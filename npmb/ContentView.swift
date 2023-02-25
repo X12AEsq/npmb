@@ -6,16 +6,32 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
+@available(iOS 15.0, *)
 struct ContentView: View {
+    @State private var showingEditVehicleView = false
+    
+    @EnvironmentObject var CVModel:CommonViewModel
+ 
+//    @FirestoreQuery(collectionPath: "vehicles", predicates: []) var vehicles: [Vehicle]
+    
+//    @Binding var loggedIn: Bool
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        Group {
+            if CVModel.userSession != nil {
+                MainInterfaceView()
+            } else {
+                LoginView()
+            }
         }
-        .padding()
+        .onAppear {
+            CVModel.clientSubscribe()
+//            CVModel.expenseSubscribe()
+        }
     }
 }
 
