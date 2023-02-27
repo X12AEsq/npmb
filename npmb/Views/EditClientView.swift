@@ -78,7 +78,23 @@ struct EditClientView: View {
                 }
             }
             .padding(.leading)
-        }
+            HStack {
+                Button {
+                    print("Select save")
+                } label: {
+                    Text(saveMessage)
+                }
+                .buttonStyle(CustomButton())
+                if saveMessage == "Update" {
+                    Button {
+                        print("Select delete")
+                    } label: {
+                        Text("Delete Client")
+                    }
+                    .buttonStyle(CustomButton())
+                }
+            }
+         }
         .onAppear {
             if let client = client {
                 lastName = client.lastName

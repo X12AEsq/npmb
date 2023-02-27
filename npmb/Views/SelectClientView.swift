@@ -29,19 +29,19 @@ struct SelectClientView: View {
                             EditClientView(client: client)
                         }
                     }
-                    //                .onDelete(perform: delete)
+//                    .onDelete(perform: delete)
                 }
             }
- //           .listStyle(.plain)
+            .listStyle(.plain)
             .navigationTitle("Which Client?")
         }
     }
     
 //    func delete(at offsets: IndexSet) {
 //        offsets.forEach { index in
-//            let vehicle = vehicles[index]
+//            let client = CVModel.clients[index]
 //            Task {
-//                await CVModel.deleteVehicle(vehicle:vehicle)
+//                await CVModel.deleteClient(client:client)
 //            }
 //        }
 //    }
