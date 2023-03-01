@@ -26,4 +26,10 @@ extension ClientModel {
         }
         return part1 + part2 + part3 + part4
     }
+    
+    public var sortFormat2:String {
+        var part1:String = String(self.internalID)
+        var part2:String = FormattingService.rjf(base: part1, len: 4, zeroFill: true)
+        return part2 + "-" + self.formattedName
+    }
 }

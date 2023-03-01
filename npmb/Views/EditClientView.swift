@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct EditClientView: View {
-    @EnvironmentObject var pcvm:CommonViewModel
+    @EnvironmentObject var CVModel:CommonViewModel
+    @Environment(\.dismiss) var dismiss
+
     @State var statusMessage:String = ""
+    @State var clientID:String = ""
+    @State var internalID:Int = 0
     @State var lastName:String = ""
     @State var firstName:String = ""
     @State var middleName:String = ""
@@ -23,6 +27,7 @@ struct EditClientView: View {
     @State var telnumber:String = ""
     @State var note:String = ""
     @State var jail:String = ""
+    @State var representation:[Int] = []
     @State var saveMessage:String = ""
 
     var so:StateOptions = StateOptions()
@@ -80,7 +85,11 @@ struct EditClientView: View {
             .padding(.leading)
             HStack {
                 Button {
-                    print("Select save")
+                    if saveMessage == "Update" {
+                        updateClient()
+                    } else {
+                        print("Select save")
+                    }
                 } label: {
                     Text(saveMessage)
                 }
@@ -97,6 +106,8 @@ struct EditClientView: View {
          }
         .onAppear {
             if let client = client {
+                clientID = client.id!
+                internalID = client.internalID
                 lastName = client.lastName
                 firstName = client.firstName
                 middleName = client.middleName
@@ -110,8 +121,10 @@ struct EditClientView: View {
                 telnumber = FormattingService.deComposePhone(inpphone: client.phone)[2]
                 note = client.note
                 jail = client.jail
+                representation = client.representation
                 saveMessage = "Update"
             } else {
+                internalID = 0
                 lastName = ""
                 firstName = ""
                 middleName = ""
@@ -125,7 +138,26 @@ struct EditClientView: View {
                 telnumber = ""
                 note = ""
                 jail = ""
+                representation = []
                 saveMessage = "Add"
+            }
+        }
+    }
+    
+    func addClient() {
+        Task {
+            await CVModel.addClient(lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail)
+            if CVModel.taskCompleted {
+                dismiss()
+            }
+        }
+    }
+    
+    func updateClient() {
+        Task {
+            await CVModel.updateClient(clientID: clientID, internalID: internalID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: representation)
+            if CVModel.taskCompleted {
+                dismiss()
             }
         }
     }

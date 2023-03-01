@@ -137,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				318BD06E29AA9BC00063BAA1 /* ClientModel.swift */,
+				318BD08029AAB3320063BAA1 /* ClientExtension.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -153,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				318BD07429AA9FD60063BAA1 /* EditClientView.swift */,
-				318BD08029AAB3320063BAA1 /* ClientExtension.swift */,
 				318BD07E29AAB2270063BAA1 /* SelectClientView.swift */,
 			);
 			path = Views;

@@ -12,7 +12,7 @@ import FirebaseFirestoreSwift
 
 @available(iOS 15.0, *)
 struct SelectClientView: View {
-    @State private var showingEditVehicleView = false
+    @State private var sortOption = 1
     
     @EnvironmentObject var CVModel:CommonViewModel
  
@@ -21,30 +21,50 @@ struct SelectClientView: View {
     var body: some View {
         // TODO: Replace with navigation stack
         NavigationStack {
+            HStack {
+                Button {
+                    sortOption = 1
+                } label: {
+                    Text("By Name")
+                }
+                .buttonStyle(CustomButton())
+                 Button {
+                    sortOption = 2
+                } label: {
+                    Text("By ID")
+                }
+                .buttonStyle(CustomButton())
+             }
+
             ScrollView {
                 VStack (alignment: .leading) {
                     NavigationLink(destination: { EditClientView() }, label: { Text("Add New Client") })
-                    ForEach(CVModel.clients.sorted {$0.formattedName < $1.formattedName }) { client in
-                        NavigationLink(client.formattedName) {
-                            EditClientView(client: client)
+                    switch sortOption {
+                    case 1:
+                        ForEach(CVModel.clients.sorted {$0.formattedName < $1.formattedName }) { client in
+                            NavigationLink(client.formattedName) {
+                                EditClientView(client: client)
+                            }
+                        }
+                    case 2:
+                        ForEach(CVModel.clients.sorted {$0.internalID < $1.internalID }) { client in
+                            NavigationLink(client.sortFormat2) {
+                                EditClientView(client: client)
+                            }
+                        }
+                    default:
+                        ForEach(CVModel.clients.sorted {$0.formattedName < $1.formattedName }) { client in
+                            NavigationLink(client.formattedName) {
+                                EditClientView(client: client)
+                            }
                         }
                     }
-//                    .onDelete(perform: delete)
                 }
             }
             .listStyle(.plain)
             .navigationTitle("Which Client?")
         }
-    }
-    
-//    func delete(at offsets: IndexSet) {
-//        offsets.forEach { index in
-//            let client = CVModel.clients[index]
-//            Task {
-//                await CVModel.deleteClient(client:client)
-//            }
-//        }
-//    }
+    }    
 }
 
 struct SelectClientView_Previews: PreviewProvider {
