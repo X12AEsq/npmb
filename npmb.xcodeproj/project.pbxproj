@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313BC3AA29AF025900D99BB8 /* CauseModel.swift */; };
+		317D987A29B1825400709C32 /* CauseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987929B1825400709C32 /* CauseExtension.swift */; };
+		317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987B29B1844700709C32 /* SelectCauseView.swift */; };
 		318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD04629AA7DBC0063BAA1 /* npmbApp.swift */; };
 		318BD04929AA7DBC0063BAA1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD04829AA7DBC0063BAA1 /* ContentView.swift */; };
 		318BD04B29AA7DBD0063BAA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 318BD04A29AA7DBD0063BAA1 /* Assets.xcassets */; };
@@ -33,6 +36,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		313BC3AA29AF025900D99BB8 /* CauseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseModel.swift; sourceTree = "<group>"; };
+		317D987929B1825400709C32 /* CauseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseExtension.swift; sourceTree = "<group>"; };
+		317D987B29B1844700709C32 /* SelectCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCauseView.swift; sourceTree = "<group>"; };
 		318BD04329AA7DBC0063BAA1 /* npmb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = npmb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		318BD04629AA7DBC0063BAA1 /* npmbApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = npmbApp.swift; sourceTree = "<group>"; };
 		318BD04829AA7DBC0063BAA1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -138,6 +144,8 @@
 			children = (
 				318BD06E29AA9BC00063BAA1 /* ClientModel.swift */,
 				318BD08029AAB3320063BAA1 /* ClientExtension.swift */,
+				313BC3AA29AF025900D99BB8 /* CauseModel.swift */,
+				317D987929B1825400709C32 /* CauseExtension.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -155,6 +163,7 @@
 			children = (
 				318BD07429AA9FD60063BAA1 /* EditClientView.swift */,
 				318BD07E29AAB2270063BAA1 /* SelectClientView.swift */,
+				317D987B29B1844700709C32 /* SelectCauseView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -264,12 +273,15 @@
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
+				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
 				318BD06A29AA820E0063BAA1 /* CommonViewModel.swift in Sources */,
 				318BD05A29AA800C0063BAA1 /* CustomTextField.swift in Sources */,
 				318BD06F29AA9BC00063BAA1 /* ClientModel.swift in Sources */,
 				318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */,
+				313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */,
 				318BD07529AA9FD60063BAA1 /* EditClientView.swift in Sources */,
+				317D987A29B1825400709C32 /* CauseExtension.swift in Sources */,
 				318BD05C29AA800C0063BAA1 /* CustomButton.swift in Sources */,
 				318BD07F29AAB2270063BAA1 /* SelectClientView.swift in Sources */,
 			);

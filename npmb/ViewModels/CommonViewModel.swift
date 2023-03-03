@@ -21,10 +21,10 @@ class CommonViewModel: ObservableObject {
     @Published var userSession: FirebaseAuth.User?
     
     @Published var clients = [ClientModel]()
-    //    @Published var expenses = [Expense]()
-    //
+    @Published var causes = [CauseModel]()
+
     var clientListener: ListenerRegistration?
-    //    var expenseListener: ListenerRegistration?
+    var causeListener: ListenerRegistration?
     
     init() {
         userSession = auth.currentUser
@@ -113,8 +113,7 @@ class CommonViewModel: ObservableObject {
             return 1
         }
     }
-    
-    
+
     public static func clientAny(internalID:Int, lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String, representation:[Int]) -> [String:Any] {
         let newClient:[String:Any] = ["internalID":internalID,
                                       "LastName":lastName,
@@ -138,10 +137,14 @@ class CommonViewModel: ObservableObject {
     func addClient(lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String) async {
         let intID = nextClientID()
         let ud:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
-        let db = Firestore.firestore()
+//        let db = Firestore.firestore()
         let reprRef = db.collection("clients")
+
+        taskCompleted = false
+        
         do {
             try await reprRef.document().setData(ud)
+            taskCompleted = true
         }
         catch {
             print("Error adding cause \(error.localizedDescription)")
@@ -157,11 +160,97 @@ class CommonViewModel: ObservableObject {
         do {
             try await db.collection("clients").document(clientID).updateData(clientData)
             taskCompleted = true
-            print("Debug updateClient updated successfully")
-            
         } catch {
             print("Debug updateClient failed \(error.localizedDescription)")
         }
     }
-}
 
+    func causeSubscribe() {
+        if causeListener == nil {
+            causeListener = db.collection("causes").addSnapshotListener
+            { (querySnapshot, error) in
+                guard let documents = querySnapshot?.documents else {
+                    return
+                }
+                self.causes = []
+                _ = documents.map { queryDocumentSnapshot -> Void in
+                    let data = queryDocumentSnapshot.data()
+                    
+                    let internalID = data["internalID"] as? Int ?? 0
+                    let causeNo = data["CauseNo"] as? String ?? ""
+                    let involvedClient = data["InvolvedClient"] as? Int ?? 0
+                    let representations = data["Representations"] as? [Int] ?? []
+                    let level = data["Level"] as? String ?? ""
+                    let court = data["Court"] as? String ?? ""
+                    let originalcharge = data["OriginalCharge"] as? String ?? ""
+                    let causeType = data["CauseType"] as? String ?? ""
+                    
+                    let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
+
+                    self.causes.append(ca)
+                    return
+                }
+            }
+        }
+    }
+    
+    func nextCauseID() -> Int {
+       // find cause with greatest internal id
+       let greatestcause = causes.max {a, b in a.internalID < b.internalID }
+       // find value of greatest internal id
+       if greatestcause != nil {
+          let gc = greatestcause!
+          let i:Int = Int(gc.internalID)
+          return i + 1
+       } else {
+          return 1
+       }
+    }
+
+    public static func causeAny(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) -> [String:Any] {
+        let newCause:[String:Any] =   ["internalID":intid,
+                                        "CauseNo":causeno,
+                                        "InvolvedClient":client,
+                                        "Representations":representations,
+                                        "Level":level,
+                                        "Court":court,
+                                        "OriginalCharge":originalcharge,
+                                        "CauseType":causetype
+                                     ]
+        return newCause
+    }
+
+    @MainActor
+    func addCause(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) async {
+       let intID = nextCauseID()
+       let ud:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intid)
+    //   let db = Firestore.firestore()
+       let reprRef = db.collection("causes")
+       
+       taskCompleted = false
+       
+       do {
+          try await reprRef.document().setData(ud)
+          taskCompleted = true
+       }
+       catch {
+          print("Error adding Cause \(error.localizedDescription)")
+       }
+    }
+
+    @MainActor
+    func updateCause(causeID:String, client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) async {
+        let causeData:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intid)
+
+       taskCompleted = false
+       
+       do {
+          try await db.collection("causes").document(causeID).updateData(causeData)
+          taskCompleted = true
+          
+       } catch {
+          print("Debug updateCause failed \(error.localizedDescription)")
+       }
+    }
+
+}

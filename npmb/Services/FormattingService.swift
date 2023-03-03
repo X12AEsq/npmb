@@ -30,7 +30,24 @@ struct FormattingService {
         }
         return workBase
     }
-    
+
+    public static func ljf(base:String, len:Int) -> String {
+        var workBase = base
+        if workBase.count == len {
+            return workBase
+        }
+        if workBase.count < len {
+            while workBase.count < len {
+                workBase = workBase + " "
+            }
+        } else {
+            while workBase.count > len {
+                workBase = String(workBase.dropLast(1))
+            }
+        }
+        return workBase
+    }
+
     public static func fmtphone(area:String, exchange:String, number:String) -> String {
         let xa = self.rjf(base: area, len: 3, zeroFill: true)
         let xe = self.rjf(base: exchange, len: 3, zeroFill: true)
