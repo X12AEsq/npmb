@@ -4,7 +4,6 @@
 //
 //  Created by Morris Albers on 2/25/23.
 //
-
 import SwiftUI
 
 struct EditClientView: View {
@@ -169,3 +168,4 @@ struct EditClientView_Previews: PreviewProvider {
         )
     }
 }
+    

@@ -9,6 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseAuth
+import SwiftUI
 
 class CommonViewModel: ObservableObject {
     
@@ -20,6 +21,8 @@ class CommonViewModel: ObservableObject {
     
     @Published var userSession: FirebaseAuth.User?
     
+    @Published var presentedViews = NavigationPath()
+
     @Published var clients = [ClientModel]()
     @Published var causes = [CauseModel]()
 

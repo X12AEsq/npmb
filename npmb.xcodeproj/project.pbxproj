@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3110F13E29B687E200430226 /* GeneralMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3110F13D29B687E200430226 /* GeneralMenu.swift */; };
 		313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313BC3AA29AF025900D99BB8 /* CauseModel.swift */; };
+		316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316035E429B443A3002D82F3 /* OffenseLevel.swift */; };
 		317D987A29B1825400709C32 /* CauseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987929B1825400709C32 /* CauseExtension.swift */; };
 		317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987B29B1844700709C32 /* SelectCauseView.swift */; };
 		318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD04629AA7DBC0063BAA1 /* npmbApp.swift */; };
@@ -33,10 +35,13 @@
 		318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD07C29AAA87D0063BAA1 /* YesNoModel.swift */; };
 		318BD07F29AAB2270063BAA1 /* SelectClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD07E29AAB2270063BAA1 /* SelectClientView.swift */; };
 		318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD08029AAB3320063BAA1 /* ClientExtension.swift */; };
+		31F36A3029B190750059D122 /* EditCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F36A2F29B190750059D122 /* EditCauseView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3110F13D29B687E200430226 /* GeneralMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralMenu.swift; sourceTree = "<group>"; };
 		313BC3AA29AF025900D99BB8 /* CauseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseModel.swift; sourceTree = "<group>"; };
+		316035E429B443A3002D82F3 /* OffenseLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffenseLevel.swift; sourceTree = "<group>"; };
 		317D987929B1825400709C32 /* CauseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseExtension.swift; sourceTree = "<group>"; };
 		317D987B29B1844700709C32 /* SelectCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCauseView.swift; sourceTree = "<group>"; };
 		318BD04329AA7DBC0063BAA1 /* npmb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = npmb.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +64,7 @@
 		318BD07C29AAA87D0063BAA1 /* YesNoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YesNoModel.swift; sourceTree = "<group>"; };
 		318BD07E29AAB2270063BAA1 /* SelectClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectClientView.swift; sourceTree = "<group>"; };
 		318BD08029AAB3320063BAA1 /* ClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientExtension.swift; sourceTree = "<group>"; };
+		31F36A2F29B190750059D122 /* EditCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCauseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +152,7 @@
 				318BD08029AAB3320063BAA1 /* ClientExtension.swift */,
 				313BC3AA29AF025900D99BB8 /* CauseModel.swift */,
 				317D987929B1825400709C32 /* CauseExtension.swift */,
+				3110F13D29B687E200430226 /* GeneralMenu.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -163,6 +170,7 @@
 			children = (
 				318BD07429AA9FD60063BAA1 /* EditClientView.swift */,
 				318BD07E29AAB2270063BAA1 /* SelectClientView.swift */,
+				31F36A2F29B190750059D122 /* EditCauseView.swift */,
 				317D987B29B1844700709C32 /* SelectCauseView.swift */,
 			);
 			path = Views;
@@ -173,6 +181,7 @@
 			children = (
 				318BD07C29AAA87D0063BAA1 /* YesNoModel.swift */,
 				318BD07729AAA0C30063BAA1 /* StateCodeModel.swift */,
+				316035E429B443A3002D82F3 /* OffenseLevel.swift */,
 			);
 			path = Enumerations;
 			sourceTree = "<group>";
@@ -269,9 +278,11 @@
 				318BD04929AA7DBC0063BAA1 /* ContentView.swift in Sources */,
 				318BD07B29AAA12A0063BAA1 /* GrowingButton.swift in Sources */,
 				318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */,
+				31F36A3029B190750059D122 /* EditCauseView.swift in Sources */,
 				318BD07229AA9D280063BAA1 /* FormattingService.swift in Sources */,
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
+				3110F13E29B687E200430226 /* GeneralMenu.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
@@ -280,6 +291,7 @@
 				318BD06F29AA9BC00063BAA1 /* ClientModel.swift in Sources */,
 				318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */,
 				313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */,
+				316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */,
 				318BD07529AA9FD60063BAA1 /* EditClientView.swift in Sources */,
 				317D987A29B1825400709C32 /* CauseExtension.swift in Sources */,
 				318BD05C29AA800C0063BAA1 /* CustomButton.swift in Sources */,

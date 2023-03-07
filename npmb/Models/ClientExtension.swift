@@ -32,4 +32,12 @@ extension ClientModel {
         let part2:String = FormattingService.rjf(base: part1, len: 4, zeroFill: true)
         return part2 + "-" + self.formattedName
     }
+    
+    public var sortFormat3:String {
+        let part1:String = self.formattedName
+        let part2:String = String(self.internalID)
+        let part3:String = FormattingService.rjf(base: part2, len: 4, zeroFill: true)
+        var part4:String = part1 + "-" + part3
+        return part4.trimmingCharacters(in: .whitespaces)
+    }
 }

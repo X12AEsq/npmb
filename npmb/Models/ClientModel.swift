@@ -8,10 +8,13 @@
 import Foundation
 import FirebaseFirestore
 
-class ClientModel: Identifiable, Codable, ObservableObject {
+class ClientModel: Identifiable, Hashable, Codable, ObservableObject {
     static func == (lhs: ClientModel, rhs: ClientModel) -> Bool {
             lhs.formattedName == rhs.formattedName
         }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
     var id: String?
 //    @DocumentID var id: String?
     var internalID: Int             // Firebase Integer

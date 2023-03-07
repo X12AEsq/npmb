@@ -12,6 +12,11 @@ import FirebaseFirestoreSwift
 
 @available(iOS 15.0, *)
 struct SelectCauseView: View {
+
+    enum Route: Hashable {
+        case causes
+        case clients
+    }
     @State private var sortOption = 1
     
     @EnvironmentObject var CVModel:CommonViewModel

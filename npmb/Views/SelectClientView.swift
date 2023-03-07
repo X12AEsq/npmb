@@ -12,6 +12,8 @@ import FirebaseFirestoreSwift
 
 @available(iOS 15.0, *)
 struct SelectClientView: View {
+    var selectOnly:Bool
+    
     @State private var sortOption = 1
     
     @EnvironmentObject var CVModel:CommonViewModel
@@ -43,19 +45,25 @@ struct SelectClientView: View {
                     case 1:
                         ForEach(CVModel.clients.sorted {$0.formattedName < $1.formattedName }) { client in
                             NavigationLink(client.formattedName) {
-                                EditClientView(client: client)
+                                if !selectOnly {
+                                    EditClientView(client: client)
+                                }
                             }
                         }
                     case 2:
                         ForEach(CVModel.clients.sorted {$0.internalID < $1.internalID }) { client in
                             NavigationLink(client.sortFormat2) {
-                                EditClientView(client: client)
+                                if !selectOnly {
+                                    EditClientView(client: client)
+                                }
                             }
                         }
                     default:
                         ForEach(CVModel.clients.sorted {$0.formattedName < $1.formattedName }) { client in
                             NavigationLink(client.formattedName) {
-                                EditClientView(client: client)
+                                if !selectOnly {
+                                    EditClientView(client: client)
+                                }
                             }
                         }
                     }
@@ -67,8 +75,8 @@ struct SelectClientView: View {
     }    
 }
 
-struct SelectClientView_Previews: PreviewProvider {
-    static var previews: some View {
-        SelectClientView()
-    }
-}
+//struct SelectClientView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SelectClientView()
+//    }
+//}
