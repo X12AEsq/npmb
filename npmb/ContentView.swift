@@ -30,7 +30,7 @@ struct ContentView: View {
         }
         .onAppear {
             CVModel.clientSubscribe()
-//            CVModel.expenseSubscribe()
+            CVModel.causeSubscribe()
         }
     }
 }

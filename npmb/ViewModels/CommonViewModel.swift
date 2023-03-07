@@ -255,5 +255,15 @@ class CommonViewModel: ObservableObject {
           print("Debug updateCause failed \(error.localizedDescription)")
        }
     }
-
+    
+//    func sortedCauses(option:CauseSortOptions) -> [CauseModel] {
+//        switch option {
+//        case .byCauseNo:
+//            return causes.sorted { $0.causeNo < $1.causeNo }
+//        case .byIntID:
+//            return causes.sorted { $0.internalID < $1.internalID }
+//        }
+//    }
 }
+
+
