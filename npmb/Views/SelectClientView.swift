@@ -81,9 +81,9 @@ struct SelectClientView: View {
     
     func filterThem(option:Int, filter:String) -> [ClientModel] {
         if option == 1 {
-            return sortThem(option: option).filter { $0.formattedName.hasPrefix(filter) }
+            return sortThem(option: option).filter { $0.formattedName.lowercased().hasPrefix(filter.lowercased()) }
         } else {
-            return sortThem(option: option).filter { $0.sortFormat2.hasPrefix(filter) }
+            return sortThem(option: option).filter { $0.sortFormat2.lowercased().hasPrefix(filter.lowercased()) }
         }
     }
     

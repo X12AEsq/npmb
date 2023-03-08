@@ -23,6 +23,7 @@ struct SelectCauseView: View {
     var body: some View {
         NavigationStack {
             VStack (alignment: .leading) {
+                Text("Causes").font(.title)
                 HStack {
                     Button {
                         sortedCauses = sortThem(option: 1)
@@ -73,17 +74,15 @@ struct SelectCauseView: View {
                 }
             }
             .listStyle(.plain)
-            .navigationTitle("Which Cause?")
+//            .navigationTitle("Which Cause?")
         }
     }
     
     func filterThem(prefix:String, option:Int) -> Void {
         if option == 1 {
             sortedCauses = sortThem(option: option).filter { $0.sortFormat1.hasPrefix(prefix) }
-            print("Sorted")
         } else {
             sortedCauses = sortThem(option: option).filter { $0.sortFormat2.hasPrefix(prefix) }
-            print("Sorted")
         }
     }
     
@@ -103,7 +102,6 @@ struct SelectCauseView: View {
             returnString = cause.sortFormat2
         }
         if returnString.hasPrefix(" ") {
-            print("found one")
         }
         return "." + returnString + "."
     }

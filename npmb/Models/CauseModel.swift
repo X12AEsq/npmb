@@ -36,6 +36,7 @@ class CauseModel: Identifiable, Codable, ObservableObject {
         client:Int,
         causeno:String,
         representations:[Int],
+        involvedClient:Int,
         level:String,
         court: String,
         originalcharge: String,

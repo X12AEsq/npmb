@@ -116,6 +116,15 @@ class CommonViewModel: ObservableObject {
             return 1
         }
     }
+    
+    public func findClient(internalID:Int) -> ClientModel {
+        let workClients:[ClientModel] = clients.filter { $0.internalID == internalID }
+        if workClients.count == 1 {
+            return workClients[0]
+        } else {
+            return ClientModel()
+        }
+    }
 
     public static func clientAny(internalID:Int, lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String, representation:[Int]) -> [String:Any] {
         let newClient:[String:Any] = ["internalID":internalID,
@@ -188,7 +197,7 @@ class CommonViewModel: ObservableObject {
                     let originalcharge = data["OriginalCharge"] as? String ?? ""
                     let causeType = data["CauseType"] as? String ?? ""
                     
-                    let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
+                    let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
 
                     self.causes.append(ca)
                     return
@@ -197,9 +206,9 @@ class CommonViewModel: ObservableObject {
         }
     }
     
-    func nextCauseID() -> Int {
+    public func nextCauseID() -> Int {
        // find cause with greatest internal id
-       let greatestcause = causes.max {a, b in a.internalID < b.internalID }
+        let greatestcause = causes.max {a, b in a.internalID < b.internalID }
        // find value of greatest internal id
        if greatestcause != nil {
           let gc = greatestcause!
@@ -208,6 +217,15 @@ class CommonViewModel: ObservableObject {
        } else {
           return 1
        }
+    }
+    
+    public func findCause(internalID:Int) -> CauseModel {
+        let workCauses:[CauseModel] = causes.filter { $0.internalID == internalID }
+        if workCauses.count == 1 {
+            return workCauses[0]
+        } else {
+            return CauseModel()
+        }
     }
 
     public static func causeAny(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) -> [String:Any] {
