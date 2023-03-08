@@ -16,30 +16,44 @@ struct SelectClientView: View {
     @State var selectedClient = ClientModel()
     
     @State private var sortOption = 1
+    @State private var sortMessage = ""
     @State private var filterString = ""
-//    @State private var sortedClients:[ClientModel] = []
+    @State private var sortedClients:[ClientModel] = []
     
     @EnvironmentObject var CVModel:CommonViewModel
  
 //    @FirestoreQuery(collectionPath: "vehicles", predicates: []) var vehicles: [Vehicle]
     
     var body: some View {
-        // TODO: Replace with navigation stack
         NavigationStack {
-            HStack {
-                Button {
-                    sortOption = 1
-                } label: {
-                    Text("By Name")
+            VStack {
+                HStack {
+                    Button {
+                        sortOption = 1
+                        sortMessage = "By Name"
+                    } label: {
+                        Text("By Name")
+                    }
+                    .buttonStyle(CustomButton())
+                    Button {
+                        sortOption = 2
+                        sortMessage = "By ID"
+                    } label: {
+                        Text("By ID")
+                    }
+                    .buttonStyle(CustomButton())
                 }
-                .buttonStyle(CustomButton())
-                 Button {
-                    sortOption = 2
-                } label: {
-                    Text("By ID")
+                HStack {
+                    Text("Filter by " + sortMessage)
+                    TextField("", text: $filterString)
+                        .background(Color.gray.opacity(0.30))
+                        .onChange(of: filterString) { newValue in
+                            sortedClients = filterThem(option: sortOption, filter: filterString)
+                        }
+
+                    Spacer()
                 }
-                .buttonStyle(CustomButton())
-             }
+            }
 
             ScrollView {
                 VStack (alignment: .leading) {
@@ -47,7 +61,7 @@ struct SelectClientView: View {
                         NavigationLink(destination: { EditClientView() }, label: { Text("Add New Client") })
                         Spacer()
                     }
-                    ForEach(filterThem(option: sortOption, filter: filterString)) { client in
+                    ForEach(sortedClients) { client in
                         HStack {
                             NavigationLink(sortOption == 1 ? client.formattedName : client.sortFormat2) {
                                 EditClientView(client: client)
@@ -56,6 +70,9 @@ struct SelectClientView: View {
                         }
                     }
                 }
+                .onAppear {
+                    sortedClients = filterThem(option: sortOption, filter: filterString)
+                }
             }
             .listStyle(.plain)
             .navigationTitle("Which Client?")
@@ -63,7 +80,11 @@ struct SelectClientView: View {
     }
     
     func filterThem(option:Int, filter:String) -> [ClientModel] {
-        return sortThem(option: option)
+        if option == 1 {
+            return sortThem(option: option).filter { $0.formattedName.hasPrefix(filter) }
+        } else {
+            return sortThem(option: option).filter { $0.sortFormat2.hasPrefix(filter) }
+        }
     }
     
     func sortThem(option:Int) -> [ClientModel] {
