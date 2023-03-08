@@ -13,8 +13,11 @@ import FirebaseFirestoreSwift
 @available(iOS 15.0, *)
 struct SelectClientView: View {
     var selectOnly:Bool
+    @State var selectedClient = ClientModel()
     
     @State private var sortOption = 1
+    @State private var filterString = ""
+//    @State private var sortedClients:[ClientModel] = []
     
     @EnvironmentObject var CVModel:CommonViewModel
  
@@ -40,31 +43,16 @@ struct SelectClientView: View {
 
             ScrollView {
                 VStack (alignment: .leading) {
-                    NavigationLink(destination: { EditClientView() }, label: { Text("Add New Client") })
-                    switch sortOption {
-                    case 1:
-                        ForEach(CVModel.clients.sorted {$0.formattedName < $1.formattedName }) { client in
-                            NavigationLink(client.formattedName) {
-                                if !selectOnly {
-                                    EditClientView(client: client)
-                                }
+                    HStack {
+                        NavigationLink(destination: { EditClientView() }, label: { Text("Add New Client") })
+                        Spacer()
+                    }
+                    ForEach(filterThem(option: sortOption, filter: filterString)) { client in
+                        HStack {
+                            NavigationLink(sortOption == 1 ? client.formattedName : client.sortFormat2) {
+                                EditClientView(client: client)
                             }
-                        }
-                    case 2:
-                        ForEach(CVModel.clients.sorted {$0.internalID < $1.internalID }) { client in
-                            NavigationLink(client.sortFormat2) {
-                                if !selectOnly {
-                                    EditClientView(client: client)
-                                }
-                            }
-                        }
-                    default:
-                        ForEach(CVModel.clients.sorted {$0.formattedName < $1.formattedName }) { client in
-                            NavigationLink(client.formattedName) {
-                                if !selectOnly {
-                                    EditClientView(client: client)
-                                }
-                            }
+                            Spacer()
                         }
                     }
                 }
@@ -72,7 +60,19 @@ struct SelectClientView: View {
             .listStyle(.plain)
             .navigationTitle("Which Client?")
         }
-    }    
+    }
+    
+    func filterThem(option:Int, filter:String) -> [ClientModel] {
+        return sortThem(option: option)
+    }
+    
+    func sortThem(option:Int) -> [ClientModel] {
+        if option == 1 {
+            return CVModel.clients.sorted {$0.formattedName < $1.formattedName }
+        } else {
+            return CVModel.clients.sorted {$0.internalID < $1.internalID }
+        }
+    }
 }
 
 //struct SelectClientView_Previews: PreviewProvider {
