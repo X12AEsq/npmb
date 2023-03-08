@@ -12,7 +12,10 @@ extension CauseModel {
         let part2:String = FormattingService.rjf(base: part1, len: 4, zeroFill: true)
         let part3:String = FormattingService.ljf(base: self.causeNo, len:9)
         let part4:String = FormattingService.ljf(base: self.originalCharge, len:12)
-        return part3 + "-" + part2 + "-" + part4
+//        print("sortFormat1>" + part3 + "-" + part2 + "-" + part4 + "<")
+        let part5:String = part3 + "-" + part2 + "-" + part4
+        let part6:String = FormattingService.ljf(base: part5, len:30)
+        return part6
     }
     
     public var sortFormat2:String {
@@ -20,6 +23,9 @@ extension CauseModel {
         let part2:String = FormattingService.rjf(base: part1, len: 4, zeroFill: true)
         let part3:String = FormattingService.ljf(base: self.causeNo, len:9)
         let part4:String = FormattingService.ljf(base: self.originalCharge, len:12)
-        return part2 + "-" + part3 + "-" + part4
+//        print("sortFormat2>" + part2 + "-" + part3 + "-" + part4 + "<")
+        let part5 = part2 + "-" + part3 + "-" + part4
+        let part6:String = FormattingService.ljf(base: part5, len:30)
+        return part6
     }
 }

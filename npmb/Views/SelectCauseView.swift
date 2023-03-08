@@ -19,85 +19,52 @@ struct SelectCauseView: View {
     @State private var selectedCause:CauseModel = CauseModel()
     
     @EnvironmentObject var CVModel:CommonViewModel
-    
-    enum NextAction {
-        case producelist
-        case gotoedit
-        case exit
-    }
-    @State var pathOption = NextAction.producelist
-    
+        
     var body: some View {
-        switch pathOption {
-            case .producelist:
-                mainlist
-            case .gotoedit:
-                EditCauseView(cause:selectedCause)
-            case .exit:
-                mainlist
-//            default:
-//                entryView
-        }
-    }
-
-    
-    var mainlist: some View {
-        // TODO: Replace with navigation stack
-        VStack {
-            GeometryReader { geo in
+        NavigationStack {
+            VStack (alignment: .leading) {
+                HStack {
+                    Button {
+                        sortedCauses = sortThem(option: 1)
+                        sortOption = 1
+                        filterText = ""
+                        sortMessage = "By Cause"
+                    } label: {
+                        Text("By Cause")
+                    }
+                    .buttonStyle(CustomButton())
+                    Button {
+                        sortedCauses = sortThem(option: 2)
+                        sortOption = 2
+                        filterText = ""
+                        sortMessage = "By ID"
+                    } label: {
+                        Text("By ID")
+                    }
+                    .buttonStyle(CustomButton())
+                }
+                HStack {
+                    Text("Filter " + sortMessage)
+                    TextField("", text: $filterText)
+                        .background(Color.gray.opacity(0.3))
+                        .onChange(of: filterText, perform: { newvalue in
+                            filterThem(prefix: filterText, option: sortOption)
+                        })
+                    Spacer()
+                }
+            }
                 
+            ScrollView {
                 VStack (alignment: .leading) {
                     HStack {
-                        Button {
-                            sortedCauses = sortThem(option: 1)
-                            sortOption = 1
-                            filterText = ""
-                            sortMessage = "By Cause"
-                        } label: {
-                            Text("By Cause")
-                        }
-                        .buttonStyle(CustomButton())
-                        Button {
-                            sortedCauses = sortThem(option: 2)
-                            sortOption = 2
-                            filterText = ""
-                            sortMessage = "By ID"
-                        } label: {
-                            Text("By ID")
-                        }
-                        .buttonStyle(CustomButton())
+                        NavigationLink(destination: { EditCauseView() }, label: { Text("Add New Cause") })
+                        Spacer()
                     }
-                    VStack(alignment:.leading) {
+                    ForEach(sortedCauses) { cause in
                         HStack {
-                            Text("Filter " + sortMessage)
-                            TextField("", text: $filterText)
-                                .background(Color.gray.opacity(0.3))
-                                .onChange(of: filterText, perform: { newvalue in
-                                    filterThem(prefix: filterText, option: sortOption)
-                                })
-                        }
-                    }
-                    
-                    ScrollView {
-                        VStack {
-                            ForEach(sortedCauses) { cause in
-                                VStack {
-                                    HStack {
-                                        ActionSelect()
-                                            .onTapGesture {
-                                                selectedCause = cause
-                                                print("tapped, selected cause " + cause.causeNo)
-                                                pathOption = NextAction.gotoedit
-                                            }
-                                        if sortOption == 1 {
-                                            Text(cause.sortFormat1)
-                                        } else {
-                                            Text(cause.sortFormat2)
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            }
+                            NavigationLink(destination: { EditCauseView(cause: cause) },
+                                label: { Text(linkLabel(cause:cause, option:sortOption)) })
+                            Spacer()
                         }
                     }
                 }
@@ -105,14 +72,18 @@ struct SelectCauseView: View {
                     sortedCauses = sortThem(option: 1)
                 }
             }
+            .listStyle(.plain)
+            .navigationTitle("Which Cause?")
         }
     }
     
     func filterThem(prefix:String, option:Int) -> Void {
         if option == 1 {
             sortedCauses = sortThem(option: option).filter { $0.sortFormat1.hasPrefix(prefix) }
+            print("Sorted")
         } else {
             sortedCauses = sortThem(option: option).filter { $0.sortFormat2.hasPrefix(prefix) }
+            print("Sorted")
         }
     }
     
@@ -122,6 +93,19 @@ struct SelectCauseView: View {
         } else {
             return CVModel.causes.sorted {$0.internalID < $1.internalID }
         }
+    }
+    
+    func linkLabel(cause:CauseModel, option:Int) -> String {
+        var returnString = ""
+        if option == 1 {
+            returnString = cause.sortFormat1
+        } else {
+            returnString = cause.sortFormat2
+        }
+        if returnString.hasPrefix(" ") {
+            print("found one")
+        }
+        return "." + returnString + "."
     }
                         
 }

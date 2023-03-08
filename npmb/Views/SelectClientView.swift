@@ -44,7 +44,7 @@ struct SelectClientView: View {
                     .buttonStyle(CustomButton())
                 }
                 HStack {
-                    Text("Filter by " + sortMessage)
+                    Text("Filter " + sortMessage)
                     TextField("", text: $filterString)
                         .background(Color.gray.opacity(0.30))
                         .onChange(of: filterString) { newValue in
