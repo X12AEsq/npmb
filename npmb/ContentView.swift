@@ -31,6 +31,7 @@ struct ContentView: View {
         .onAppear {
             CVModel.clientSubscribe()
             CVModel.causeSubscribe()
+            CVModel.representationSubscribe()
         }
     }
 }

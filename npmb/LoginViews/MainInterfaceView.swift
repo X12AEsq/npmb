@@ -50,6 +50,11 @@ struct MainInterfaceView: View {
                             SelectCauseView()
                         }
                         .font(.title)
+                        .padding(.bottom, 10.0)
+                        NavigationLink("Representations") {
+                            SelectRepresentationView()
+                        }
+                        .font(.title)
                         Spacer()
                     }
                     .padding(.bottom, 10.0)

@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3110F13E29B687E200430226 /* GeneralMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3110F13D29B687E200430226 /* GeneralMenu.swift */; };
+		31035C7029BA488800D95B49 /* SelectRepresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31035C6F29BA488800D95B49 /* SelectRepresentationView.swift */; };
+		31035C7429BA4BB000D95B49 /* RepresentationExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31035C7329BA4BB000D95B49 /* RepresentationExpansion.swift */; };
+		31035C7629BA58EB00D95B49 /* EditRepresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */; };
 		3137595A29B91A6B000482F2 /* AvailableCourts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595929B91A6B000482F2 /* AvailableCourts.swift */; };
+		3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595B29B93086000482F2 /* AppearanceModel.swift */; };
+		3137595E29B93092000482F2 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595D29B93092000482F2 /* NoteModel.swift */; };
+		3137596029B9597C000482F2 /* RepresentationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595F29B9597C000482F2 /* RepresentationModel.swift */; };
 		313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313BC3AA29AF025900D99BB8 /* CauseModel.swift */; };
 		316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316035E429B443A3002D82F3 /* OffenseLevel.swift */; };
 		317D987A29B1825400709C32 /* CauseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987929B1825400709C32 /* CauseExtension.swift */; };
@@ -42,8 +47,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3110F13D29B687E200430226 /* GeneralMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralMenu.swift; sourceTree = "<group>"; };
+		31035C6F29BA488800D95B49 /* SelectRepresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRepresentationView.swift; sourceTree = "<group>"; };
+		31035C7329BA4BB000D95B49 /* RepresentationExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentationExpansion.swift; sourceTree = "<group>"; };
+		31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepresentationView.swift; sourceTree = "<group>"; };
 		3137595929B91A6B000482F2 /* AvailableCourts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableCourts.swift; sourceTree = "<group>"; };
+		3137595B29B93086000482F2 /* AppearanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceModel.swift; sourceTree = "<group>"; };
+		3137595D29B93092000482F2 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
+		3137595F29B9597C000482F2 /* RepresentationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentationModel.swift; sourceTree = "<group>"; };
 		313BC3AA29AF025900D99BB8 /* CauseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseModel.swift; sourceTree = "<group>"; };
 		316035E429B443A3002D82F3 /* OffenseLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffenseLevel.swift; sourceTree = "<group>"; };
 		317D987929B1825400709C32 /* CauseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseExtension.swift; sourceTree = "<group>"; };
@@ -154,11 +164,14 @@
 		318BD06D29AA9ADF0063BAA1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				318BD06E29AA9BC00063BAA1 /* ClientModel.swift */,
-				318BD08029AAB3320063BAA1 /* ClientExtension.swift */,
+				3137595B29B93086000482F2 /* AppearanceModel.swift */,
 				313BC3AA29AF025900D99BB8 /* CauseModel.swift */,
 				317D987929B1825400709C32 /* CauseExtension.swift */,
-				3110F13D29B687E200430226 /* GeneralMenu.swift */,
+				318BD06E29AA9BC00063BAA1 /* ClientModel.swift */,
+				318BD08029AAB3320063BAA1 /* ClientExtension.swift */,
+				3137595D29B93092000482F2 /* NoteModel.swift */,
+				3137595F29B9597C000482F2 /* RepresentationModel.swift */,
+				31035C7329BA4BB000D95B49 /* RepresentationExpansion.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -178,6 +191,8 @@
 				318BD07E29AAB2270063BAA1 /* SelectClientView.swift */,
 				31F36A2F29B190750059D122 /* EditCauseView.swift */,
 				317D987B29B1844700709C32 /* SelectCauseView.swift */,
+				31035C6F29BA488800D95B49 /* SelectRepresentationView.swift */,
+				31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -287,26 +302,31 @@
 				318BD04929AA7DBC0063BAA1 /* ContentView.swift in Sources */,
 				318BD07B29AAA12A0063BAA1 /* GrowingButton.swift in Sources */,
 				3137595A29B91A6B000482F2 /* AvailableCourts.swift in Sources */,
+				3137596029B9597C000482F2 /* RepresentationModel.swift in Sources */,
 				31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */,
 				318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */,
 				31F36A3029B190750059D122 /* EditCauseView.swift in Sources */,
 				318BD07229AA9D280063BAA1 /* FormattingService.swift in Sources */,
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
-				3110F13E29B687E200430226 /* GeneralMenu.swift in Sources */,
+				31035C7029BA488800D95B49 /* SelectRepresentationView.swift in Sources */,
+				3137595E29B93092000482F2 /* NoteModel.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
 				31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */,
 				318BD06A29AA820E0063BAA1 /* CommonViewModel.swift in Sources */,
 				318BD05A29AA800C0063BAA1 /* CustomTextField.swift in Sources */,
+				31035C7629BA58EB00D95B49 /* EditRepresentationView.swift in Sources */,
 				318BD06F29AA9BC00063BAA1 /* ClientModel.swift in Sources */,
 				318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */,
 				313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */,
 				316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */,
 				318BD07529AA9FD60063BAA1 /* EditClientView.swift in Sources */,
 				317D987A29B1825400709C32 /* CauseExtension.swift in Sources */,
+				3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */,
 				318BD05C29AA800C0063BAA1 /* CustomButton.swift in Sources */,
+				31035C7429BA4BB000D95B49 /* RepresentationExpansion.swift in Sources */,
 				318BD07F29AAB2270063BAA1 /* SelectClientView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

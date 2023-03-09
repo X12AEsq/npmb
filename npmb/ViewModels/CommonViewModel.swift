@@ -22,16 +22,20 @@ class CommonViewModel: ObservableObject {
     @Published var userSession: FirebaseAuth.User?
     
     @Published var presentedViews = NavigationPath()
-
+    
     @Published var clients = [ClientModel]()
     @Published var causes = [CauseModel]()
-
+    @Published var representations = [RepresentationModel]()
+    
     var clientListener: ListenerRegistration?
     var causeListener: ListenerRegistration?
+    var representationListener: ListenerRegistration?
     
     init() {
         userSession = auth.currentUser
     }
+    
+    // MARK: Login Functions
     
     @MainActor
     func createUser(withEmail email: String, password: String) async {
@@ -69,6 +73,8 @@ class CommonViewModel: ObservableObject {
             return false
         }
     }
+    
+    // MARK: Client Functions
     
     func clientSubscribe() {
         if clientListener == nil {
@@ -125,7 +131,7 @@ class CommonViewModel: ObservableObject {
             return ClientModel()
         }
     }
-
+    
     public static func clientAny(internalID:Int, lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String, representation:[Int]) -> [String:Any] {
         let newClient:[String:Any] = ["internalID":internalID,
                                       "LastName":lastName,
@@ -149,9 +155,9 @@ class CommonViewModel: ObservableObject {
     func addClient(lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String) async {
         let intID = nextClientID()
         let ud:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
-//        let db = Firestore.firestore()
+        //        let db = Firestore.firestore()
         let reprRef = db.collection("clients")
-
+        
         taskCompleted = false
         
         do {
@@ -166,7 +172,7 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func updateClient(clientID:String, internalID:Int, lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String, representation:[Int]) async {
         let clientData:[String:Any] = CommonViewModel.clientAny(internalID:internalID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation:representation)
-
+        
         taskCompleted = false
         
         do {
@@ -176,7 +182,9 @@ class CommonViewModel: ObservableObject {
             print("Debug updateClient failed \(error.localizedDescription)")
         }
     }
-
+    
+    // MARK: Cause Functions
+    
     func causeSubscribe() {
         if causeListener == nil {
             causeListener = db.collection("causes").addSnapshotListener
@@ -198,7 +206,7 @@ class CommonViewModel: ObservableObject {
                     let causeType = data["CauseType"] as? String ?? ""
                     
                     let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
-
+                    
                     self.causes.append(ca)
                     return
                 }
@@ -207,16 +215,16 @@ class CommonViewModel: ObservableObject {
     }
     
     public func nextCauseID() -> Int {
-       // find cause with greatest internal id
+        // find cause with greatest internal id
         let greatestcause = causes.max {a, b in a.internalID < b.internalID }
-       // find value of greatest internal id
-       if greatestcause != nil {
-          let gc = greatestcause!
-          let i:Int = Int(gc.internalID)
-          return i + 1
-       } else {
-          return 1
-       }
+        // find value of greatest internal id
+        if greatestcause != nil {
+            let gc = greatestcause!
+            let i:Int = Int(gc.internalID)
+            return i + 1
+        } else {
+            return 1
+        }
     }
     
     public func findCause(internalID:Int) -> CauseModel {
@@ -227,61 +235,143 @@ class CommonViewModel: ObservableObject {
             return CauseModel()
         }
     }
-
+    
     public static func causeAny(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) -> [String:Any] {
         let newCause:[String:Any] =   ["internalID":intid,
-                                        "CauseNo":causeno,
-                                        "InvolvedClient":client,
-                                        "Representations":representations,
-                                        "Level":level,
-                                        "Court":court,
-                                        "OriginalCharge":originalcharge,
-                                        "CauseType":causetype
-                                     ]
+                                       "CauseNo":causeno,
+                                       "InvolvedClient":client,
+                                       "Representations":representations,
+                                       "Level":level,
+                                       "Court":court,
+                                       "OriginalCharge":originalcharge,
+                                       "CauseType":causetype
+        ]
         return newCause
     }
-
+    
     @MainActor
-    func addCause(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) async {
-       let intID = nextCauseID()
-       let ud:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intid)
-    //   let db = Firestore.firestore()
-       let reprRef = db.collection("causes")
-       
-       taskCompleted = false
-       
-       do {
-          try await reprRef.document().setData(ud)
-          taskCompleted = true
-       }
-       catch {
-          print("Error adding Cause \(error.localizedDescription)")
-       }
+    func addCause(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String) async {
+        let intID = nextCauseID()
+        let ud:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intID)
+        //   let db = Firestore.firestore()
+        let reprRef = db.collection("causes")
+        
+        taskCompleted = false
+        
+        do {
+            try await reprRef.document().setData(ud)
+            taskCompleted = true
+        }
+        catch {
+            print("Error adding Cause \(error.localizedDescription)")
+        }
     }
-
+    
     @MainActor
     func updateCause(causeID:String, client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) async {
         let causeData:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intid)
-
-       taskCompleted = false
-       
-       do {
-          try await db.collection("causes").document(causeID).updateData(causeData)
-          taskCompleted = true
-          
-       } catch {
-          print("Debug updateCause failed \(error.localizedDescription)")
-       }
+        
+        taskCompleted = false
+        
+        do {
+            try await db.collection("causes").document(causeID).updateData(causeData)
+            taskCompleted = true
+            
+        } catch {
+            print("Debug updateCause failed \(error.localizedDescription)")
+        }
     }
     
-//    func sortedCauses(option:CauseSortOptions) -> [CauseModel] {
-//        switch option {
-//        case .byCauseNo:
-//            return causes.sorted { $0.causeNo < $1.causeNo }
-//        case .byIntID:
-//            return causes.sorted { $0.internalID < $1.internalID }
-//        }
-//    }
+    // MARK: Representation Functions
+
+    func representationSubscribe() {
+        if representationListener == nil {
+            representationListener = db.collection("representations").addSnapshotListener
+            { (querySnapshot, error) in
+                guard let documents = querySnapshot?.documents else {
+                    return
+                }
+                self.representations = []
+                _ = documents.map { queryDocumentSnapshot -> Void in
+                    let data = queryDocumentSnapshot.data()
+                    
+                    let internalID = data["internalID"] as? Int ?? 0
+                    let involvedClient = data["InvolvedClient"] as? Int ?? 0
+                    let involvedCause = data["InvolvedCause"] as? Int ?? 0
+                    let involvedAppearances = data["InvolvedAppearances"] as? [Int] ?? []
+                    let involvedNotes = data["InvolvedNotes"] as? [Int] ?? []
+                    let active = data["Active"] as? Bool ?? false               // Open,Closed
+                    let assignedDate = data["AssignedDate"] as? String ?? ""
+                    let dispositionDate = data["DispositionDate"] as? String ?? ""
+                    let dispositionType = data["DispositionType"] as? String ?? ""
+                    let dispositionAction = data["DispositionAction"] as? String ?? ""
+                    let primaryCategory = data["PrimaryCategory"] as? String ?? ""
+
+                    let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory)
+
+                    self.representations.append(rm)
+                    return
+                }
+            }
+        }
+    }
+
+    func nextRepresentationID() -> Int {
+        // find cause with greatest internal id
+        let greatestrepresentation = representations.max {a, b in a.internalID < b.internalID }
+        // find value of greatest internal id
+        if greatestrepresentation != nil {
+            let gc = greatestrepresentation!
+            let i:Int = Int(gc.internalID)
+            return i + 1
+        } else {
+            return 1
+        }
+    }
+    
+    public func findRepresentation(internalID:Int) -> RepresentationModel {
+        let workRepresentations:[RepresentationModel] = representations.filter { $0.internalID == internalID }
+        if workRepresentations.count == 1 {
+            return workRepresentations[0]
+        } else {
+            return RepresentationModel()
+        }
+    }
+
+    func RepresentationAny(internalID:Int, involvedClient:Int, involvedCause:Int, appearances:[Int], notes:[Int], active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String) -> [String:Any] {
+        let newRepresentation:[String:Any] = ["internalID":internalID,
+                                     "InvolvedClient":involvedClient,
+                                     "InvolvedCause":involvedCause,
+                                     "InvolvedAppearances":appearances,
+                                     "InvolvedNotes":notes,
+                                     "Active":active,
+                                     "AssignedDate":assignedDate,
+                                     "DispositionDate":dispositionDate,
+                                     "DispositionType":dispositionType,
+                                     "DispositionAction":dispositionAction,
+                                     "PrimaryCategory":primaryCategory]
+        return newRepresentation
+    }
+
+    // MARK: Representation Expansion Functions
+    
+    public func findRepresentationExpansion(internalID:Int) -> RepresentationExpansion {
+        var rx = RepresentationExpansion()
+        rx.representation = findRepresentation(internalID: internalID)
+        rx.client = findClient(internalID: rx.representation.involvedClient)
+        rx.cause = findCause(internalID: rx.representation.involvedCause)
+        return rx
+    }
+    
+    public func findRepresentationExpansion(representation:RepresentationModel) -> RepresentationExpansion {
+        var rx = RepresentationExpansion()
+        rx.representation = representation
+        rx.client = findClient(internalID: rx.representation.involvedClient)
+        rx.cause = findCause(internalID: rx.representation.involvedCause)
+        return rx
+    }
+
 }
+
 
 
