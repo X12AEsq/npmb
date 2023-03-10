@@ -66,7 +66,7 @@ struct SelectRepresentationView: View {
                     }
                     ForEach(sortedRX) { rx in
                         HStack {
-                            NavigationLink(destination: { EditRepresentationView() },
+                            NavigationLink(destination: { EditRepresentationView(rx: rx) },
                                            label: { LineLabel(option: sortOption, rx: rx) })
                             Spacer()
                         }

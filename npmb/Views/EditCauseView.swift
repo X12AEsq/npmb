@@ -126,7 +126,7 @@ struct EditCauseView: View {
                         if saveMessage == "Update" {
                             updateCause()
                         } else {
-                            print("Select save")
+                            print("Select save") // Add new cause here
                         }
                     } label: {
                         Text(saveMessage)
@@ -198,21 +198,21 @@ struct EditCauseView: View {
     }
     
     func addCause() {
-//        Task {
-//            await CVModel.addCause(client:Int, causeno:causeNo, representations:[Int], level:String, court: String, originalcharge: String, causeType: String, intid:internalID)
-//            if CVModel.taskCompleted {
-//                dismiss()
-//            }
-//        }
+        Task {
+            await CVModel.addCause(client:selectedClient.internalID, causeno:causeNo, representations:representations, level:causeLevel, court: causeCourt, originalcharge: causeOriginalCharge, causetype: causeType)
+            if CVModel.taskCompleted {
+                dismiss()
+            }
+        }
     }
     
     func updateCause() {
-//        Task {
-//            await CVModel.updateCause(causeID: causeID, internalID: internalID, causeNo: causeNo, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: representation)
-//            if CVModel.taskCompleted {
-//                dismiss()
-//            }
-//        }
+        Task {
+            await CVModel.updateCause(causeID: cause?.id ?? "", client:selectedClient.internalID, causeno:causeNo, representations:representations, level:causeLevel, court: causeCourt, originalcharge: causeOriginalCharge, causetype: causeType, intid: internalID)
+            if CVModel.taskCompleted {
+                dismiss()
+            }
+        }
     }
     
     var selClient: some View {

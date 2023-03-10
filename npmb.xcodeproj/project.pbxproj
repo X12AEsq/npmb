@@ -10,6 +10,10 @@
 		31035C7029BA488800D95B49 /* SelectRepresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31035C6F29BA488800D95B49 /* SelectRepresentationView.swift */; };
 		31035C7429BA4BB000D95B49 /* RepresentationExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31035C7329BA4BB000D95B49 /* RepresentationExpansion.swift */; };
 		31035C7629BA58EB00D95B49 /* EditRepresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */; };
+		31054FFC29BAAC97004002DD /* DateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFB29BAAC97004002DD /* DateService.swift */; };
+		31054FFE29BAB53B004002DD /* PrimaryCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFD29BAB53B004002DD /* PrimaryCategory.swift */; };
+		3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */; };
+		3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105500129BADFA3004002DD /* DispositionActionOptions.swift */; };
 		3137595A29B91A6B000482F2 /* AvailableCourts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595929B91A6B000482F2 /* AvailableCourts.swift */; };
 		3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595B29B93086000482F2 /* AppearanceModel.swift */; };
 		3137595E29B93092000482F2 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595D29B93092000482F2 /* NoteModel.swift */; };
@@ -50,6 +54,10 @@
 		31035C6F29BA488800D95B49 /* SelectRepresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRepresentationView.swift; sourceTree = "<group>"; };
 		31035C7329BA4BB000D95B49 /* RepresentationExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentationExpansion.swift; sourceTree = "<group>"; };
 		31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepresentationView.swift; sourceTree = "<group>"; };
+		31054FFB29BAAC97004002DD /* DateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateService.swift; sourceTree = "<group>"; };
+		31054FFD29BAB53B004002DD /* PrimaryCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryCategory.swift; sourceTree = "<group>"; };
+		31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionTypeOptions.swift; sourceTree = "<group>"; };
+		3105500129BADFA3004002DD /* DispositionActionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionActionOptions.swift; sourceTree = "<group>"; };
 		3137595929B91A6B000482F2 /* AvailableCourts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableCourts.swift; sourceTree = "<group>"; };
 		3137595B29B93086000482F2 /* AppearanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceModel.swift; sourceTree = "<group>"; };
 		3137595D29B93092000482F2 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
@@ -180,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				318BD07129AA9D280063BAA1 /* FormattingService.swift */,
+				31054FFB29BAAC97004002DD /* DateService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -204,6 +213,9 @@
 				318BD07729AAA0C30063BAA1 /* StateCodeModel.swift */,
 				316035E429B443A3002D82F3 /* OffenseLevel.swift */,
 				3137595929B91A6B000482F2 /* AvailableCourts.swift */,
+				31054FFD29BAB53B004002DD /* PrimaryCategory.swift */,
+				31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */,
+				3105500129BADFA3004002DD /* DispositionActionOptions.swift */,
 			);
 			path = Enumerations;
 			sourceTree = "<group>";
@@ -309,12 +321,16 @@
 				318BD07229AA9D280063BAA1 /* FormattingService.swift in Sources */,
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
+				31054FFC29BAAC97004002DD /* DateService.swift in Sources */,
+				3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */,
+				3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */,
 				31035C7029BA488800D95B49 /* SelectRepresentationView.swift in Sources */,
 				3137595E29B93092000482F2 /* NoteModel.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
 				31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */,
+				31054FFE29BAB53B004002DD /* PrimaryCategory.swift in Sources */,
 				318BD06A29AA820E0063BAA1 /* CommonViewModel.swift in Sources */,
 				318BD05A29AA800C0063BAA1 /* CustomTextField.swift in Sources */,
 				31035C7629BA58EB00D95B49 /* EditRepresentationView.swift in Sources */,
