@@ -23,16 +23,24 @@ class CommonViewModel: ObservableObject {
     
     @Published var presentedViews = NavigationPath()
     
+    @Published var appStatus:String = ""
+    
     @Published var clients = [ClientModel]()
     @Published var causes = [CauseModel]()
     @Published var representations = [RepresentationModel]()
-    
+    @Published var appearances = [AppearanceModel]()
+    @Published var notes = [NotesModel]()
+
     var clientListener: ListenerRegistration?
     var causeListener: ListenerRegistration?
     var representationListener: ListenerRegistration?
-    
+    var appearanceListener: ListenerRegistration?
+    var notesListener: ListenerRegistration?
+
     init() {
         userSession = auth.currentUser
+        appStatus = "npmb v1.06\n"
+        appStatus += "EditRepresentationView needs CRUD logic and note and appearance UI\n"
     }
     
     // MARK: Login Functions
@@ -356,7 +364,7 @@ class CommonViewModel: ObservableObject {
     // MARK: Representation Expansion Functions
     
     public func findRepresentationExpansion(internalID:Int) -> RepresentationExpansion {
-        var rx = RepresentationExpansion()
+        let rx = RepresentationExpansion()
         rx.representation = findRepresentation(internalID: internalID)
         rx.client = findClient(internalID: rx.representation.involvedClient)
         rx.cause = findCause(internalID: rx.representation.involvedCause)
@@ -364,14 +372,81 @@ class CommonViewModel: ObservableObject {
     }
     
     public func findRepresentationExpansion(representation:RepresentationModel) -> RepresentationExpansion {
-        var rx = RepresentationExpansion()
+        let rx = RepresentationExpansion()
         rx.representation = representation
         rx.client = findClient(internalID: rx.representation.involvedClient)
         rx.cause = findCause(internalID: rx.representation.involvedCause)
         return rx
     }
+    
+    // MARK: Appearance Functions
+
+    func appearanceSubscribe() {
+        if appearanceListener == nil {
+            appearanceListener = db.collection("appearances").addSnapshotListener
+            { (querySnapshot, error) in
+                guard let documents = querySnapshot?.documents else {
+//                    self.msgs.append("no appearances")
+                    return
+                }
+                self.appearances = []
+                _ = documents.map { queryDocumentSnapshot -> Void in
+                    let data = queryDocumentSnapshot.data()
+                    
+                    let internalID = data["internalID"] as? Int ?? 0
+                    let involvedClient = data["InvolvedClient"] as? Int ?? 0
+                    let involvedCause = data["InvolvedCause"] as? Int ?? 0
+                    let involvedRepresentation = data["InvolvedRepresentation"] as? Int ?? 0
+                    let appearDate = data["AppearDate"] as? String ?? ""
+                    let appearTime = data["AppearTime"] as? String ?? ""
+                    let appearNote = data["AppearNote"] as? String ?? ""
+          
+                    let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
+                    self.appearances.append(am)
+                     return
+                }
+            }
+        }
+    }
+    
+    public func assembleAppearances(repID:Int) -> [AppearanceModel] {
+        let workAppearances:[AppearanceModel] = appearances.filter { $0.involvedRepresentation == repID }
+        return workAppearances.sorted { $0.appearDate < $1.appearDate }
+    }
+
+// MARK: Note Functions
+    
+    func noteSubscribe() {
+        if notesListener == nil {
+            notesListener = db.collection("notes").addSnapshotListener
+            { (querySnapshot, error) in
+                guard let documents = querySnapshot?.documents else {
+                    return
+                }
+                self.notes = []
+                _ = documents.map { queryDocumentSnapshot -> Void in
+                    let data = queryDocumentSnapshot.data()
+                    let internalID = data["internalID"] as? Int ?? 0
+                    let involvedClient = data["involvedClient"] as? Int ?? 0
+                    let involvedCause = data["involvedCause"] as? Int ?? 0
+                    let involvedRepresentation = data["involvedRepresentation"] as? Int ?? 0
+                    let noteDate = data["noteDate"] as? String ?? ""
+                    let noteTime = data["noteTime"] as? String ?? ""
+                    let noteNote = data["noteNote"] as? String ?? ""
+                    let noteCategory = data["noteCategory"] as? String ?? ""
+          
+                    let nm:NotesModel = NotesModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, notedate:noteDate, notetime:noteTime, notenote:noteNote, notecat:noteCategory)
+                    self.notes.append(nm)
+                    return
+                }
+            }
+        }
+    }
+
+    public func assembleNotes(repID:Int) -> [NotesModel] {
+        let workNotes:[NotesModel] = notes.filter { $0.involvedRepresentation == repID }
+        return workNotes.sorted { $0.noteDate < $1.noteDate }
+    }
+
 
 }
-
-
-

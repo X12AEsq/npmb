@@ -32,6 +32,8 @@ struct ContentView: View {
             CVModel.clientSubscribe()
             CVModel.causeSubscribe()
             CVModel.representationSubscribe()
+            CVModel.appearanceSubscribe()
+            CVModel.noteSubscribe()
         }
     }
 }

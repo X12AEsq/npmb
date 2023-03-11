@@ -95,6 +95,8 @@ struct SelectRepresentationView: View {
             let newrx = RepresentationExpansion(rm: item)
             newrx.client = CVModel.findClient(internalID: item.involvedClient)
             newrx.cause = CVModel.findCause(internalID: item.involvedCause)
+            newrx.appearances = CVModel.assembleAppearances(repID: item.internalID)
+            newrx.notes = CVModel.assembleNotes(repID: item.internalID)
             rx.append(newrx)
         }
         if option == 1 {

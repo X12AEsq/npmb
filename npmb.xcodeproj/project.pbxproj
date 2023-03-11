@@ -16,8 +16,9 @@
 		3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105500129BADFA3004002DD /* DispositionActionOptions.swift */; };
 		3137595A29B91A6B000482F2 /* AvailableCourts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595929B91A6B000482F2 /* AvailableCourts.swift */; };
 		3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595B29B93086000482F2 /* AppearanceModel.swift */; };
-		3137595E29B93092000482F2 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595D29B93092000482F2 /* NoteModel.swift */; };
+		3137595E29B93092000482F2 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595D29B93092000482F2 /* NotesModel.swift */; };
 		3137596029B9597C000482F2 /* RepresentationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595F29B9597C000482F2 /* RepresentationModel.swift */; };
+		313A657229BB8F8C009B484D /* SelectCauseUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313A657129BB8F8C009B484D /* SelectCauseUtil.swift */; };
 		313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313BC3AA29AF025900D99BB8 /* CauseModel.swift */; };
 		316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316035E429B443A3002D82F3 /* OffenseLevel.swift */; };
 		317D987A29B1825400709C32 /* CauseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987929B1825400709C32 /* CauseExtension.swift */; };
@@ -60,8 +61,9 @@
 		3105500129BADFA3004002DD /* DispositionActionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionActionOptions.swift; sourceTree = "<group>"; };
 		3137595929B91A6B000482F2 /* AvailableCourts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableCourts.swift; sourceTree = "<group>"; };
 		3137595B29B93086000482F2 /* AppearanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceModel.swift; sourceTree = "<group>"; };
-		3137595D29B93092000482F2 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
+		3137595D29B93092000482F2 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
 		3137595F29B9597C000482F2 /* RepresentationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentationModel.swift; sourceTree = "<group>"; };
+		313A657129BB8F8C009B484D /* SelectCauseUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCauseUtil.swift; sourceTree = "<group>"; };
 		313BC3AA29AF025900D99BB8 /* CauseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseModel.swift; sourceTree = "<group>"; };
 		316035E429B443A3002D82F3 /* OffenseLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffenseLevel.swift; sourceTree = "<group>"; };
 		317D987929B1825400709C32 /* CauseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseExtension.swift; sourceTree = "<group>"; };
@@ -177,7 +179,7 @@
 				317D987929B1825400709C32 /* CauseExtension.swift */,
 				318BD06E29AA9BC00063BAA1 /* ClientModel.swift */,
 				318BD08029AAB3320063BAA1 /* ClientExtension.swift */,
-				3137595D29B93092000482F2 /* NoteModel.swift */,
+				3137595D29B93092000482F2 /* NotesModel.swift */,
 				3137595F29B9597C000482F2 /* RepresentationModel.swift */,
 				31035C7329BA4BB000D95B49 /* RepresentationExpansion.swift */,
 			);
@@ -200,6 +202,7 @@
 				318BD07E29AAB2270063BAA1 /* SelectClientView.swift */,
 				31F36A2F29B190750059D122 /* EditCauseView.swift */,
 				317D987B29B1844700709C32 /* SelectCauseView.swift */,
+				313A657129BB8F8C009B484D /* SelectCauseUtil.swift */,
 				31035C6F29BA488800D95B49 /* SelectRepresentationView.swift */,
 				31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */,
 			);
@@ -325,7 +328,8 @@
 				3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */,
 				3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */,
 				31035C7029BA488800D95B49 /* SelectRepresentationView.swift in Sources */,
-				3137595E29B93092000482F2 /* NoteModel.swift in Sources */,
+				313A657229BB8F8C009B484D /* SelectCauseUtil.swift in Sources */,
+				3137595E29B93092000482F2 /* NotesModel.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,

@@ -39,6 +39,7 @@ struct MainInterfaceView: View {
                         .background(.white.opacity(0.3))
                         .clipShape(Capsule())
                 }
+                Text(CVModel.appStatus)
                 NavigationStack {
                     VStack(alignment: .leading) {
                         NavigationLink("Clients") {
@@ -64,7 +65,7 @@ struct MainInterfaceView: View {
                         .font(.largeTitle)
                         .foregroundColor(.primary)
 
-                .navigationTitle("Albers Law Practice")
+                        .navigationTitle("Albers Law Practice")
                 }
                 
                 Spacer()
@@ -73,43 +74,6 @@ struct MainInterfaceView: View {
     }
 }
 
-//struct SelectionOption: Identifiable, Hashable {
-//    let id = UUID()
-//    let name: String
-//}
-//
-//extension SelectionOption {
-//    static var data: [SelectionOption] {
-//        return [
-//            .init(name: "Bangla"),
-//            .init(name: "English"),
-//            .init(name: "Science")
-//        ]
-//    }
-//}
-//
-//struct SelectionOptionView: View {
-//    let option: SelectionOption
-//
-//    init(_ option: SelectionOption) {
-//        self.option = option
-//    }
-//
-//    var body: some View {
-//        VStack {
-//            Text("Your selected option is:")
-//            Text(option.name)
-//                .bold()
-//                .shadow(radius: 2)
-//            Button {
-//                path.
-////                Text("Pushing " + option.name)
-//            } label: {
-//                Text("Push Screen B")
-//            }
-//        }
-//    }
-//}
 //
 //struct MainInterfaceView_Previews: PreviewProvider {
 //    static var previews: some View {
