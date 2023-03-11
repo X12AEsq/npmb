@@ -32,6 +32,8 @@ struct EditRepresentationView: View {
     @State var repDateDisp:Date = Date()
     @State var repDispType:String = ""
     @State var repDispAction:String = ""
+    @State var repAppearances:[AppearanceModel] = []
+    @State var repNotes:[NotesModel] = []
     @State var cauInternalID = 0
     @State var cauCauseNo = ""
     @State var cauOrigCharge = ""
@@ -52,14 +54,14 @@ struct EditRepresentationView: View {
             VStack (alignment: .leading) {
                 VStack (alignment: .leading) {
                     Text("Representation").font(.title)
-                        .padding(.bottom)
+                        .padding([.leading, .bottom, .trailing])
                     if statusMessage != "" {
                         Text(statusMessage)
                             .font(.body)
                             .foregroundColor(Color.red)
                             .multilineTextAlignment(.leading)
-                            .padding(.bottom)
-                    }
+                            .padding([.leading, .bottom, .trailing])
+                         }
                     HStack {
                         VStack {
                             VStack {
@@ -168,7 +170,7 @@ struct EditRepresentationView: View {
                             }
                             
                         }
-                        .padding()
+                        .padding(.bottom)
                         .frame(width: geo.size.width * 0.495)
                         .border(.yellow, width: 4)
                     }
@@ -192,6 +194,8 @@ struct EditRepresentationView: View {
                 repDateDisp = DateService.dateString2Date(inDate: repDispDate)
                 repDispType = rx.representation.dispositionType
                 repDispAction = rx.representation.dispositionAction
+                repAppearances = rx.appearances
+                repNotes = rx.notes
                 cauInternalID = rx.cause.internalID
                 cauCauseNo = rx.cause.causeNo
                 cauOrigCharge = rx.cause.originalCharge
@@ -211,6 +215,8 @@ struct EditRepresentationView: View {
                 repDispType = ""
                 repDateDisp = Date()
                 repDispAction = ""
+                repAppearances = []
+                repNotes = []
                 cauInternalID = 0
                 cauCauseNo = ""
                 cauOrigCharge = ""
@@ -223,47 +229,85 @@ struct EditRepresentationView: View {
     
     var detail: some View {
         VStack (alignment: .leading) {
-            HStack {
-                Text("Representation:")
-                Text(String(repInternalID))
-            }
-            HStack {
-                Text("Assigned: ")
-                Text(repAssigned)
-            }
-            HStack {
-                Text("Category: ")
-                Text(repCategory)
-            }
-            HStack {
-                Text("Active:")
-                Text((repActive) ? "yes" : "no")
-            }
-            if !repActive {
+            VStack (alignment: .leading) {
                 HStack {
-                    Text("Competed:")
-                    Text(repDispDate)
+                    Text("Representation:")
+                    Text(String(repInternalID))
+                }
+                HStack {
+                    Text("Assigned: ")
+                    Text(repAssigned)
+                }
+                HStack {
+                    Text("Category: ")
+                    Text(repCategory)
+                }
+                HStack {
+                    Text("Active:")
+                    Text((repActive) ? "yes" : "no")
+                }
+                if !repActive {
+                    HStack {
+                        Text("Competed:")
+                        Text(repDispDate)
+                        Text(" ")
+                        Text(repDispType)
+                        Text(" ")
+                        Text(repDispAction)
+                    }
+                }
+                HStack {
+                    Text("Cause:")
+                    Text(String(cauInternalID))
                     Text(" ")
-                    Text(repDispType)
+                    Text(cauCauseNo)
                     Text(" ")
-                    Text(repDispAction)
+                    Text(cauOrigCharge)
+                }
+                HStack {
+                    Text("Client:")
+                    Text(String(cliInternalID))
+                    Text(" ")
+                    Text(cliName)
                 }
             }
-            HStack {
-                Text("Cause:")
-                Text(String(cauInternalID))
-                Text(" ")
-                Text(cauCauseNo)
-                Text(" ")
-                Text(cauOrigCharge)
+            .padding(.all, 20.0)
+            .border(.indigo, width: 4)
+            
+            VStack (alignment: .leading) {
+                Text("Appearances")
+                ScrollView {
+                    ForEach(repAppearances) { appr in
+                        HStack (alignment: .top) {
+                            Text(appr.appearDate)
+                            Text(appr.appearTime)
+                            Text(appr.appearNote)
+                            Spacer()
+                        }
+                     }
+                }
             }
-            HStack {
-                Text("Client:")
-                Text(String(cliInternalID))
-                Text(" ")
-                Text(cliName)
+            .padding(.all, 20.0)
+            .border(.indigo, width: 4)
+            
+            VStack (alignment: .leading) {
+                Text("Notes")
+                ScrollView {
+                    ForEach(repNotes) { note in
+                        HStack (alignment: .top) {
+                            Text(note.noteDate)
+                            Text(note.noteTime)
+                            Text(note.noteNote)
+                            Spacer()
+                        }
+                     }
+                }
             }
+            .padding(.all, 20.0)
+            .border(.indigo, width: 4)
+
         }
+                
     }
     
     var inputmain: some View {
