@@ -91,5 +91,12 @@ struct DateService {
         let returnDate = formatter.string(from: inDate)
         return returnDate
     }
+    
+    public static func dateTime2String(inDate:Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HHmm"
+        let work = formatter.string(from: inDate)
+        return work
+    }
 
 }

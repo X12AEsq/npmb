@@ -34,11 +34,22 @@ struct EditRepresentationView: View {
     @State var repDispAction:String = ""
     @State var repAppearances:[AppearanceModel] = []
     @State var repNotes:[NotesModel] = []
+    
     @State var cauInternalID = 0
     @State var cauCauseNo = ""
     @State var cauOrigCharge = ""
+    
     @State var cliInternalID:Int = 0
     @State var cliName:String = ""
+    
+    @State var dateAppr:Date = Date()
+    @State var apprDate:String = ""
+//    @State var appearDateYear:String
+//    @State var appearDateMonth:String
+//    @State var appearDateDay:String
+    @State var apprTime:String = ""
+    @State var apprNote:String = ""
+    
     @State var startingFilter:String = ""
     @State var activeScreen = NextAction.maininput
     @State private var orientation = UIDeviceOrientation.portrait
@@ -75,7 +86,7 @@ struct EditRepresentationView: View {
                                     Button {
                                         activeScreen = .maininput
                                     } label: {
-                                        Text("Repr")
+                                        Text("Main")
                                     }
                                     .buttonStyle(CustomButton())
                                     Button {
@@ -148,19 +159,8 @@ struct EditRepresentationView: View {
                                         }
                                     } else {
                                         if activeScreen == .editappearance {
-                                            HStack {
-                                                Button {
-                                                    activeScreen = .maininput
-                                                } label: {
-                                                    Text("Add/Edit Main")
-                                                }
-                                                .buttonStyle(CustomButton())
-                                                Button {
-                                                    activeScreen = .editnote
-                                                } label: {
-                                                    Text("Add/Edit Note")
-                                                }
-                                                .buttonStyle(CustomButton())
+                                            VStack {
+                                                inputAppr
                                             }
                                         } else {
                                             if activeScreen == .selectcause {
@@ -302,38 +302,49 @@ struct EditRepresentationView: View {
     }
     
     var detail: some View {
-        VStack (alignment: .leading) {
-            VStack (alignment: .leading) {
-                Text("Appearances")
-                ScrollView {
-                    ForEach(repAppearances) { appr in
-                        HStack (alignment: .top) {
-                            Text(appr.appearDate)
-                            Text(appr.appearTime)
-                            Text(appr.appearNote)
-                            Spacer()
+        ZStack {
+            if activeScreen == .editappearance {
+                VStack (alignment: .leading) {
+                    Text("Appearances")
+                    ScrollView {
+                        ForEach(repAppearances) { appr in
+                            HStack (alignment: .top) {
+                                ActionEdit()
+                                    .onTapGesture {
+                                        dateAppr = DateService.dateString2Date(inDate: appr.appearDate, inTime: appr.appearTime)
+                                        apprNote = appr.appearNote
+                                    }
+                                Text(appr.appearDate)
+                                Text(appr.appearTime)
+                                Text(appr.appearNote)
+                                Spacer()
+                            }
                         }
-                     }
+                    }
+                }
+                .padding(.all, 20.0)
+                .border(.indigo, width: 4)
+            } else {
+                if activeScreen == .editnote {
+                    VStack (alignment: .leading) {
+                        Text("Notes")
+                        ScrollView {
+                            ForEach(repNotes) { note in
+                                HStack (alignment: .top) {
+                                    Text(note.noteDate)
+                                    Text(note.noteTime)
+                                    Text(note.noteNote)
+                                    Spacer()
+                                }
+                            }
+                        }
+                    }
+                    .padding(.all, 20.0)
+                    .border(.indigo, width: 4)
+                } else {
+                    Text("No extended display selected")
                 }
             }
-            .padding(.all, 20.0)
-            .border(.indigo, width: 4)
-            
-            VStack (alignment: .leading) {
-                Text("Notes")
-                ScrollView {
-                    ForEach(repNotes) { note in
-                        HStack (alignment: .top) {
-                            Text(note.noteDate)
-                            Text(note.noteTime)
-                            Text(note.noteNote)
-                            Spacer()
-                        }
-                     }
-                }
-            }
-            .padding(.all, 20.0)
-            .border(.indigo, width: 4)
         }
     }
 
@@ -376,6 +387,45 @@ struct EditRepresentationView: View {
                 }
             }
         }
+    }
+    
+    var inputAppr: some View {
+        VStack (alignment: .leading) {
+            Button {
+                dateAppr = Date()
+                apprNote = ""
+            } label: {
+                Text("Add Appearance")
+            }
+            .buttonStyle(CustomButton())
+            DatePicker("Appearance Date", selection: $dateAppr).padding().onChange(of: dateAppr, perform: { value in
+                apprDate = DateService.dateDate2String(inDate: value)
+                apprTime = DateService.dateTime2String(inDate: value)
+            })
+            TextField(text: $apprNote, prompt: Text("note")) {
+                Text(apprNote)
+            }.padding(.all, 20.0)
+            Spacer()
+            
+            HStack {
+                Button {
+                    dateAppr = Date()
+                    apprNote = ""
+                   activeScreen = .maininput
+                } label: {
+                    Text("Save Appr")
+                }
+                .buttonStyle(CustomButton())
+                Button {
+                    dateAppr = Date()
+                    apprNote = ""
+                   activeScreen = .maininput
+                } label: {
+                    Text("Quit (no save)")
+                }
+                .buttonStyle(CustomButton())
+            }
+       }
     }
 }
 
