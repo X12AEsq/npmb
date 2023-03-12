@@ -49,22 +49,25 @@ struct EditRepresentationView: View {
         case editnote
         case selectcause
     }
-
+// TODO: write appearance and note logic
     var body: some View {
         GeometryReader { geo in
             VStack (alignment: .leading) {
                 VStack (alignment: .leading) {
-                    Text("Representation").font(.title)
-                        .padding([.leading, .bottom, .trailing])
-                    if statusMessage != "" {
-                        Text(statusMessage)
+                    Text("Representation").font(.title)             // Top of screen
+                        .padding([.leading, .bottom, .trailing])    // Top of screen
+                    if statusMessage != "" {                        // Top of screen
+                        Text(statusMessage)                         // Top of screen
                             .font(.body)
                             .foregroundColor(Color.red)
                             .multilineTextAlignment(.leading)
                             .padding([.leading, .bottom, .trailing])
                          }
+                    mainsummary                                     // Top of screen
+                        .frame(width: geo.size.width * 0.99)
+
                     HStack {
-                        VStack {
+                        VStack {                                        // left hand side
                             VStack {
                                 detail
                                 Spacer()
@@ -72,25 +75,25 @@ struct EditRepresentationView: View {
                                     Button {
                                         activeScreen = .maininput
                                     } label: {
-                                        Text("Edit Representation")
+                                        Text("Repr")
                                     }
                                     .buttonStyle(CustomButton())
                                     Button {
                                         activeScreen = .selectcause
                                     } label: {
-                                        Text("Attach Cause")
+                                        Text("Cause")
                                     }
                                     .buttonStyle(CustomButton())
                                     Button {
                                         activeScreen = .editappearance
                                     } label: {
-                                        Text("Add/Edit Appearance")
+                                        Text("Appear")
                                     }
                                     .buttonStyle(CustomButton())
                                     Button {
                                         activeScreen = .editnote
                                     } label: {
-                                        Text("Add/Edit Note")
+                                        Text("Note")
                                     }
                                     .buttonStyle(CustomButton())
                                 }
@@ -111,19 +114,19 @@ struct EditRepresentationView: View {
                                             print("Select Delete")
                                         }
                                         .font(.headline.bold())
-                                        .frame(maxWidth: .infinity, maxHeight: 55)
+                                        .frame(maxWidth: .infinity, maxHeight: 45)
                                         .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
                                     }
                                 }
                             }
                             .padding()
                             .border(.indigo, width: 4)
-                        }
+                        }                                               // End of left hand side
                         .padding()
                         .frame(width: geo.size.width * 0.495)
                         .border(.yellow, width: 4)
 
-                        ZStack {
+                        ZStack {                                        // right hand side
                             VStack {
                                 if activeScreen == .maininput {
                                     inputmain
@@ -169,7 +172,6 @@ struct EditRepresentationView: View {
                                     }
                                 }
                             }
-                            
                         }
                         .padding(.bottom)
                         .frame(width: geo.size.width * 0.495)
@@ -244,9 +246,8 @@ struct EditRepresentationView: View {
         }
     }
     
-    
-    var detail: some View {
-        VStack (alignment: .leading) {
+    var mainsummary: some View {
+        HStack (alignment: .top){
             VStack (alignment: .leading) {
                 HStack {
                     Text("Representation:")
@@ -260,10 +261,16 @@ struct EditRepresentationView: View {
                     Text("Category: ")
                     Text(repCategory)
                 }
+            }
+            Spacer()
+            VStack (alignment: .leading) {
                 HStack {
                     Text("Active:")
                     Text((repActive) ? "yes" : "no")
                 }
+            }
+            Spacer()
+            VStack (alignment: .leading) {
                 if !repActive {
                     HStack {
                         Text("Competed:")
@@ -289,9 +296,13 @@ struct EditRepresentationView: View {
                     Text(cliName)
                 }
             }
-            .padding(.all, 20.0)
-            .border(.indigo, width: 4)
-            
+        }
+        .padding(.all, 20.0)
+        .border(.yellow, width: 4)
+    }
+    
+    var detail: some View {
+        VStack (alignment: .leading) {
             VStack (alignment: .leading) {
                 Text("Appearances")
                 ScrollView {
@@ -323,11 +334,9 @@ struct EditRepresentationView: View {
             }
             .padding(.all, 20.0)
             .border(.indigo, width: 4)
-
         }
-                
     }
-    
+
     var inputmain: some View {
         Form {
             Section(header: Text("Representation Data").background(Color.blue).foregroundColor(.white)) {
