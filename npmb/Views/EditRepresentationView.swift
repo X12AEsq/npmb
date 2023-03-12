@@ -41,6 +41,7 @@ struct EditRepresentationView: View {
     @State var cliName:String = ""
     @State var startingFilter:String = ""
     @State var activeScreen = NextAction.maininput
+    @State private var orientation = UIDeviceOrientation.portrait
     
     enum NextAction {
         case maininput
@@ -225,7 +226,24 @@ struct EditRepresentationView: View {
                 startingFilter = ""
             }
         }
+        .onRotate { newOrientation in
+            if newOrientation.isLandscape || newOrientation.isPortrait {
+                if newOrientation != orientation {
+                    orientation = newOrientation
+                }
+            }
+//            if orientation.isPortrait {
+//                print("Portrait")
+//            } else if orientation.isLandscape {
+//                print("Landscape")
+//            } else if orientation.isFlat {
+//                print("Flat")
+//            } else {
+//                print("Unknown")
+//            }
+        }
     }
+    
     
     var detail: some View {
         VStack (alignment: .leading) {

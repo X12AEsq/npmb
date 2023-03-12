@@ -14,6 +14,7 @@
 		31054FFE29BAB53B004002DD /* PrimaryCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFD29BAB53B004002DD /* PrimaryCategory.swift */; };
 		3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */; };
 		3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105500129BADFA3004002DD /* DispositionActionOptions.swift */; };
+		312EA24829BD2B6000B61D0A /* DeviceRotationViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */; };
 		3137595A29B91A6B000482F2 /* AvailableCourts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595929B91A6B000482F2 /* AvailableCourts.swift */; };
 		3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595B29B93086000482F2 /* AppearanceModel.swift */; };
 		3137595E29B93092000482F2 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595D29B93092000482F2 /* NotesModel.swift */; };
@@ -59,6 +60,7 @@
 		31054FFD29BAB53B004002DD /* PrimaryCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryCategory.swift; sourceTree = "<group>"; };
 		31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionTypeOptions.swift; sourceTree = "<group>"; };
 		3105500129BADFA3004002DD /* DispositionActionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionActionOptions.swift; sourceTree = "<group>"; };
+		312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRotationViewModifier.swift; sourceTree = "<group>"; };
 		3137595929B91A6B000482F2 /* AvailableCourts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableCourts.swift; sourceTree = "<group>"; };
 		3137595B29B93086000482F2 /* AppearanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceModel.swift; sourceTree = "<group>"; };
 		3137595D29B93092000482F2 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				318BD07A29AAA12A0063BAA1 /* GrowingButton.swift */,
 				31B6748429B6F2100007D08B /* ActionEdit.swift */,
 				31B6748629B6F4620007D08B /* ActionSelect.swift */,
+				312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
 				31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */,
 				31054FFE29BAB53B004002DD /* PrimaryCategory.swift in Sources */,
+				312EA24829BD2B6000B61D0A /* DeviceRotationViewModifier.swift in Sources */,
 				318BD06A29AA820E0063BAA1 /* CommonViewModel.swift in Sources */,
 				318BD05A29AA800C0063BAA1 /* CustomTextField.swift in Sources */,
 				31035C7629BA58EB00D95B49 /* EditRepresentationView.swift in Sources */,
