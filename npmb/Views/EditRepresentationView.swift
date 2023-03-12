@@ -44,12 +44,15 @@ struct EditRepresentationView: View {
     
     @State var dateAppr:Date = Date()
     @State var apprDate:String = ""
-//    @State var appearDateYear:String
-//    @State var appearDateMonth:String
-//    @State var appearDateDay:String
     @State var apprTime:String = ""
     @State var apprNote:String = ""
     
+    @State var dateNote:Date = Date()
+    @State var noteDate:String = ""
+    @State var noteTime:String = ""
+    @State var noteNote:String = ""
+    @State var noteCategory:String = "NOTE"
+
     @State var startingFilter:String = ""
     @State var activeScreen = NextAction.maininput
     @State private var orientation = UIDeviceOrientation.portrait
@@ -60,6 +63,9 @@ struct EditRepresentationView: View {
         case editnote
         case selectcause
     }
+    
+    var NoteCatOptions = ["TODO", "NOTE", "DONE"]
+    
 // TODO: write appearance and note logic
     var body: some View {
         GeometryReader { geo in
@@ -143,19 +149,8 @@ struct EditRepresentationView: View {
                                     inputmain
                                 } else {
                                     if activeScreen == .editnote {
-                                        HStack {
-                                            Button {
-                                                activeScreen = .maininput
-                                            } label: {
-                                                Text("Add/Edit Main")
-                                            }
-                                            .buttonStyle(CustomButton())
-                                            Button {
-                                                activeScreen = .editappearance
-                                            } label: {
-                                                Text("Add/Edit Appearance")
-                                            }
-                                            .buttonStyle(CustomButton())
+                                        VStack {
+                                            inputNote
                                         }
                                     } else {
                                         if activeScreen == .editappearance {
@@ -331,8 +326,14 @@ struct EditRepresentationView: View {
                         ScrollView {
                             ForEach(repNotes) { note in
                                 HStack (alignment: .top) {
+                                    ActionEdit()
+                                        .onTapGesture {
+                                            dateNote = DateService.dateString2Date(inDate: note.noteDate, inTime: note.noteTime)
+                                            noteNote = note.noteNote
+                                            noteCategory = note.noteCategory
+                                        }
                                     Text(note.noteDate)
-                                    Text(note.noteTime)
+                                    Text(note.noteCategory)
                                     Text(note.noteNote)
                                     Spacer()
                                 }
@@ -427,6 +428,54 @@ struct EditRepresentationView: View {
             }
        }
     }
+    
+    var inputNote: some View {
+        VStack (alignment: .leading) {
+            Button {
+                dateNote = Date()
+                noteNote = ""
+            } label: {
+                Text("Add Note")
+            }
+            .buttonStyle(CustomButton())
+            DatePicker("Note Date", selection: $dateNote).padding().onChange(of: dateNote, perform: { value in
+                noteDate = DateService.dateDate2String(inDate: value)
+                noteTime = DateService.dateTime2String(inDate: value)
+            })
+            Picker("Category", selection: $noteCategory) {
+                ForEach(NoteCatOptions, id: \.self) {
+                    Text($0)
+                }
+            }
+
+            TextField(text: $noteNote, prompt: Text("note")) {
+                Text(noteNote)
+            }.padding(.all, 20.0)
+            Spacer()
+            
+            HStack {
+                Button {
+                    dateNote = Date()
+                    noteNote = ""
+                    noteCategory = "NOTE"
+                    activeScreen = .maininput
+                } label: {
+                    Text("Save Note")
+                }
+                .buttonStyle(CustomButton())
+                Button {
+                    dateNote = Date()
+                    noteNote = ""
+                    noteCategory = "NOTE"
+                    activeScreen = .maininput
+                } label: {
+                    Text("Quit (no save)")
+                }
+                .buttonStyle(CustomButton())
+            }
+        }
+    }
+
 }
 
 //struct EditRepresentationView_Previews: PreviewProvider {
