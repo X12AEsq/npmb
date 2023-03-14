@@ -44,6 +44,29 @@ struct EditClientView: View {
                     .padding(.bottom)
             }
             Form {
+                Section(header: Text("Action").background(Color.blue).foregroundColor(.white)) {
+                    HStack {
+                        Button {
+                            if saveMessage == "Update" {
+                                updateClient()
+                            } else {
+                                print("Select save")
+                            }
+                        } label: {
+                            Text(saveMessage)
+                        }
+                        .buttonStyle(CustomButton())
+                        if saveMessage == "Update" {
+                            Button {
+                                print("Select delete")
+                            } label: {
+                                Text("Delete Client")
+                            }
+                            .buttonStyle(CustomButton())
+                        }
+                    }
+                }
+
                 Section(header: Text("Client Name").background(Color.blue).foregroundColor(.white)) {
                     TextField("Last Name", text: $lastName)
                     TextField("First Name", text: $firstName)
@@ -82,26 +105,6 @@ struct EditClientView: View {
                 }
             }
             .padding(.leading)
-            HStack {
-                Button {
-                    if saveMessage == "Update" {
-                        updateClient()
-                    } else {
-                        print("Select save")
-                    }
-                } label: {
-                    Text(saveMessage)
-                }
-                .buttonStyle(CustomButton())
-                if saveMessage == "Update" {
-                    Button {
-                        print("Select delete")
-                    } label: {
-                        Text("Delete Client")
-                    }
-                    .buttonStyle(CustomButton())
-                }
-            }
          }
         .onAppear {
             if let client = client {
@@ -162,10 +165,10 @@ struct EditClientView: View {
     }
 }
 
-struct EditClientView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditClientView(
-        )
-    }
-}
+//struct EditClientView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EditClientView(
+//        )
+//    }
+//}
     

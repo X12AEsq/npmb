@@ -70,9 +70,8 @@ struct SelectCauseView: View {
                     }
                 }
                 .onAppear {
-                    sortedCauses = sortThem(option: 1)
-                    filterText = ""
-                }
+                    filterThem(prefix: filterText, option: sortOption)
+                 }
             }
             .listStyle(.plain)
 //            .navigationTitle("Which Cause?")
