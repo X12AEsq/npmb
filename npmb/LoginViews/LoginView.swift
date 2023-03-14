@@ -46,6 +46,8 @@ struct LoginView: View {
                 VStack(spacing: 20) {
                     Button {
                         Task {
+                            print (email)
+                            print (password)
                             await commonVM.signIn(withEmail: email, password: password)
                         }
                     } label: {

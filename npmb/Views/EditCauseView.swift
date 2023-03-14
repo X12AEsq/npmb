@@ -46,6 +46,32 @@ struct EditCauseView: View {
                     .padding(.bottom)
             }
             Form {
+                Section(header: Text("Action").background(Color.blue).foregroundColor(.white)) {
+                    
+                    HStack {
+                        Button {
+                            if saveMessage == "Update" {
+                                updateCause()
+                            } else {
+                                print("Select save") // Add new cause here
+                            }
+                        } label: {
+                            Text(saveMessage)
+                        }
+                        .buttonStyle(CustomButton())
+                        if saveMessage == "Update" {
+                            Button("Delete", role: .destructive) {
+                                print("Select delete")
+                            }
+                            .font(.headline.bold())
+                            .frame(maxWidth: .infinity, maxHeight: 55)
+                            .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                            
+                            //                        .buttonStyle(CustomButton())
+                        }
+                    }
+                }
+
                 Section(header: Text("Cause").background(Color.blue).foregroundColor(.white)) {
                     HStack {
                         Text("Cause No: ")
@@ -121,28 +147,6 @@ struct EditCauseView: View {
                     }
                 }
                 .padding(.leading)
-                HStack {
-                    Button {
-                        if saveMessage == "Update" {
-                            updateCause()
-                        } else {
-                            print("Select save") // Add new cause here
-                        }
-                    } label: {
-                        Text(saveMessage)
-                    }
-                    .buttonStyle(CustomButton())
-                    if saveMessage == "Update" {
-                        Button("Delete", role: .destructive) {
-                            print("Select delete")
-                        }
-                        .font(.headline.bold())
-                        .frame(maxWidth: .infinity, maxHeight: 55)
-                        .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
-
-//                        .buttonStyle(CustomButton())
-                    }
-                }
             } // end of form
             .onAppear {
                 sortedClients = CVModel.clients.sorted {

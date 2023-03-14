@@ -71,6 +71,7 @@ struct SelectCauseView: View {
                 }
                 .onAppear {
                     sortedCauses = sortThem(option: 1)
+                    filterText = ""
                 }
             }
             .listStyle(.plain)
@@ -114,99 +115,3 @@ struct SelectCauseView: View {
 //        SelectCauseView()
 //    }
 //}
-
-/*
- var doList: some View {
-     VStack {
-         GeometryReader { geo in
-             ScrollView {
-                 VStack (alignment: .leading) {
-                     ForEach(rxs) { rexm in
-                         VStack {
-                             HStack {
-                                 ActionEdit()
-                                     .onTapGesture {
-                                         sortedClients = pcvm.clients.sorted {
-                                             $0.formattedName < $1.formattedName
-                                         }
-                                         sortedCauses = pcvm.causes.sorted {
-                                             $0.causeNo < $1.causeNo
-                                         }
-                                         clientSelectionIndex = 0
-                                         causeSelectionIndex = 0
-                                         selectedRepresentation = rexm.reinternalID
-                                         _ = pcvm.assembleRCB(id: selectedRepresentation)
-                                         if pcvm.rcb.rcbRep.internalID == 0 {
-                                             statusMessage = "Could not locate selected representation"
-                                         } else {
-                                             statusMessage = ""
-                                             extractRepresentation(rep: pcvm.rcb.rcbRep)
-                                             pathOption = NextAction.gotoedit
-                                         }
-                                     }
-                                     .frame(width: geo.size.width * 0.035)
-                                     .background(Color.blue)
-                                     .foregroundColor(.white)
-                                     .cornerRadius(10)
-                                 ActionDisplay()
-                                     .onTapGesture {
-                                         print("Selected")
-                                         selectedRepresentation = rexm.reinternalID
-                                         _ = pcvm.assembleRCB(id: selectedRepresentation)
-                                         if pcvm.rcb.rcbRep.internalID == 0 {
-                                             statusMessage = "Could not locate selected representation"
-                                         } else {
-                                             statusMessage = ""
-                                             pathOption = NextAction.detail
-                                         }
-                                     }
-                                     .frame(width: geo.size.width * 0.035)
-                                     .background(Color.green)
-                                     .foregroundColor(.white)
-                                     .cornerRadius(10)
-                                 ActionAddAppear()
-                                     .onTapGesture {
-                                         selectedRepresentation = rexm.reinternalID
-                                         _ = pcvm.assembleRCB(id: selectedRepresentation)
-                                         if pcvm.rcb.rcbRep.internalID == 0 {
-                                             statusMessage = "Could not locate selected representation"
-                                         } else {
-                                             statusMessage = ""
-                                             pathOption = NextAction.addappear
-                                         }
-                                     }
-                                     .frame(width: geo.size.width * 0.035)
-                                     .background(Color.yellow)
-                                     .foregroundColor(.black)
-                                     .cornerRadius(10)
-                                 ActionAddNote()
-                                     .onTapGesture {
-                                         selectedRepresentation = rexm.reinternalID
-                                         _ = pcvm.assembleRCB(id: selectedRepresentation)
-                                         if pcvm.rcb.rcbRep.internalID == 0 {
-                                             statusMessage = "Could not locate selected representation"
-                                         } else {
-                                             statusMessage = ""
-                                             initNoteWorkArea()
-                                             pathOption = NextAction.addnote
-                                         }
-                                     }
-                                     .frame(width: geo.size.width * 0.035)
-                                     .background(Color.black)
-                                     .foregroundColor(.yellow)
-                                     .cornerRadius(10)
-                                 Text(String(rexm.reinternalID)).frame(width: geo.size.width * 0.045, alignment: .trailing).foregroundColor(.black)
-                                 Text(String(rexm.reassignedDate)).frame(width: geo.size.width * 0.145, alignment: .trailing).foregroundColor(.black)
-                                 Text(actinact(inp:rexm.reactive)).frame(width: geo.size.width * 0.09, alignment: .leading).foregroundColor(.black)
-                                 Text(rexm.cacauseNo).frame(width: geo.size.width * 0.15, alignment: .leading).foregroundColor(.black)
-                                 Text(rexm.clformattedName).frame(width: geo.size.width * 0.4, alignment: .leading).foregroundColor(.black)
-                             }.frame(width: geo.size.width, height:geo.size.height * 0.02, alignment: .leading).foregroundColor(.black)
-                         }
-                     }
-                 }
-             }
-         }
-     }
- }
-
- */
