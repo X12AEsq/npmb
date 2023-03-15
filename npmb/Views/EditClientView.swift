@@ -62,7 +62,9 @@ struct EditClientView: View {
                             } label: {
                                 Text("Delete Client")
                             }
-                            .buttonStyle(CustomButton())
+                            .font(.headline.bold())
+                            .frame(maxWidth: .infinity, maxHeight: 55)
+                            .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
                         }
                     }
                 }

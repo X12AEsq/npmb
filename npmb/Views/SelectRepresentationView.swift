@@ -73,7 +73,7 @@ struct SelectRepresentationView: View {
                     }
                 }
                 .onAppear {
-                    sortedRX = sortThem(option: 1)
+                    filterThem(prefix: filterText, option: sortOption)
                 }
             }
             .listStyle(.plain)

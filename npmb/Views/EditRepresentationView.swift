@@ -12,6 +12,7 @@ struct EditRepresentationView: View {
     @Environment(\.dismiss) var dismiss
     
     var rx:RepresentationExpansion?
+    @State var wrx:RepresentationExpansion = RepresentationExpansion()
 
     @State var statusMessage:String = ""
     @State var saveMessage:String = ""
@@ -25,8 +26,8 @@ struct EditRepresentationView: View {
     @State var repInternalID:Int = 0
     @State var repAssigned:String = ""
     @State var repDateAssigned:Date = Date()
-    @State var repCategory:String = ""
-    @State var repActive:Bool = true
+//    @State var repCategory:String = ""
+//    @State var repActive:Bool = true
     @State var repActiveString:String = ""
     @State var repDispDate:String = ""
     @State var repDateDisp:Date = Date()
@@ -46,6 +47,7 @@ struct EditRepresentationView: View {
     @State var apprDate:String = ""
     @State var apprTime:String = ""
     @State var apprNote:String = ""
+    @State var apprInternal:Int = 0
     
     @State var dateNote:Date = Date()
     @State var noteDate:String = ""
@@ -56,6 +58,7 @@ struct EditRepresentationView: View {
     @State var startingFilter:String = ""
     @State var activeScreen = NextAction.maininput
     @State private var orientation = UIDeviceOrientation.portrait
+    @State var adding:Bool = false
     
     enum NextAction {
         case maininput
@@ -117,10 +120,12 @@ struct EditRepresentationView: View {
 
                                 HStack {
                                     Button {
-                                        if saveMessage == "Update" {
-                                            print("Select Update")
-                                        } else {
-                                            print("Select Save")
+                                        if auditRepresentation() {
+                                            if saveMessage == "Update" {
+                                                print("Select Update")
+                                            } else {
+                                                print("Select Save")
+                                            }
                                         }
                                     } label: {
                                         Text(saveMessage)
@@ -147,19 +152,36 @@ struct EditRepresentationView: View {
                             VStack {
                                 if activeScreen == .maininput {
                                     inputmain
+                                        .padding()
+                                        .border(.indigo, width: 4)
                                 } else {
                                     if activeScreen == .editnote {
                                         VStack {
                                             inputNote
+                                                .padding()
+                                                .border(.indigo, width: 4)
                                         }
                                     } else {
                                         if activeScreen == .editappearance {
                                             VStack {
                                                 inputAppr
+                                                    .padding()
+                                                    .border(.indigo, width: 4)
                                             }
                                         } else {
                                             if activeScreen == .selectcause {
-                                                SelectCauseUtil(selectedCause: $selectedCause, startingFilter: rx?.cause.causeNo)
+                                                VStack {
+                                                    if selectedCause.internalID != 0 {
+                                                        Button { recordCauseSelection(cm:selectedCause) }
+                                                        label: {
+                                                        if adding { Text("add cause") }
+                                                        else { Text("update cause") }
+                                                    }
+                                                        .buttonStyle(CustomButton())
+                                                    }
+
+                                                    SelectCauseUtil(selectedCause: $selectedCause, startingFilter: rx?.cause.causeNo)
+                                                }
                                                     .padding()
                                                     .border(.indigo, width: 4)
                                             }
@@ -168,7 +190,7 @@ struct EditRepresentationView: View {
                                 }
                             }
                         }
-                        .padding(.bottom)
+                        .padding(.all)
                         .frame(width: geo.size.width * 0.495)
                         .border(.yellow, width: 4)
                     }
@@ -180,48 +202,7 @@ struct EditRepresentationView: View {
             }
         }
         .onAppear {
-            if let rx = rx {
-                saveMessage = "Update"
-                repInternalID = rx.representation.internalID
-                repAssigned = rx.representation.assignedDate
-                repDateAssigned = DateService.dateString2Date(inDate: repAssigned)
-                repActive = rx.representation.active
-                repActiveString = (repActive) ? "Yes" : "No"
-                repCategory = rx.representation.primaryCategory
-                repDispDate = rx.representation.dispositionDate
-                repDateDisp = DateService.dateString2Date(inDate: repDispDate)
-                repDispType = rx.representation.dispositionType
-                repDispAction = rx.representation.dispositionAction
-                repAppearances = rx.appearances
-                repNotes = rx.notes
-                cauInternalID = rx.cause.internalID
-                cauCauseNo = rx.cause.causeNo
-                cauOrigCharge = rx.cause.originalCharge
-                cliInternalID = rx.client.internalID
-                cliName = rx.client.formattedName
-                startingFilter = rx.cause.sortFormat1
-                print("set starting filter to /(startingFilter) - /(rx.cause.sortFormat1)")
-            } else {
-                saveMessage = "Add"
-                repInternalID = 0
-                repAssigned = ""
-                repDateAssigned = Date()
-                repActive = true
-                repActiveString = "Yes"
-                repCategory = ""
-                repDispDate = ""
-                repDispType = ""
-                repDateDisp = Date()
-                repDispAction = ""
-                repAppearances = []
-                repNotes = []
-                cauInternalID = 0
-                cauCauseNo = ""
-                cauOrigCharge = ""
-                cliInternalID = 0
-                cliName = ""
-                startingFilter = ""
-            }
+            prepWorkArea()
         }
         .onRotate { newOrientation in
             if newOrientation.isLandscape || newOrientation.isPortrait {
@@ -254,19 +235,19 @@ struct EditRepresentationView: View {
                 }
                 HStack {
                     Text("Category: ")
-                    Text(repCategory)
+                    Text(wrx.representation.primaryCategory)
                 }
             }
             Spacer()
             VStack (alignment: .leading) {
                 HStack {
                     Text("Active:")
-                    Text((repActive) ? "yes" : "no")
+                    Text((wrx.representation.active) ? "yes" : "no")
                 }
             }
             Spacer()
             VStack (alignment: .leading) {
-                if !repActive {
+                if !wrx.representation.active {
                     HStack {
                         Text("Competed:")
                         Text(repDispDate)
@@ -308,6 +289,7 @@ struct EditRepresentationView: View {
                                     .onTapGesture {
                                         dateAppr = DateService.dateString2Date(inDate: appr.appearDate, inTime: appr.appearTime)
                                         apprNote = appr.appearNote
+                                        apprInternal = appr.internalID
                                     }
                                 Text(appr.appearDate)
                                 Text(appr.appearTime)
@@ -355,7 +337,7 @@ struct EditRepresentationView: View {
                 DatePicker("Assigned", selection: $repDateAssigned, displayedComponents: [.date]).padding().onChange(of: repDateAssigned, perform: { value in
                     repAssigned = DateService.dateDate2String(inDate: repDateAssigned)
                 })
-                Picker("Category", selection: $repCategory) {
+                Picker("Category", selection: $wrx.representation.primaryCategory) {
                     ForEach(pc.primaryCategories, id: \.self) {
                         Text($0)
                     }
@@ -363,11 +345,11 @@ struct EditRepresentationView: View {
                 Picker("Active", selection: $repActiveString) {
                     ForEach(activeOptions, id: \.self) {
                         Text($0).onChange(of: repActiveString, perform: { value in
-                            repActive = (value == "Yes")
+                            wrx.representation.active = (value == "Yes")
                          })
                     }
                 }
-                if !repActive {
+                if !wrx.representation.active {
                     DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding().onChange(of: repDateDisp, perform: { value in
                         repDispDate = DateService.dateDate2String(inDate: value)
                     })
@@ -393,10 +375,13 @@ struct EditRepresentationView: View {
     var inputAppr: some View {
         VStack (alignment: .leading) {
             Button {
-                dateAppr = Date()
-                apprNote = ""
+                if apprInternal == 0 {
+                    dateAppr = Date()
+                    apprNote = ""
+                }
             } label: {
-                Text("Add Appearance")
+                if apprInternal == 0 { Text("Add Appearance") }
+                else { Text("Edit Appearance") }
             }
             .buttonStyle(CustomButton())
             DatePicker("Appearance Date", selection: $dateAppr).padding().onChange(of: dateAppr, perform: { value in
@@ -412,7 +397,7 @@ struct EditRepresentationView: View {
                 Button {
                     dateAppr = Date()
                     apprNote = ""
-                   activeScreen = .maininput
+                    activeScreen = .maininput
                 } label: {
                     Text("Save Appr")
                 }
@@ -420,7 +405,7 @@ struct EditRepresentationView: View {
                 Button {
                     dateAppr = Date()
                     apprNote = ""
-                   activeScreen = .maininput
+                    activeScreen = .maininput
                 } label: {
                     Text("Quit (no save)")
                 }
@@ -473,6 +458,84 @@ struct EditRepresentationView: View {
                 }
                 .buttonStyle(CustomButton())
             }
+        }
+    }
+    
+    func auditRepresentation() -> Bool {
+        statusMessage = ""
+        if wrx.cause.internalID == 0 { recordError(er:"invalid cause for representation") }
+        if wrx.client.internalID == 0 { recordError(er:"invalid client for representation") }
+        if statusMessage == "" { return true }
+        return false
+    }
+    
+    func recordError(er:String) {
+        if statusMessage != "" { statusMessage = statusMessage + "\n" + er }
+        else { statusMessage = er }
+    }
+    
+    func recordCauseSelection(cm:CauseModel) -> Void {
+        wrx.cause = cm
+        wrx.client = CVModel.findClient(internalID:cm.involvedClient)
+        cauInternalID = cm.internalID
+        cauCauseNo = cm.causeNo
+        cauOrigCharge = cm.originalCharge
+        if wrx.client.internalID == cm.involvedClient {
+            cliInternalID = wrx.client.internalID
+            cliName = wrx.client.formattedName
+        }
+    }
+    
+    func prepWorkArea() -> Void {
+        if let rx = rx {
+            saveMessage = "Update"
+            adding = false
+            wrx = rx
+            wrx.representation.active = rx.representation.active
+            wrx.representation.primaryCategory = rx.representation.primaryCategory
+            prepRepWorkArea(xrx: rx)
+            cauInternalID = rx.cause.internalID
+            cauCauseNo = rx.cause.causeNo
+            cauOrigCharge = rx.cause.originalCharge
+            cliInternalID = rx.client.internalID
+            cliName = rx.client.formattedName
+            startingFilter = rx.cause.sortFormat1
+            print("set starting filter to /(startingFilter) - /(rx.cause.sortFormat1)")
+        } else {
+            saveMessage = "Add"
+            adding = true
+            wrx = RepresentationExpansion()
+            prepRepWorkArea(xrx: wrx)
+            repDateAssigned = Date()
+            wrx.representation.active = true
+            repActiveString = "Yes"
+            wrx.representation.primaryCategory = "ORIG"
+            repDateDisp = Date()
+            cauInternalID = 0
+            cauCauseNo = ""
+            cauOrigCharge = ""
+            cliInternalID = 0
+            cliName = ""
+            startingFilter = ""
+        }
+    }
+    
+    func prepRepWorkArea(xrx:RepresentationExpansion) {
+        repInternalID = xrx.representation.internalID
+        repAssigned = xrx.representation.assignedDate
+        repDateAssigned = DateService.dateString2Date(inDate: repAssigned)
+        repActiveString = (xrx.representation.active) ? "Yes" : "No"
+        repDispDate = xrx.representation.dispositionDate
+        repDateDisp = DateService.dateString2Date(inDate: repDispDate)
+        repDispType = xrx.representation.dispositionType
+        repDispAction = xrx.representation.dispositionAction
+        repAppearances = xrx.appearances
+        repNotes = xrx.notes
+    }
+    
+    func recordAppearance(appr:AppearanceModel) async -> Void {
+        if wrx.representation.internalID == 0 {
+            wrx.representation = await CVModel.addRepresentation(involvedClient: wrx.representation.involvedClient, involvedCause: wrx.representation.involvedCause, active: wrx.representation.active, assignedDate: wrx.representation.assignedDate, dispositionDate: wrx.representation.dispositionDate, dispositionType: wrx.representation.dispositionType, dispositionAction: wrx.representation.dispositionAction, primaryCategory: wrx.representation.primaryCategory)
         }
     }
 

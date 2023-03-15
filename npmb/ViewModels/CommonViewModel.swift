@@ -360,6 +360,25 @@ class CommonViewModel: ObservableObject {
                                      "PrimaryCategory":primaryCategory]
         return newRepresentation
     }
+    
+    @MainActor
+    func addRepresentation(involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String) async -> RepresentationModel {
+        let intID = nextRepresentationID()
+        let ud:[String:Any] = RepresentationAny(internalID: intID, involvedClient: involvedClient, involvedCause: involvedCause, appearances: [], notes: [], active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
+        //   let db = Firestore.firestore()
+        let reprRef = db.collection("representations")
+        
+        taskCompleted = false
+        
+        do {
+            try await reprRef.document().setData(ud)
+            taskCompleted = true
+        }
+        catch {
+            print("Error adding Cause \(error.localizedDescription)")
+        }
+        return findRepresentation(internalID: intID)
+    }
 
     // MARK: Representation Expansion Functions
     
