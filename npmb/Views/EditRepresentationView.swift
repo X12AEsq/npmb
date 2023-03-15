@@ -23,7 +23,6 @@ struct EditRepresentationView: View {
     var dao:DispositionActionOptions = DispositionActionOptions()
     var activeOptions = ["Yes", "No"]
 
-    @State var repInternalID:Int = 0
     @State var repAssigned:String = ""
     @State var repDateAssigned:Date = Date()
 //    @State var repCategory:String = ""
@@ -74,20 +73,22 @@ struct EditRepresentationView: View {
         GeometryReader { geo in
             VStack (alignment: .leading) {
                 VStack (alignment: .leading) {
-                    Text("Representation").font(.title)             // Top of screen
-                        .padding([.leading, .bottom, .trailing])    // Top of screen
-                    if statusMessage != "" {                        // Top of screen
-                        Text(statusMessage)                         // Top of screen
+// start of screen header
+                    Text("Representation").font(.title)
+                        .padding([.leading, .bottom, .trailing])
+                    if statusMessage != "" {
+                        Text(statusMessage)
                             .font(.body)
                             .foregroundColor(Color.red)
                             .multilineTextAlignment(.leading)
                             .padding([.leading, .bottom, .trailing])
                          }
-                    mainsummary                                     // Top of screen
+                    mainsummary
                         .frame(width: geo.size.width * 0.99)
-
-                    HStack {
-                        VStack {                                        // left hand side
+// bottom of screen header
+                    HStack {            // left and right sides of the rest
+// start of left hand side
+                        VStack {
                             VStack {
                                 detail
                                 Spacer()
@@ -143,12 +144,12 @@ struct EditRepresentationView: View {
                             }
                             .padding()
                             .border(.indigo, width: 4)
-                        }                                               // End of left hand side
+                        }
                         .padding()
                         .frame(width: geo.size.width * 0.495)
                         .border(.yellow, width: 4)
-
-                        ZStack {                                        // right hand side
+// End of left hand side, start of right hand side
+                        ZStack {
                             VStack {
                                 if activeScreen == .maininput {
                                     inputmain
@@ -193,12 +194,9 @@ struct EditRepresentationView: View {
                         .padding(.all)
                         .frame(width: geo.size.width * 0.495)
                         .border(.yellow, width: 4)
+// end of right hand side
                     }
                 }
-
-                
-//                VStack {
-//                }
             }
         }
         .onAppear {
@@ -221,7 +219,9 @@ struct EditRepresentationView: View {
 //            }
         }
     }
-    
+/*
+    mainsummary appears in the spash header across the top of the screen
+*/
     var mainsummary: some View {
         HStack (alignment: .top){
             VStack (alignment: .leading) {
@@ -276,7 +276,9 @@ struct EditRepresentationView: View {
         .padding(.all, 20.0)
         .border(.yellow, width: 4)
     }
-    
+/*
+    detail is the left half of the bottom part of the screen; it can be a list of the appearances, a list of notes ... when it displays a list, if no member of the list has been selected, the right hand half of the screen will show a blank entry for for the list type; if a member has been selected, the right side will show an edit entry form pre-filled with the selected data
+*/
     var detail: some View {
         ZStack {
             if activeScreen == .editappearance {
@@ -330,7 +332,9 @@ struct EditRepresentationView: View {
             }
         }
     }
-
+/*
+    inputmain is the data entry screen for the representation itself; it appears on the right hand side of the bottom when "main" has been selected for entry
+ */
     var inputmain: some View {
         Form {
             Section(header: Text("Representation Data").background(Color.blue).foregroundColor(.white)) {
@@ -350,9 +354,9 @@ struct EditRepresentationView: View {
                     }
                 }
                 if !wrx.representation.active {
-                    DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding().onChange(of: repDateDisp, perform: { value in
-                        repDispDate = DateService.dateDate2String(inDate: value)
-                    })
+                    DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
+                        .onChange(of: repDateDisp, perform: { value in
+                            repDispDate = DateService.dateDate2String(inDate: value) })
                     Picker(selection: $repDispType) {
                         ForEach(dto.dispositionTypeOptions , id: \.self) {
                             Text($0)
@@ -491,6 +495,7 @@ struct EditRepresentationView: View {
             saveMessage = "Update"
             adding = false
             wrx = rx
+            prepRepWorkArea(xrx: rx)
             wrx.representation.active = rx.representation.active
             wrx.representation.primaryCategory = rx.representation.primaryCategory
             prepRepWorkArea(xrx: rx)
@@ -518,6 +523,7 @@ struct EditRepresentationView: View {
             cliName = ""
             startingFilter = ""
         }
+        srx = wrx
     }
     
     func prepRepWorkArea(xrx:RepresentationExpansion) {

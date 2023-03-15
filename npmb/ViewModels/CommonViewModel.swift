@@ -422,7 +422,7 @@ class CommonViewModel: ObservableObject {
           
                     let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
                     self.appearances.append(am)
-                     return
+                    return
                 }
             }
         }
