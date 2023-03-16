@@ -361,6 +361,19 @@ class CommonViewModel: ObservableObject {
         return newRepresentation
     }
     
+    func RepresentationAny(internalID:Int, involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String) -> [String:Any] {
+        let newRepresentation:[String:Any] = ["internalID":internalID,
+                                     "InvolvedClient":involvedClient,
+                                     "InvolvedCause":involvedCause,
+                                     "Active":active,
+                                     "AssignedDate":assignedDate,
+                                     "DispositionDate":dispositionDate,
+                                     "DispositionType":dispositionType,
+                                     "DispositionAction":dispositionAction,
+                                     "PrimaryCategory":primaryCategory]
+        return newRepresentation
+    }
+
     @MainActor
     func addRepresentation(involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String) async -> RepresentationModel {
         let intID = nextRepresentationID()
@@ -378,6 +391,27 @@ class CommonViewModel: ObservableObject {
             print("Error adding Cause \(error.localizedDescription)")
         }
         return findRepresentation(internalID: intID)
+    }
+    
+    @MainActor
+    func updateRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String, intid:Int) async -> FunctionReturn {
+        print("updateRepresentation entered")
+        
+        let ud:[String:Any] = RepresentationAny(internalID: intid, involvedClient: involvedClient, involvedCause: involvedCause, active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
+        print(ud)
+
+        taskCompleted = false
+        let reprRef = db.collection("representations").document(representationID)
+        
+        do {
+            try await reprRef.setData(ud, merge: true)
+            taskCompleted = true
+            print("Debug update Representation succeeded")
+            return FunctionReturn(status: .successful, message: "")
+        } catch {
+            print("Debug update Representation failed \(error.localizedDescription)")
+            return FunctionReturn(status: .IOError, message: "Update representation failed: " + error.localizedDescription)
+        }
     }
 
     // MARK: Representation Expansion Functions

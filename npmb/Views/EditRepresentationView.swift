@@ -66,6 +66,7 @@ struct EditRepresentationView: View {
     @State var startingFilter:String = ""
     @State var activeScreen = NextAction.maininput
     @State private var orientation = UIDeviceOrientation.portrait
+    @State var callResult:FunctionReturn = FunctionReturn()
     @State var adding:Bool = false
     
     enum NextAction {
@@ -133,11 +134,18 @@ struct EditRepresentationView: View {
                                 HStack {
                                     Button {
                                         if auditRepresentation() {
-                                            if saveMessage == "Update" {
-                                                print("Select Update")
-                                            } else {
-                                                print("Select Save")
+                                            print("Edit representation starting update")
+                                            Task {
+                                                await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
                                             }
+                                            print("Edit Representation update returned")
+                                            print(CVModel.taskCompleted)
+//                                            if callResult.status == .successful {
+//                                                statusMessage = ""
+//                                                prepWorkArea()
+//                                            } else {
+//                                                statusMessage = callResult.message
+//                                            }
                                         }
                                     } label: {
                                         Text(saveMessage)
@@ -505,8 +513,8 @@ struct EditRepresentationView: View {
     
     func auditRepresentation() -> Bool {
         statusMessage = ""
-//        if wrx.cause.internalID == 0 { recordError(er:"invalid cause for representation") }
-//        if wrx.client.internalID == 0 { recordError(er:"invalid client for representation") }
+        if repCause == 0 { recordError(er:"invalid cause for representation") }
+        if repClient == 0 { recordError(er:"invalid client for representation") }
         if statusMessage == "" { return true }
         return false
     }
