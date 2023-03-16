@@ -427,7 +427,30 @@ class CommonViewModel: ObservableObject {
             }
         }
     }
-    
+
+    func nextAppearanceID() -> Int {
+         let greatestappearance = appearances.max {a, b in a.internalID < b.internalID }
+        // find value of greatest internal id
+        if greatestappearance != nil {
+            let gc = greatestappearance!
+            let i:Int = Int(gc.internalID)
+            return i + 1
+        } else {
+            return 1
+        }
+    }
+
+    func AppearanceAny(intid:Int, client:Int, cause:Int, representation:Int, appeardate:String, appeartime:String, appearnote:String) -> [String:Any] {
+        let newAppearance:[String:Any] = ["internalID":intid,
+                                          "InvolvedClient":client,
+                                          "InvolvedCause":cause,
+                                          "InvolvedRepresentation":representation,
+                                          "AppearDate":appeardate,
+                                          "AppearTime":appeartime,
+                                          "AppearNote":appearnote]
+        return newAppearance
+    }
+
     public func assembleAppearances(repID:Int) -> [AppearanceModel] {
         let workAppearances:[AppearanceModel] = appearances.filter { $0.involvedRepresentation == repID }
         return workAppearances.sorted { $0.appearDate < $1.appearDate }

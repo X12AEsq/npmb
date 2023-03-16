@@ -23,10 +23,11 @@ struct EditRepresentationView: View {
     var dao:DispositionActionOptions = DispositionActionOptions()
     var activeOptions = ["Yes", "No"]
 
+    @State var repInternalID:Int = 0
     @State var repAssigned:String = ""
     @State var repDateAssigned:Date = Date()
-//    @State var repCategory:String = ""
-//    @State var repActive:Bool = true
+    @State var repCategory:String = ""
+    @State var repActive:Bool = true
     @State var repActiveString:String = ""
     @State var repDispDate:String = ""
     @State var repDateDisp:Date = Date()
@@ -34,6 +35,8 @@ struct EditRepresentationView: View {
     @State var repDispAction:String = ""
     @State var repAppearances:[AppearanceModel] = []
     @State var repNotes:[NotesModel] = []
+    @State var repAdding:Bool = false
+    @State var repChanged:Bool = false
     
     @State var cauInternalID = 0
     @State var cauCauseNo = ""
@@ -47,6 +50,7 @@ struct EditRepresentationView: View {
     @State var apprTime:String = ""
     @State var apprNote:String = ""
     @State var apprInternal:Int = 0
+    @State var apprArray:[AppearanceModel] = []
     
     @State var dateNote:Date = Date()
     @State var noteDate:String = ""
@@ -105,18 +109,20 @@ struct EditRepresentationView: View {
                                         Text("Cause")
                                     }
                                     .buttonStyle(CustomButton())
-                                    Button {
-                                        activeScreen = .editappearance
-                                    } label: {
-                                        Text("Appear")
+                                    if !repChanged {
+                                        Button {
+                                            activeScreen = .editappearance
+                                        } label: {
+                                            Text("Appear")
+                                        }
+                                        .buttonStyle(CustomButton())
+                                        Button {
+                                            activeScreen = .editnote
+                                        } label: {
+                                            Text("Note")
+                                        }
+                                        .buttonStyle(CustomButton())
                                     }
-                                    .buttonStyle(CustomButton())
-                                    Button {
-                                        activeScreen = .editnote
-                                    } label: {
-                                        Text("Note")
-                                    }
-                                    .buttonStyle(CustomButton())
                                 }
 
                                 HStack {
@@ -235,19 +241,19 @@ struct EditRepresentationView: View {
                 }
                 HStack {
                     Text("Category: ")
-                    Text(wrx.representation.primaryCategory)
+                    Text(repCategory)
                 }
             }
             Spacer()
             VStack (alignment: .leading) {
                 HStack {
                     Text("Active:")
-                    Text((wrx.representation.active) ? "yes" : "no")
+                    Text((repActive) ? "yes" : "no")
                 }
             }
             Spacer()
             VStack (alignment: .leading) {
-                if !wrx.representation.active {
+                if !repActive {
                     HStack {
                         Text("Competed:")
                         Text(repDispDate)
@@ -285,6 +291,14 @@ struct EditRepresentationView: View {
                 VStack (alignment: .leading) {
                     Text("Appearances")
                     ScrollView {
+                        Button {
+                            apprInternal = 0
+                            dateAppr = Date()
+                            apprNote = ""
+                        } label: {
+                            Text("Add Appearance")
+                        }
+                        .buttonStyle(CustomButton())
                         ForEach(repAppearances) { appr in
                             HStack (alignment: .top) {
                                 ActionEdit()
@@ -340,33 +354,49 @@ struct EditRepresentationView: View {
             Section(header: Text("Representation Data").background(Color.blue).foregroundColor(.white)) {
                 DatePicker("Assigned", selection: $repDateAssigned, displayedComponents: [.date]).padding().onChange(of: repDateAssigned, perform: { value in
                     repAssigned = DateService.dateDate2String(inDate: repDateAssigned)
+                    wrx.representation.assignedDate = repAssigned
                 })
-                Picker("Category", selection: $wrx.representation.primaryCategory) {
+                Picker("Category", selection: $repCategory) {
                     ForEach(pc.primaryCategories, id: \.self) {
-                        Text($0)
+                        Text($0).onChange(of: repCategory, perform: { value in
+                            wrx.representation.primaryCategory = value
+                            repChanged = true
+                        })
                     }
                 }
                 Picker("Active", selection: $repActiveString) {
                     ForEach(activeOptions, id: \.self) {
                         Text($0).onChange(of: repActiveString, perform: { value in
-                            wrx.representation.active = (value == "Yes")
+                            repActive = (value == "Yes")
+                            wrx.representation.active = repActive
+                            repChanged = true
                          })
                     }
                 }
-                if !wrx.representation.active {
+                if !repActive {
                     DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
                         .onChange(of: repDateDisp, perform: { value in
-                            repDispDate = DateService.dateDate2String(inDate: value) })
+                            repDispDate = DateService.dateDate2String(inDate: value)
+                            wrx.representation.dispositionDate = repDispDate
+                            repChanged = true
+                        })
+                    
                     Picker(selection: $repDispType) {
                         ForEach(dto.dispositionTypeOptions , id: \.self) {
-                            Text($0)
+                            Text($0).onChange(of: repDispType, perform: { value in
+                                wrx.representation.dispositionType = value
+                                repChanged = true
+                            })
                         }
                     } label: {
                         Text("Action")
                     }
                     Picker(selection: $repDispAction) {
                         ForEach(dao.dispositionActionOptions , id: \.self) {
-                            Text($0)
+                            Text($0).onChange(of: repDispAction, perform: { value in
+                                wrx.representation.dispositionAction = value
+                                repChanged = true
+                            })
                         }
                     } label: {
                         Text("Action")
@@ -378,16 +408,6 @@ struct EditRepresentationView: View {
     
     var inputAppr: some View {
         VStack (alignment: .leading) {
-            Button {
-                if apprInternal == 0 {
-                    dateAppr = Date()
-                    apprNote = ""
-                }
-            } label: {
-                if apprInternal == 0 { Text("Add Appearance") }
-                else { Text("Edit Appearance") }
-            }
-            .buttonStyle(CustomButton())
             DatePicker("Appearance Date", selection: $dateAppr).padding().onChange(of: dateAppr, perform: { value in
                 apprDate = DateService.dateDate2String(inDate: value)
                 apprTime = DateService.dateTime2String(inDate: value)
@@ -399,9 +419,13 @@ struct EditRepresentationView: View {
             
             HStack {
                 Button {
-                    dateAppr = Date()
-                    apprNote = ""
-                    activeScreen = .maininput
+//                    if auditRepresentation() {
+//                        apprArray = wrx.appearances
+//                        apprArray.append(AppearanceModel(fsid: "", intid: CVModel.nextAppearanceID(), client: wrx.representation.involvedClient, cause: wrx.representation.involvedCause, representation: wrx., appeardate: <#T##String#>, appeartime: <#T##String#>, appearnote: <#T##String#>))
+//                        dateAppr = Date()
+//                        apprNote = ""
+//                        activeScreen = .maininput
+//                    }
                 } label: {
                     Text("Save Appr")
                 }
@@ -478,6 +502,37 @@ struct EditRepresentationView: View {
         else { statusMessage = er }
     }
     
+//    func recordRepresentation() async -> Bool {
+//        var changed:Bool = false
+//        if let rx = rx {
+//            if rx.representation.assignedDate != wrx.representation.assignedDate {
+//                rx.representation.assignedDate = wrx.representation.assignedDate
+//                changed = true
+//            }
+//            if rx.representation.primaryCategory != wrx.representation.primaryCategory {
+//                rx.representation.primaryCategory = wrx.representation.primaryCategory
+//                changed = true
+//            }
+//            if rx.representation.active != wrx.representation.active {
+//                rx.representation.active = wrx.representation.active
+//                changed = true
+//            }
+//            if rx.representation.dispositionDate != wrx.representation.dispositionDate {
+//                rx.representation.dispositionDate = wrx.representation.dispositionDate
+//                changed = true
+//            }
+//            if rx.representation.dispositionType != wrx.representation.dispositionType {
+//                rx.representation.dispositionType = wrx.representation.dispositionType
+//                changed = true
+//            }
+//            if rx.representation.dispositionAction != wrx.representation.dispositionAction {
+//                rx.representation.dispositionAction = wrx.representation.dispositionAction
+//                changed = true;
+//            }
+//         }
+//        return changed
+//    }
+    
     func recordCauseSelection(cm:CauseModel) -> Void {
         wrx.cause = cm
         wrx.client = CVModel.findClient(internalID:cm.involvedClient)
@@ -496,8 +551,8 @@ struct EditRepresentationView: View {
             adding = false
             wrx = rx
             prepRepWorkArea(xrx: rx)
-            wrx.representation.active = rx.representation.active
-            wrx.representation.primaryCategory = rx.representation.primaryCategory
+            repActive = rx.representation.active
+            repCategory = rx.representation.primaryCategory
             prepRepWorkArea(xrx: rx)
             cauInternalID = rx.cause.internalID
             cauCauseNo = rx.cause.causeNo
@@ -505,6 +560,8 @@ struct EditRepresentationView: View {
             cliInternalID = rx.client.internalID
             cliName = rx.client.formattedName
             startingFilter = rx.cause.sortFormat1
+            repAdding = false
+            repChanged = false
             print("set starting filter to /(startingFilter) - /(rx.cause.sortFormat1)")
         } else {
             saveMessage = "Add"
@@ -512,9 +569,9 @@ struct EditRepresentationView: View {
             wrx = RepresentationExpansion()
             prepRepWorkArea(xrx: wrx)
             repDateAssigned = Date()
-            wrx.representation.active = true
+            repActive = true
             repActiveString = "Yes"
-            wrx.representation.primaryCategory = "ORIG"
+            repCategory = "ORIG"
             repDateDisp = Date()
             cauInternalID = 0
             cauCauseNo = ""
@@ -522,8 +579,9 @@ struct EditRepresentationView: View {
             cliInternalID = 0
             cliName = ""
             startingFilter = ""
+            repAdding = true
+            repChanged = false
         }
-        srx = wrx
     }
     
     func prepRepWorkArea(xrx:RepresentationExpansion) {
