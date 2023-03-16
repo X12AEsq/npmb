@@ -11,11 +11,14 @@ struct EditRepresentationView: View {
     @EnvironmentObject var CVModel:CommonViewModel
     @Environment(\.dismiss) var dismiss
     
-    var rx:RepresentationExpansion?
-    @State var wrx:RepresentationExpansion = RepresentationExpansion()
+    var rxid:Int
+//    @State var wrx:RepresentationExpansion = RepresentationExpansion()
 
     @State var statusMessage:String = ""
     @State var saveMessage:String = ""
+    @State var rep:RepresentationModel = RepresentationModel()
+    @State var cau:CauseModel = CauseModel()
+    @State var cli:ClientModel = ClientModel()
     @State var selectedCause:CauseModel = CauseModel()
     
     var pc:PrimaryCategory = PrimaryCategory()
@@ -33,10 +36,12 @@ struct EditRepresentationView: View {
     @State var repDateDisp:Date = Date()
     @State var repDispType:String = ""
     @State var repDispAction:String = ""
-    @State var repAppearances:[AppearanceModel] = []
+    @State var repApprs:[AppearanceModel] = []
     @State var repNotes:[NotesModel] = []
+    @State var repCause:Int = 0
+    @State var repClient:Int = 0
     @State var repAdding:Bool = false
-    @State var repChanged:Bool = false
+//    @State var repChanged:Bool = false
     
     @State var cauInternalID = 0
     @State var cauCauseNo = ""
@@ -109,7 +114,7 @@ struct EditRepresentationView: View {
                                         Text("Cause")
                                     }
                                     .buttonStyle(CustomButton())
-                                    if !repChanged {
+                                    if !repChanged() {
                                         Button {
                                             activeScreen = .editappearance
                                         } label: {
@@ -138,6 +143,14 @@ struct EditRepresentationView: View {
                                         Text(saveMessage)
                                     }
                                     .buttonStyle(CustomButton())
+                                    if repChanged() {
+                                        Button {
+                                            prepWorkArea()
+                                        } label: {
+                                            Text("Quit")
+                                        }
+                                        .buttonStyle(CustomButton())
+                                    }
                                     if saveMessage == "Update" {
                                         Button("Delete", role: .destructive) {
                                             print("Select Delete")
@@ -187,7 +200,7 @@ struct EditRepresentationView: View {
                                                         .buttonStyle(CustomButton())
                                                     }
 
-                                                    SelectCauseUtil(selectedCause: $selectedCause, startingFilter: rx?.cause.causeNo)
+//                                                    SelectCauseUtil(selectedCause: $selectedCause, startingFilter: rx?.cause.causeNo)
                                                 }
                                                     .padding()
                                                     .border(.indigo, width: 4)
@@ -299,7 +312,7 @@ struct EditRepresentationView: View {
                             Text("Add Appearance")
                         }
                         .buttonStyle(CustomButton())
-                        ForEach(repAppearances) { appr in
+                        ForEach(repApprs) { appr in
                             HStack (alignment: .top) {
                                 ActionEdit()
                                     .onTapGesture {
@@ -354,13 +367,14 @@ struct EditRepresentationView: View {
             Section(header: Text("Representation Data").background(Color.blue).foregroundColor(.white)) {
                 DatePicker("Assigned", selection: $repDateAssigned, displayedComponents: [.date]).padding().onChange(of: repDateAssigned, perform: { value in
                     repAssigned = DateService.dateDate2String(inDate: repDateAssigned)
-                    wrx.representation.assignedDate = repAssigned
+//                    repChanged = true
+//                    wrx.representation.assignedDate = repAssigned
                 })
                 Picker("Category", selection: $repCategory) {
                     ForEach(pc.primaryCategories, id: \.self) {
                         Text($0).onChange(of: repCategory, perform: { value in
-                            wrx.representation.primaryCategory = value
-                            repChanged = true
+//                            wrx.representation.primaryCategory = value
+//                            repChanged = true
                         })
                     }
                 }
@@ -368,8 +382,8 @@ struct EditRepresentationView: View {
                     ForEach(activeOptions, id: \.self) {
                         Text($0).onChange(of: repActiveString, perform: { value in
                             repActive = (value == "Yes")
-                            wrx.representation.active = repActive
-                            repChanged = true
+//                            wrx.representation.active = repActive
+//                            repChanged = true
                          })
                     }
                 }
@@ -377,15 +391,15 @@ struct EditRepresentationView: View {
                     DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
                         .onChange(of: repDateDisp, perform: { value in
                             repDispDate = DateService.dateDate2String(inDate: value)
-                            wrx.representation.dispositionDate = repDispDate
-                            repChanged = true
+//                            wrx.representation.dispositionDate = repDispDate
+//                            repChanged = true
                         })
                     
                     Picker(selection: $repDispType) {
                         ForEach(dto.dispositionTypeOptions , id: \.self) {
                             Text($0).onChange(of: repDispType, perform: { value in
-                                wrx.representation.dispositionType = value
-                                repChanged = true
+//                                wrx.representation.dispositionType = value
+//                                repChanged = true
                             })
                         }
                     } label: {
@@ -394,8 +408,8 @@ struct EditRepresentationView: View {
                     Picker(selection: $repDispAction) {
                         ForEach(dao.dispositionActionOptions , id: \.self) {
                             Text($0).onChange(of: repDispAction, perform: { value in
-                                wrx.representation.dispositionAction = value
-                                repChanged = true
+//                                wrx.representation.dispositionAction = value
+//                                repChanged = true
                             })
                         }
                     } label: {
@@ -491,8 +505,8 @@ struct EditRepresentationView: View {
     
     func auditRepresentation() -> Bool {
         statusMessage = ""
-        if wrx.cause.internalID == 0 { recordError(er:"invalid cause for representation") }
-        if wrx.client.internalID == 0 { recordError(er:"invalid client for representation") }
+//        if wrx.cause.internalID == 0 { recordError(er:"invalid cause for representation") }
+//        if wrx.client.internalID == 0 { recordError(er:"invalid client for representation") }
         if statusMessage == "" { return true }
         return false
     }
@@ -534,73 +548,98 @@ struct EditRepresentationView: View {
 //    }
     
     func recordCauseSelection(cm:CauseModel) -> Void {
-        wrx.cause = cm
-        wrx.client = CVModel.findClient(internalID:cm.involvedClient)
-        cauInternalID = cm.internalID
-        cauCauseNo = cm.causeNo
-        cauOrigCharge = cm.originalCharge
-        if wrx.client.internalID == cm.involvedClient {
-            cliInternalID = wrx.client.internalID
-            cliName = wrx.client.formattedName
-        }
+//        wrx.cause = cm
+//        wrx.client = CVModel.findClient(internalID:cm.involvedClient)
+//        cauInternalID = cm.internalID
+//        cauCauseNo = cm.causeNo
+//        cauOrigCharge = cm.originalCharge
+//        if wrx.client.internalID == cm.involvedClient {
+//            cliInternalID = wrx.client.internalID
+//            cliName = wrx.client.formattedName
+//        }
     }
     
     func prepWorkArea() -> Void {
-        if let rx = rx {
+        if rxid == 0 {
+            rep = RepresentationModel()
+        } else {
+            rep = CVModel.findRepresentation(internalID:rxid)
+            repApprs = CVModel.assembleAppearances(repID: rxid)
+        }
+        
+        if rep.involvedCause == 0 {
+            cau = CauseModel()
+        } else {
+            cau = CVModel.findCause(internalID: rep.involvedCause)
+        }
+        
+        if rep.involvedClient == 0 {
+            cli = ClientModel()
+        } else {
+            cli = CVModel.findClient(internalID: rep.involvedClient)
+        }
+        repClient = rep.involvedClient
+        repCause = rep.involvedCause
+        repActive = rep.active
+        repCategory = rep.primaryCategory
+        repInternalID = rep.internalID
+        repAssigned = rep.assignedDate
+        repDateAssigned = DateService.dateString2Date(inDate: repAssigned)
+        repActiveString = (rep.active) ? "Yes" : "No"
+        repDispDate = rep.dispositionDate
+        repDateDisp = DateService.dateString2Date(inDate: repDispDate)
+        repDispType = rep.dispositionType
+        repDispAction = rep.dispositionAction
+        if rep.internalID != 0 {
             saveMessage = "Update"
             adding = false
-            wrx = rx
-            prepRepWorkArea(xrx: rx)
-            repActive = rx.representation.active
-            repCategory = rx.representation.primaryCategory
-            prepRepWorkArea(xrx: rx)
-            cauInternalID = rx.cause.internalID
-            cauCauseNo = rx.cause.causeNo
-            cauOrigCharge = rx.cause.originalCharge
-            cliInternalID = rx.client.internalID
-            cliName = rx.client.formattedName
-            startingFilter = rx.cause.sortFormat1
+//            repAppearances = rep.appearances
+//            repNotes = rep.notes
+            cauInternalID = cau.internalID
+            cauCauseNo = cau.causeNo
+            cauOrigCharge = cau.originalCharge
+            cliInternalID = cli.internalID
+            cliName = cli.formattedName
+            startingFilter = cau.sortFormat1
             repAdding = false
-            repChanged = false
-            print("set starting filter to /(startingFilter) - /(rx.cause.sortFormat1)")
+//            repChanged = false
         } else {
             saveMessage = "Add"
             adding = true
-            wrx = RepresentationExpansion()
-            prepRepWorkArea(xrx: wrx)
-            repDateAssigned = Date()
-            repActive = true
-            repActiveString = "Yes"
-            repCategory = "ORIG"
-            repDateDisp = Date()
-            cauInternalID = 0
-            cauCauseNo = ""
-            cauOrigCharge = ""
-            cliInternalID = 0
-            cliName = ""
-            startingFilter = ""
+//            wrx = RepresentationExpansion()
+//            prepRepWorkArea(xrx: wrx)
+//            repDateAssigned = Date()
+//            repActive = true
+//            repActiveString = "Yes"
+//            repCategory = "ORIG"
+//            repDateDisp = Date()
+//            cauInternalID = 0
+//            cauCauseNo = ""
+//            cauOrigCharge = ""
+//            cliInternalID = 0
+//            cliName = ""
+//            startingFilter = ""
             repAdding = true
-            repChanged = false
+//            repChanged = false
         }
     }
     
-    func prepRepWorkArea(xrx:RepresentationExpansion) {
-        repInternalID = xrx.representation.internalID
-        repAssigned = xrx.representation.assignedDate
-        repDateAssigned = DateService.dateString2Date(inDate: repAssigned)
-        repActiveString = (xrx.representation.active) ? "Yes" : "No"
-        repDispDate = xrx.representation.dispositionDate
-        repDateDisp = DateService.dateString2Date(inDate: repDispDate)
-        repDispType = xrx.representation.dispositionType
-        repDispAction = xrx.representation.dispositionAction
-        repAppearances = xrx.appearances
-        repNotes = xrx.notes
+    func repChanged() -> Bool {
+        if repClient != rep.involvedClient { return true }
+        if repCause != rep.involvedCause { return true }
+        if repActive != rep.active { return true }
+        if repCategory != rep.primaryCategory { return true }
+        if repInternalID != rep.internalID { return true }
+        if repAssigned != rep.assignedDate { return true }
+        if repDispDate != rep.dispositionDate { return true }
+        if repDispType != rep.dispositionType { return true }
+        if repDispAction != rep.dispositionAction { return true }
+        return false
     }
-    
     func recordAppearance(appr:AppearanceModel) async -> Void {
-        if wrx.representation.internalID == 0 {
-            wrx.representation = await CVModel.addRepresentation(involvedClient: wrx.representation.involvedClient, involvedCause: wrx.representation.involvedCause, active: wrx.representation.active, assignedDate: wrx.representation.assignedDate, dispositionDate: wrx.representation.dispositionDate, dispositionType: wrx.representation.dispositionType, dispositionAction: wrx.representation.dispositionAction, primaryCategory: wrx.representation.primaryCategory)
-        }
+//        if wrx.representation.internalID == 0 {
+//            wrx.representation = await CVModel.addRepresentation(involvedClient: wrx.representation.involvedClient, involvedCause: wrx.representation.involvedCause, active: wrx.representation.active, assignedDate: wrx.representation.assignedDate, dispositionDate: wrx.representation.dispositionDate, dispositionType: wrx.representation.dispositionType, dispositionAction: wrx.representation.dispositionAction, primaryCategory: wrx.representation.primaryCategory)
+//        }
     }
 
 }

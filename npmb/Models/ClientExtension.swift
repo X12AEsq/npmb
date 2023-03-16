@@ -37,7 +37,7 @@ extension ClientModel {
         let part1:String = self.formattedName
         let part2:String = String(self.internalID)
         let part3:String = FormattingService.rjf(base: part2, len: 4, zeroFill: true)
-        var part4:String = part1 + "-" + part3
+        let part4:String = part1 + "-" + part3
         return part4.trimmingCharacters(in: .whitespaces)
     }
 }

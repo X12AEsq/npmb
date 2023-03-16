@@ -60,13 +60,13 @@ struct SelectRepresentationView: View {
             ScrollView {
                 VStack (alignment: .leading) {
                     HStack {
-                        NavigationLink(destination: { EditRepresentationView() }, label: { Text("Add New Representation") })
+                        NavigationLink(destination: { EditRepresentationView(rxid: 0) }, label: { Text("Add New Representation") })
                             .padding(.bottom, 20)
                          Spacer()
                     }
                     ForEach(sortedRX) { rx in
                         HStack {
-                            NavigationLink(destination: { EditRepresentationView(rx: rx) },
+                            NavigationLink(destination: { EditRepresentationView(rxid: rx.representation.internalID) },
                                            label: { LineLabel(option: sortOption, rx: rx) })
                             Spacer()
                         }

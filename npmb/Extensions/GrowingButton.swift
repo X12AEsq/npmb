@@ -23,6 +23,6 @@ struct GrowingButton: ButtonStyle {
             .foregroundColor(.yellow)
 //            .clipShape(Circle())
             .scaleEffect(configuration.isPressed ? 1.2 : 1)
-            .animation(.easeOut(duration: 0.2))
+//            .animation(.easeOut(duration: 0.2))
     }
 }
