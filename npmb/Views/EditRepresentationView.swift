@@ -26,6 +26,7 @@ struct EditRepresentationView: View {
     var dao:DispositionActionOptions = DispositionActionOptions()
     var activeOptions = ["Yes", "No"]
 
+    @State var repDocumentID:String = ""
     @State var repInternalID:Int = 0
     @State var repAssigned:String = ""
     @State var repDateAssigned:Date = Date()
@@ -103,70 +104,70 @@ struct EditRepresentationView: View {
                                 detail
                                 Spacer()
                                 HStack {
-                                    Button {
-                                        activeScreen = .maininput
-                                    } label: {
-                                        Text("Main")
-                                    }
-                                    .buttonStyle(CustomButton())
-                                    Button {
-                                        activeScreen = .selectcause
-                                    } label: {
-                                        Text("Cause")
-                                    }
-                                    .buttonStyle(CustomButton())
-                                    if !repChanged() {
+                                    if activeScreen != .editappearance {
                                         Button {
-                                            activeScreen = .editappearance
+                                            activeScreen = .maininput
                                         } label: {
-                                            Text("Appear")
+                                            Text("Main")
                                         }
                                         .buttonStyle(CustomButton())
                                         Button {
-                                            activeScreen = .editnote
+                                            activeScreen = .selectcause
                                         } label: {
-                                            Text("Note")
+                                            Text("Cause")
                                         }
                                         .buttonStyle(CustomButton())
+                                        if !repChanged() {
+                                            Button {
+                                                activeScreen = .editappearance
+                                            } label: {
+                                                Text("Appear")
+                                            }
+                                            .buttonStyle(CustomButton())
+                                            Button {
+                                                activeScreen = .editnote
+                                            } label: {
+                                                Text("Note")
+                                            }
+                                            .buttonStyle(CustomButton())
+                                        }
                                     }
                                 }
 
                                 HStack {
-                                    Button {
-                                        if auditRepresentation() {
-                                            print("Edit representation starting update")
-                                            Task {
-                                                await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
-                                                print("Edit Representation update returned")
-                                                print(callResult)
-                                                print(CVModel.taskCompleted)
-                                                if callResult.status == .successful {
-                                                    statusMessage = ""
-                                                    prepWorkArea()
-                                                } else {
-                                                    statusMessage = callResult.message
+                                    if activeScreen != .editappearance {
+                                        Button {
+                                            if auditRepresentation() {
+                                                Task {
+                                                    await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
+                                                    if callResult.status == .successful {
+                                                        statusMessage = ""
+                                                        prepWorkArea()
+                                                    } else {
+                                                        statusMessage = callResult.message
+                                                    }
                                                 }
                                             }
-                                        }
-                                    } label: {
-                                        Text(saveMessage)
-                                    }
-                                    .buttonStyle(CustomButton())
-                                    if repChanged() {
-                                        Button {
-                                            prepWorkArea()
                                         } label: {
-                                            Text("Quit")
+                                            Text(saveMessage)
                                         }
                                         .buttonStyle(CustomButton())
-                                    }
-                                    if saveMessage == "Update" {
-                                        Button("Delete", role: .destructive) {
-                                            print("Select Delete")
+                                        if repChanged() {
+                                            Button {
+                                                prepWorkArea()
+                                            } label: {
+                                                Text("Quit")
+                                            }
+                                            .buttonStyle(CustomButton())
                                         }
-                                        .font(.headline.bold())
-                                        .frame(maxWidth: .infinity, maxHeight: 45)
-                                        .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                                        if saveMessage == "Update" {
+                                            Button("Delete", role: .destructive) {
+                                                print("Select Delete")
+                                            }
+                                            .font(.headline.bold())
+                                            .frame(maxWidth: .infinity, maxHeight: 45)
+                                            .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                                        }
                                     }
                                 }
                             }
@@ -443,13 +444,15 @@ struct EditRepresentationView: View {
             
             HStack {
                 Button {
-//                    if auditRepresentation() {
-//                        apprArray = wrx.appearances
-//                        apprArray.append(AppearanceModel(fsid: "", intid: CVModel.nextAppearanceID(), client: wrx.representation.involvedClient, cause: wrx.representation.involvedCause, representation: wrx., appeardate: <#T##String#>, appeartime: <#T##String#>, appearnote: <#T##String#>))
-//                        dateAppr = Date()
-//                        apprNote = ""
-//                        activeScreen = .maininput
-//                    }
+                    if auditAppearance() {
+                        Task {
+                            await callResult = CVModel.addAppearanceToRepresentation(representationID: repDocumentID, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                            dateAppr = Date()
+                            apprNote = ""
+                            activeScreen = .maininput
+                        }
+                        print("addAppearanceToRepresentation returned ", callResult)
+                    }
                 } label: {
                     Text("Save Appr")
                 }
@@ -521,6 +524,18 @@ struct EditRepresentationView: View {
         return false
     }
     
+    func auditAppearance() -> Bool {
+        statusMessage = ""
+        if repDocumentID == "" { recordError(er:"unknown document id for representation") }
+        if repInternalID == 0 { recordError(er:"unknown internal id for representation") }
+        if repCause == 0 { recordError(er:"invalid cause for representation") }
+        if repClient == 0 { recordError(er:"invalid client for representation") }
+        if apprDate == "" { recordError(er: "invalid appearance date")}
+        if apprTime == "" { recordError(er: "invalid appearance time")}
+        if statusMessage == "" { return true }
+        return false
+    }
+
     func recordError(er:String) {
         if statusMessage != "" { statusMessage = statusMessage + "\n" + er }
         else { statusMessage = er }
@@ -562,6 +577,7 @@ struct EditRepresentationView: View {
         repActive = rep.active
         repCategory = rep.primaryCategory
         repInternalID = rep.internalID
+        repDocumentID = rep.id ?? ""
         repAssigned = rep.assignedDate
         repDateAssigned = DateService.dateString2Date(inDate: repAssigned)
         repActiveString = (rep.active) ? "Yes" : "No"

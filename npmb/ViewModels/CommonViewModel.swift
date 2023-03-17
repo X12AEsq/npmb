@@ -374,6 +374,11 @@ class CommonViewModel: ObservableObject {
                                      "PrimaryCategory":primaryCategory]
         return newRepresentation
     }
+    
+    func RepresentationAny(involvedAppearances:[Int]) -> [String:Any] {
+        let newRepresentation:[String:Any] = ["InvolvedAppearances":involvedAppearances]
+        return newRepresentation
+    }
 
     @MainActor
     func addRepresentation(involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String) async -> RepresentationModel {
@@ -396,11 +401,37 @@ class CommonViewModel: ObservableObject {
     
     @MainActor
     func updateRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String, intid:Int) async -> FunctionReturn {
-        print("updateRepresentation entered")
         
     var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
         
         let ud:[String:Any] = RepresentationAny(internalID: intid, involvedClient: involvedClient, involvedCause: involvedCause, active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
+        print(representationID, ud)
+
+        taskCompleted = false
+        let reprRef = db.collection("representations").document(representationID)
+        
+        do {
+            try await reprRef.setData(ud, merge: true)
+            taskCompleted = true
+            print("Debug update Representation succeeded")
+            rtn.status = .successful
+            rtn.message = ""
+            return rtn
+        } catch {
+            print("Debug update Representation failed \(error.localizedDescription)")
+            rtn.status = .IOError
+            rtn.message = "Update representation failed: " + error.localizedDescription
+            return rtn
+        }
+    }
+    
+    @MainActor
+    func updateRepresentation(representationID:String, involvedappearances:[Int]) async -> FunctionReturn {
+        print("updateRepresentation entered ", representationID, involvedappearances)
+        
+    var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        
+        let ud:[String:Any] = RepresentationAny(involvedAppearances: involvedappearances)
         print(representationID, ud)
 
         taskCompleted = false
@@ -463,6 +494,7 @@ class CommonViewModel: ObservableObject {
           
                     let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
                     self.appearances.append(am)
+                    print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count))
                     return
                 }
             }
@@ -490,6 +522,65 @@ class CommonViewModel: ObservableObject {
                                           "AppearTime":appeartime,
                                           "AppearNote":appearnote]
         return newAppearance
+    }
+    
+    @MainActor
+    func addAppearance(involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
+        
+        print("addAppearance entered ", involvedClient, involvedCause, involvedRepresentation, appearDate, appearTime, appearNote, "<<")
+
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+
+        let intID = nextAppearanceID()
+        let ud:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
+        
+        let reprRef = db.collection("appearances")
+        
+        taskCompleted = false
+        
+        do {
+            try await reprRef.document().setData(ud)
+            taskCompleted = true
+            print("Debug update Appearance ", rtn)
+            rtn.status = .successful
+            rtn.message = ""
+            print("addAppearance returning 1: ", rtn)
+            return rtn
+        }
+        catch {
+            print("Debug update Appearance failed \(error.localizedDescription)")
+            rtn.status = .IOError
+            rtn.message = "Update Appearance failed: " + error.localizedDescription
+            print("addAppearance returning 2: ", rtn)
+            return rtn
+        }
+    }
+
+    @MainActor
+    func addAppearanceToRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
+        
+        print("addAppearanceToRepresentation entered ", representationID, involvedClient, involvedCause, involvedRepresentation, appearDate, appearTime, appearNote, "XX")
+        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        var apprs:[AppearanceModel] = []
+        var apprids:[Int] = []
+        
+        Task {
+            await rtn = self.addAppearance(involvedClient:involvedClient, involvedCause:involvedCause, involvedRepresentation:involvedRepresentation, appearDate:appearDate, appearTime:appearTime, appearNote:appearNote)
+            if rtn.status != .successful {
+                return rtn
+            }
+            
+            apprs = assembleAppearances(repID:involvedRepresentation)
+            apprids = []
+            for appr in apprs {
+                apprids.append(appr.internalID)
+            }
+
+            await rtn = self.updateRepresentation(representationID: representationID, involvedappearances:apprids)
+            return rtn
+        }
+        return rtn
     }
 
     public func assembleAppearances(repID:Int) -> [AppearanceModel] {
