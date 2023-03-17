@@ -318,6 +318,7 @@ class CommonViewModel: ObservableObject {
                     let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory)
 
                     self.representations.append(rm)
+                    print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + String(self.representations.count))
                     return
                 }
             }
@@ -397,8 +398,10 @@ class CommonViewModel: ObservableObject {
     func updateRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String, intid:Int) async -> FunctionReturn {
         print("updateRepresentation entered")
         
+    var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        
         let ud:[String:Any] = RepresentationAny(internalID: intid, involvedClient: involvedClient, involvedCause: involvedCause, active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
-        print(ud)
+        print(representationID, ud)
 
         taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
@@ -407,10 +410,14 @@ class CommonViewModel: ObservableObject {
             try await reprRef.setData(ud, merge: true)
             taskCompleted = true
             print("Debug update Representation succeeded")
-            return FunctionReturn(status: .successful, message: "")
+            rtn.status = .successful
+            rtn.message = ""
+            return rtn
         } catch {
             print("Debug update Representation failed \(error.localizedDescription)")
-            return FunctionReturn(status: .IOError, message: "Update representation failed: " + error.localizedDescription)
+            rtn.status = .IOError
+            rtn.message = "Update representation failed: " + error.localizedDescription
+            return rtn
         }
     }
 

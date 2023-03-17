@@ -137,15 +137,16 @@ struct EditRepresentationView: View {
                                             print("Edit representation starting update")
                                             Task {
                                                 await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
+                                                print("Edit Representation update returned")
+                                                print(callResult)
+                                                print(CVModel.taskCompleted)
+                                                if callResult.status == .successful {
+                                                    statusMessage = ""
+                                                    prepWorkArea()
+                                                } else {
+                                                    statusMessage = callResult.message
+                                                }
                                             }
-                                            print("Edit Representation update returned")
-                                            print(CVModel.taskCompleted)
-//                                            if callResult.status == .successful {
-//                                                statusMessage = ""
-//                                                prepWorkArea()
-//                                            } else {
-//                                                statusMessage = callResult.message
-//                                            }
                                         }
                                     } label: {
                                         Text(saveMessage)
@@ -381,6 +382,7 @@ struct EditRepresentationView: View {
                 Picker("Category", selection: $repCategory) {
                     ForEach(pc.primaryCategories, id: \.self) {
                         Text($0).onChange(of: repCategory, perform: { value in
+                            repCategory = value
 //                            wrx.representation.primaryCategory = value
 //                            repChanged = true
                         })
@@ -523,38 +525,7 @@ struct EditRepresentationView: View {
         if statusMessage != "" { statusMessage = statusMessage + "\n" + er }
         else { statusMessage = er }
     }
-    
-//    func recordRepresentation() async -> Bool {
-//        var changed:Bool = false
-//        if let rx = rx {
-//            if rx.representation.assignedDate != wrx.representation.assignedDate {
-//                rx.representation.assignedDate = wrx.representation.assignedDate
-//                changed = true
-//            }
-//            if rx.representation.primaryCategory != wrx.representation.primaryCategory {
-//                rx.representation.primaryCategory = wrx.representation.primaryCategory
-//                changed = true
-//            }
-//            if rx.representation.active != wrx.representation.active {
-//                rx.representation.active = wrx.representation.active
-//                changed = true
-//            }
-//            if rx.representation.dispositionDate != wrx.representation.dispositionDate {
-//                rx.representation.dispositionDate = wrx.representation.dispositionDate
-//                changed = true
-//            }
-//            if rx.representation.dispositionType != wrx.representation.dispositionType {
-//                rx.representation.dispositionType = wrx.representation.dispositionType
-//                changed = true
-//            }
-//            if rx.representation.dispositionAction != wrx.representation.dispositionAction {
-//                rx.representation.dispositionAction = wrx.representation.dispositionAction
-//                changed = true;
-//            }
-//         }
-//        return changed
-//    }
-    
+
     func recordCauseSelection(cm:CauseModel) -> Void {
 //        wrx.cause = cm
 //        wrx.client = CVModel.findClient(internalID:cm.involvedClient)
