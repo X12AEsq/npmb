@@ -12,6 +12,7 @@ struct EditRepresentationView: View {
     @Environment(\.dismiss) var dismiss
     
     var rxid:Int
+    @State var workingid:Int = 0
 //    @State var wrx:RepresentationExpansion = RepresentationExpansion()
 
     @State var statusMessage:String = ""
@@ -104,7 +105,7 @@ struct EditRepresentationView: View {
                                 detail
                                 Spacer()
                                 HStack {
-                                    if activeScreen != .editappearance {
+                                    if activeScreen != .editappearance && activeScreen != .editnote {
                                         Button {
                                             activeScreen = .maininput
                                         } label: {
@@ -135,14 +136,14 @@ struct EditRepresentationView: View {
                                 }
 
                                 HStack {
-                                    if activeScreen != .editappearance {
+                                    if activeScreen != .editappearance && activeScreen != .editnote {
                                         Button {
                                             if auditRepresentation() {
                                                 Task {
                                                     await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
                                                     if callResult.status == .successful {
                                                         statusMessage = ""
-                                                        prepWorkArea()
+                                                        prepWorkArea(repid: workingid)
                                                     } else {
                                                         statusMessage = callResult.message
                                                     }
@@ -154,7 +155,7 @@ struct EditRepresentationView: View {
                                         .buttonStyle(CustomButton())
                                         if repChanged() {
                                             Button {
-                                                prepWorkArea()
+                                                prepWorkArea(repid: workingid)
                                             } label: {
                                                 Text("Quit")
                                             }
@@ -229,7 +230,8 @@ struct EditRepresentationView: View {
             }
         }
         .onAppear {
-            prepWorkArea()
+            workingid = rxid
+            prepWorkArea(repid: workingid)
         }
         .onRotate { newOrientation in
             if newOrientation.isLandscape || newOrientation.isPortrait {
@@ -368,6 +370,9 @@ struct EditRepresentationView: View {
                 }
             }
         }
+        .onAppear {
+            prepWorkArea(repid: workingid)
+        }
     }
 /*
     inputmain is the data entry screen for the representation itself; it appears on the right hand side of the bottom when "main" has been selected for entry
@@ -450,8 +455,13 @@ struct EditRepresentationView: View {
                             dateAppr = Date()
                             apprNote = ""
                             activeScreen = .maininput
+                            if callResult.status == .successful {
+                                statusMessage = ""
+                                prepWorkArea(repid: workingid)
+                            } else {
+                                statusMessage = callResult.message
+                            }
                         }
-                        print("addAppearanceToRepresentation returned ", callResult)
                     }
                 } label: {
                     Text("Save Appr")
@@ -471,13 +481,6 @@ struct EditRepresentationView: View {
     
     var inputNote: some View {
         VStack (alignment: .leading) {
-            Button {
-                dateNote = Date()
-                noteNote = ""
-            } label: {
-                Text("Add Note")
-            }
-            .buttonStyle(CustomButton())
             DatePicker("Note Date", selection: $dateNote).padding().onChange(of: dateNote, perform: { value in
                 noteDate = DateService.dateDate2String(inDate: value)
                 noteTime = DateService.dateTime2String(inDate: value)
@@ -495,10 +498,21 @@ struct EditRepresentationView: View {
             
             HStack {
                 Button {
-                    dateNote = Date()
-                    noteNote = ""
-                    noteCategory = "NOTE"
-                    activeScreen = .maininput
+                    if auditNote() {
+                        Task {
+                            await callResult = CVModel.addNoteToRepresentation(representationID: repDocumentID, client: repClient, cause: repCause, representation: repInternalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
+                            dateNote = Date()
+                            noteNote = ""
+                            noteCategory = "NOTE"
+                            activeScreen = .maininput
+                            if callResult.status == .successful {
+                                statusMessage = ""
+                                prepWorkArea(repid: workingid)
+                            } else {
+                                statusMessage = callResult.message
+                            }
+                        }
+                    }
                 } label: {
                     Text("Save Note")
                 }
@@ -512,6 +526,12 @@ struct EditRepresentationView: View {
                     Text("Quit (no save)")
                 }
                 .buttonStyle(CustomButton())
+            }
+        }
+        .onAppear {
+            if noteDate == "" {
+                noteDate = DateService.dateDate2String(inDate: dateNote)
+                noteTime = DateService.dateTime2String(inDate: dateNote)
             }
         }
     }
@@ -535,6 +555,18 @@ struct EditRepresentationView: View {
         if statusMessage == "" { return true }
         return false
     }
+    
+    func auditNote() -> Bool {
+        statusMessage = ""
+        if repDocumentID == "" { recordError(er:"unknown document id for representation") }
+        if repInternalID == 0 { recordError(er:"unknown internal id for representation") }
+        if repCause == 0 { recordError(er:"invalid cause for representation") }
+        if repClient == 0 { recordError(er:"invalid client for representation") }
+        if noteDate == "" { recordError(er: "invalid note date")}
+        if noteTime == "" { recordError(er: "invalid note time")}
+        if statusMessage == "" { return true }
+        return false
+    }
 
     func recordError(er:String) {
         if statusMessage != "" { statusMessage = statusMessage + "\n" + er }
@@ -553,12 +585,15 @@ struct EditRepresentationView: View {
 //        }
     }
     
-    func prepWorkArea() -> Void {
-        if rxid == 0 {
+    func prepWorkArea(repid:Int) -> Void {
+        if repid == 0 {
             rep = RepresentationModel()
+            repApprs = []
+            repNotes = []
         } else {
-            rep = CVModel.findRepresentation(internalID:rxid)
-            repApprs = CVModel.assembleAppearances(repID: rxid)
+            rep = CVModel.findRepresentation(internalID:repid)
+            repApprs = CVModel.assembleAppearances(repID: repid)
+            repNotes = CVModel.assembleNotes(repID: repid)
         }
         
         if rep.involvedCause == 0 {
