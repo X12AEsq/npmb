@@ -160,6 +160,33 @@ class CommonViewModel: ObservableObject {
     }
     
     @MainActor
+    func addClient(lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String) async -> FunctionReturn {
+        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        
+        let intID = nextClientID()
+        let uc:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
+
+        let reprRef = db.collection("clients")
+        
+        taskCompleted = false
+        
+        do {
+            try await reprRef.document().setData(uc)
+            taskCompleted = true
+            rtn.status = .successful
+            rtn.message = ""
+            return rtn
+        }
+        catch {
+            rtn.status = .IOError
+            rtn.message = "Add Client failed: " + error.localizedDescription
+            return rtn
+        }
+    }
+
+/*
+    @MainActor
     func addClient(lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String) async {
         let intID = nextClientID()
         let ud:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
@@ -176,7 +203,7 @@ class CommonViewModel: ObservableObject {
             print("Error adding cause \(error.localizedDescription)")
         }
     }
-    
+*/
     @MainActor
     func updateClient(clientID:String, internalID:Int, lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String, representation:[Int]) async {
         let clientData:[String:Any] = CommonViewModel.clientAny(internalID:internalID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation:representation)
@@ -258,23 +285,31 @@ class CommonViewModel: ObservableObject {
     }
     
     @MainActor
-    func addCause(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String) async {
+    func addCause(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String) async -> FunctionReturn {
+        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        
         let intID = nextCauseID()
-        let ud:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intID)
+        let uc:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intID)
         //   let db = Firestore.firestore()
         let reprRef = db.collection("causes")
         
         taskCompleted = false
         
         do {
-            try await reprRef.document().setData(ud)
+            try await reprRef.document().setData(uc)
             taskCompleted = true
+            rtn.status = .successful
+            rtn.message = ""
+            return rtn
         }
         catch {
-            print("Error adding Cause \(error.localizedDescription)")
+            rtn.status = .IOError
+            rtn.message = "Add Cause failed: " + error.localizedDescription
+            return rtn
         }
     }
-    
+
     @MainActor
     func updateCause(causeID:String, client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) async {
         let causeData:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intid)
@@ -318,7 +353,7 @@ class CommonViewModel: ObservableObject {
                     let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory)
 
                     self.representations.append(rm)
-                    print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + String(self.representations.count))
+//                    print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + String(self.representations.count))
                     return
                 }
             }
@@ -562,14 +597,14 @@ class CommonViewModel: ObservableObject {
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
 
         let intID = nextAppearanceID()
-        let ud:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
+        let ua:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
         
         let reprRef = db.collection("appearances")
         
         taskCompleted = false
         
         do {
-            try await reprRef.document().setData(ud)
+            try await reprRef.document().setData(ua)
             taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
@@ -605,6 +640,29 @@ class CommonViewModel: ObservableObject {
             return rtn
         }
         return rtn
+    }
+
+    @MainActor
+    func updateAppearance(appearanceID:String, intID:Int, involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
+        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        
+        let ua:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
+        
+        taskCompleted = false
+        let reprRef = db.collection("appearances").document(appearanceID)
+        
+        do {
+            try await reprRef.setData(ua, merge: true)
+            taskCompleted = true
+            rtn.status = .successful
+            rtn.message = ""
+            return rtn
+        } catch {
+            rtn.status = .IOError
+            rtn.message = "Update representation failed: " + error.localizedDescription
+            return rtn
+        }
     }
 
     public func assembleAppearances(repID:Int) -> [AppearanceModel] {

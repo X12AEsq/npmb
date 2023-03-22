@@ -28,6 +28,7 @@ struct EditClientView: View {
     @State var jail:String = ""
     @State var representation:[Int] = []
     @State var saveMessage:String = ""
+    @State var callResult:FunctionReturn = FunctionReturn()
 
     var so:StateOptions = StateOptions()
     var yno:YesNoOptions = YesNoOptions()
@@ -50,7 +51,7 @@ struct EditClientView: View {
                             if saveMessage == "Update" {
                                 updateClient()
                             } else {
-                                print("Select save")
+                                addClient()
                             }
                         } label: {
                             Text(saveMessage)
@@ -150,9 +151,12 @@ struct EditClientView: View {
     
     func addClient() {
         Task {
-            await CVModel.addClient(lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail)
-            if CVModel.taskCompleted {
+            await callResult = CVModel.addClient(lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail)
+            if callResult.status == .successful {
+                statusMessage = ""
                 dismiss()
+            } else {
+                statusMessage = callResult.message
             }
         }
     }

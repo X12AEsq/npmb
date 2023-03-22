@@ -30,7 +30,8 @@ struct EditCauseView: View {
     @State var filterString:String = ""
     @State var sortedClients:[ClientModel] = []
     @State var selectedClient:ClientModel = ClientModel()
-    
+    @State var callResult:FunctionReturn = FunctionReturn()
+
     var oo:OffenseOptions = OffenseOptions()
     var ac:AvailableCourts = AvailableCourts()
 
@@ -53,7 +54,7 @@ struct EditCauseView: View {
                             if saveMessage == "Update" {
                                 updateCause()
                             } else {
-                                print("Select save") // Add new cause here
+                                addCause()
                             }
                         } label: {
                             Text(saveMessage)
@@ -203,13 +204,16 @@ struct EditCauseView: View {
     
     func addCause() {
         Task {
-            await CVModel.addCause(client:selectedClient.internalID, causeno:causeNo, representations:representations, level:causeLevel, court: causeCourt, originalcharge: causeOriginalCharge, causetype: causeType)
-            if CVModel.taskCompleted {
+            await callResult = CVModel.addCause(client:selectedClient.internalID, causeno:causeNo, representations:representations, level:causeLevel, court: causeCourt, originalcharge: causeOriginalCharge, causetype: causeType)
+            if callResult.status == .successful {
+                statusMessage = ""
                 dismiss()
+            } else {
+                statusMessage = callResult.message
             }
         }
     }
-    
+
     func updateCause() {
         Task {
             await CVModel.updateCause(causeID: cause?.id ?? "", client:selectedClient.internalID, causeno:causeNo, representations:representations, level:causeLevel, court: causeCourt, originalcharge: causeOriginalCharge, causetype: causeType, intid: internalID)

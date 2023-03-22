@@ -53,17 +53,20 @@ struct EditRepresentationView: View {
     @State var cliName:String = ""
     
     @State var dateAppr:Date = Date()
+    @State var apprDocumentID:String = ""
     @State var apprDate:String = ""
     @State var apprTime:String = ""
     @State var apprNote:String = ""
+    @State var apprCategory:String = ""
     @State var apprInternal:Int = 0
-    @State var apprArray:[AppearanceModel] = []
+//    @State var apprArray:[AppearanceModel] = []
     
     @State var dateNote:Date = Date()
     @State var noteDate:String = ""
     @State var noteTime:String = ""
     @State var noteNote:String = ""
     @State var noteCategory:String = "NOTE"
+    @State var noteInternal:Int = 0
 
     @State var startingFilter:String = ""
     @State var activeScreen = NextAction.maininput
@@ -320,6 +323,7 @@ struct EditRepresentationView: View {
                             apprInternal = 0
                             dateAppr = Date()
                             apprNote = ""
+                            apprDocumentID = ""
                         } label: {
                             Text("Add Appearance")
                         }
@@ -331,6 +335,7 @@ struct EditRepresentationView: View {
                                         dateAppr = DateService.dateString2Date(inDate: appr.appearDate, inTime: appr.appearTime)
                                         apprNote = appr.appearNote
                                         apprInternal = appr.internalID
+                                        apprDocumentID = appr.id ?? ""
                                     }
                                 Text(appr.appearDate)
                                 Text(appr.appearTime)
@@ -347,6 +352,15 @@ struct EditRepresentationView: View {
                     VStack (alignment: .leading) {
                         Text("Notes")
                         ScrollView {
+                            Button {
+                                noteInternal = 0
+                                dateNote = Date()
+                                noteNote = ""
+                                noteCategory = ""
+                            } label: {
+                                Text("Add Appearance")
+                            }
+                            .buttonStyle(CustomButton())
                             ForEach(repNotes) { note in
                                 HStack (alignment: .top) {
                                     ActionEdit()
@@ -354,6 +368,7 @@ struct EditRepresentationView: View {
                                             dateNote = DateService.dateString2Date(inDate: note.noteDate, inTime: note.noteTime)
                                             noteNote = note.noteNote
                                             noteCategory = note.noteCategory
+                                            noteInternal = note.internalID
                                         }
                                     Text(note.noteDate)
                                     Text(note.noteCategory)
@@ -451,13 +466,18 @@ struct EditRepresentationView: View {
                 Button {
                     if auditAppearance() {
                         Task {
-                            await callResult = CVModel.addAppearanceToRepresentation(representationID: repDocumentID, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                            if apprInternal == 0 {
+                                await callResult = CVModel.addAppearanceToRepresentation(representationID: repDocumentID, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                            } else {
+                                await callResult = CVModel.updateAppearance(appearanceID: apprDocumentID, intID: apprInternal, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                            }
                             dateAppr = Date()
                             apprNote = ""
                             activeScreen = .maininput
                             if callResult.status == .successful {
                                 statusMessage = ""
                                 prepWorkArea(repid: workingid)
+                                print("successful appearance add, prepWorkArea invoked")
                             } else {
                                 statusMessage = callResult.message
                             }
@@ -500,7 +520,11 @@ struct EditRepresentationView: View {
                 Button {
                     if auditNote() {
                         Task {
-                            await callResult = CVModel.addNoteToRepresentation(representationID: repDocumentID, client: repClient, cause: repCause, representation: repInternalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
+                            if noteInternal == 0 {
+                                await callResult = CVModel.addNoteToRepresentation(representationID: repDocumentID, client: repClient, cause: repCause, representation: repInternalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
+                            } else {
+                                // CVModel.updateNote ....
+                            }
                             dateNote = Date()
                             noteNote = ""
                             noteCategory = "NOTE"
@@ -594,6 +618,7 @@ struct EditRepresentationView: View {
             rep = CVModel.findRepresentation(internalID:repid)
             repApprs = CVModel.assembleAppearances(repID: repid)
             repNotes = CVModel.assembleNotes(repID: repid)
+            print("prepWorkArea counts", repApprs, repNotes)
         }
         
         if rep.involvedCause == 0 {
