@@ -216,9 +216,12 @@ struct EditCauseView: View {
 
     func updateCause() {
         Task {
-            await CVModel.updateCause(causeID: cause?.id ?? "", client:selectedClient.internalID, causeno:causeNo, representations:representations, level:causeLevel, court: causeCourt, originalcharge: causeOriginalCharge, causetype: causeType, intid: internalID)
-            if CVModel.taskCompleted {
+            await callResult = CVModel.updateCause(causeID: cause?.id ?? "", client:selectedClient.internalID, causeno:causeNo, representations:representations, level:causeLevel, court: causeCourt, originalcharge: causeOriginalCharge, causetype: causeType, intid: internalID)
+            if callResult.status == .successful {
+                statusMessage = ""
                 dismiss()
+            } else {
+                statusMessage = callResult.message
             }
         }
     }

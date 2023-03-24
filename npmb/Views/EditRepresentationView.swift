@@ -211,10 +211,10 @@ struct EditRepresentationView: View {
                                                         if adding { Text("add cause") }
                                                         else { Text("update cause") }
                                                     }
-                                                        .buttonStyle(CustomButton())
+                                                    .buttonStyle(CustomButton())
+                                                    } else {
+                                                        SelectCauseUtil(selectedCause: $selectedCause, startingFilter: selectedCause.causeNo)
                                                     }
-
-//                                                    SelectCauseUtil(selectedCause: $selectedCause, startingFilter: rx?.cause.causeNo)
                                                 }
                                                     .padding()
                                                     .border(.indigo, width: 4)
@@ -598,6 +598,9 @@ struct EditRepresentationView: View {
     }
 
     func recordCauseSelection(cm:CauseModel) -> Void {
+        if rep.involvedCause != cm.internalID {
+            
+        }
 //        wrx.cause = cm
 //        wrx.client = CVModel.findClient(internalID:cm.involvedClient)
 //        cauInternalID = cm.internalID
