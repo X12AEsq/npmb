@@ -83,12 +83,11 @@ struct EditRepresentationView: View {
     
     var NoteCatOptions = ["TODO", "NOTE", "DONE"]
     
-// TODO: write appearance and note logic
     var body: some View {
         GeometryReader { geo in
             VStack (alignment: .leading) {
                 VStack (alignment: .leading) {
-// start of screen header
+// MARK: CROSS PAGE HEADER AT TOP: variable:mainsummary
                     Text("Representation").font(.title)
                         .padding([.leading, .bottom, .trailing])
                     if statusMessage != "" {
@@ -101,8 +100,12 @@ struct EditRepresentationView: View {
                     mainsummary
                         .frame(width: geo.size.width * 0.99)
 // bottom of screen header
-                    HStack {            // left and right sides of the rest
-// start of left hand side
+                    HStack {
+// MARK: LEFT HAND SIDE OF PAGE BOTTOM: variable:detail
+                        
+/*
+    For appearance or note input, disappear the main and cause buttons, and only display the appear or note buttons if there has been no representation change.
+*/
                         VStack {
                             VStack {
                                 detail
@@ -137,18 +140,41 @@ struct EditRepresentationView: View {
                                         }
                                     }
                                 }
-
+/*
+    These action buttons allow the representation itself to be added ...
+*/
                                 HStack {
                                     if activeScreen != .editappearance && activeScreen != .editnote {
                                         Button {
                                             if auditRepresentation() {
                                                 Task {
-                                                    await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
-                                                    if callResult.status == .successful {
-                                                        statusMessage = ""
-                                                        prepWorkArea(repid: workingid)
+                                                    if repDocumentID == "" {
+                                                        await callResult = CVModel.addRepresentation(involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory)
+                                                        print("add representation returned ", callResult)
+                                                        if callResult.status == .successful {
+                                                            statusMessage = ""
+                                                            rep = CVModel.findRepresentation(internalID:callResult.additional)
+                                                            await callResult = CVModel.attachCauseToRepresentation(representationID:rep.id ?? "",involvedCause: repCause, involvedRepresentation:rep.internalID)
+                                                            print("attach cause returned ", callResult)
+                                                            if callResult.status == .successful {
+                                                                statusMessage = ""
+                                                                prepWorkArea(repid: rep.internalID)
+                                                                activeScreen = .maininput
+                                                            } else {
+                                                                statusMessage = callResult.message
+                                                            }
+                                                        } else {
+                                                            statusMessage = callResult.message
+                                                        }
                                                     } else {
-                                                        statusMessage = callResult.message
+                        // TODO: need to handle the case where the attached cause changes - recriprocal pointers
+                                                        await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
+                                                        if callResult.status == .successful {
+                                                            statusMessage = ""
+                                                            prepWorkArea(repid: workingid)
+                                                        } else {
+                                                            statusMessage = callResult.message
+                                                        }
                                                     }
                                                 }
                                             }
@@ -181,7 +207,7 @@ struct EditRepresentationView: View {
                         .padding()
                         .frame(width: geo.size.width * 0.495)
                         .border(.yellow, width: 4)
-// End of left hand side, start of right hand side
+// MARK: RIGHT HAND SIDE OF PAGE BOTTOM: variables can be inputmain, inputNote, or inputAppr
                         ZStack {
                             VStack {
                                 if activeScreen == .maininput {
@@ -205,19 +231,59 @@ struct EditRepresentationView: View {
                                         } else {
                                             if activeScreen == .selectcause {
                                                 VStack {
-                                                    if selectedCause.internalID != 0 {
-                                                        Button { recordCauseSelection(cm:selectedCause) }
-                                                        label: {
-                                                        if adding { Text("add cause") }
-                                                        else { Text("update cause") }
+                                                    // TODO: This is all messed up - need to pop the selection screen, then act on the results; that initial check on internalID is messing with the logic
+                                                    SelectCauseUtil(selectedCause: $selectedCause, startingFilter: selectedCause.causeNo)
+                                                    Spacer()
+                                                    HStack {
+                                                        Button {
+                                                            print("selectcauseutil returned ", selectedCause.causeNo)
+                                                            cau = selectedCause
+                                                            cli = CVModel.findClient(internalID: cau.involvedClient)
+                                                            cauInternalID = cau.internalID
+                                                            cauCauseNo = cau.causeNo
+                                                            cauOrigCharge = cau.originalCharge
+                                                            cliInternalID = cli.internalID
+                                                            cliName = cli.formattedName
+                                                            repCause = cauInternalID
+                                                            repClient = cliInternalID
+                                                            activeScreen = .maininput
+                                                        }
+                                                    label: {
+                                                        Text("Select")
                                                     }
                                                     .buttonStyle(CustomButton())
-                                                    } else {
-                                                        SelectCauseUtil(selectedCause: $selectedCause, startingFilter: selectedCause.causeNo)
+                                                    Button {
+                                                        cau = CauseModel()
+                                                        cli = ClientModel()
+                                                        cauInternalID = 0
+                                                        cauCauseNo = ""
+                                                        cauOrigCharge = ""
+                                                        cliInternalID = 0
+                                                        cliName = ""
+                                                        activeScreen = .maininput
+                                                        }
+                                                    label: {
+                                                        Text("Quit")
+                                                    }
+                                                    .buttonStyle(CustomButton())
+                                                        
+                                                        //                                                    if selectedCause.internalID != 0 {
+                                                        //                                                        Button {
+                                                        //                                                            recordCauseSelection(cm:selectedCause)
+                                                        //                                                            print("selectcauseutil returned ", selectedCause.causeNo)
+                                                        //                                                        }
+                                                        //                                                        label: {
+                                                        //                                                        if adding { Text("add cause") }
+                                                        //                                                        else { Text("update cause") }
+                                                        //                                                        }
+                                                        //                                                        .buttonStyle(CustomButton())
+                                                        //                                                    } else {
+                                                        //                                                        SelectCauseUtil(selectedCause: $selectedCause, startingFilter: selectedCause.causeNo)
+                                                        //                                                    }
                                                     }
                                                 }
-                                                    .padding()
-                                                    .border(.indigo, width: 4)
+                                                .padding()
+                                                .border(.indigo, width: 4)
                                             }
                                         }
                                     }
@@ -253,9 +319,9 @@ struct EditRepresentationView: View {
 //            }
         }
     }
-/*
-    mainsummary appears in the spash header across the top of the screen
-*/
+    
+// MARK: CROSS PAGE HEADER AT TOP: variable:mainsummary
+
     var mainsummary: some View {
         HStack (alignment: .top){
             VStack (alignment: .leading) {
@@ -310,9 +376,13 @@ struct EditRepresentationView: View {
         .padding(.all, 20.0)
         .border(.yellow, width: 4)
     }
+    
+// MARK: LEFT HAND SIDE OF PAGE BOTTOM: variable:detail
+    
 /*
     detail is the left half of the bottom part of the screen; it can be a list of the appearances, a list of notes ... when it displays a list, if no member of the list has been selected, the right hand half of the screen will show a blank entry for for the list type; if a member has been selected, the right side will show an edit entry form pre-filled with the selected data
 */
+
     var detail: some View {
         ZStack {
             if activeScreen == .editappearance {
@@ -391,63 +461,110 @@ struct EditRepresentationView: View {
     }
 /*
     inputmain is the data entry screen for the representation itself; it appears on the right hand side of the bottom when "main" has been selected for entry
- */
+*/
+    // MARK: RIGHT HAND SIDE OF PAGE BOTTOM: inputmain
+
     var inputmain: some View {
-        Form {
-            Section(header: Text("Representation Data").background(Color.blue).foregroundColor(.white)) {
-                DatePicker("Assigned", selection: $repDateAssigned, displayedComponents: [.date]).padding().onChange(of: repDateAssigned, perform: { value in
+        VStack (alignment: .leading) {
+            HStack {
+                Text("Assigned")
+                DatePicker("", selection: $repDateAssigned, displayedComponents: [.date]).padding().onChange(of: repDateAssigned, perform: { value in
                     repAssigned = DateService.dateDate2String(inDate: repDateAssigned)
-//                    repChanged = true
-//                    wrx.representation.assignedDate = repAssigned
                 })
+            }
+            HStack {
+                Text("Category")
+                Spacer()
                 Picker("Category", selection: $repCategory) {
                     ForEach(pc.primaryCategories, id: \.self) {
                         Text($0).onChange(of: repCategory, perform: { value in
                             repCategory = value
-//                            wrx.representation.primaryCategory = value
-//                            repChanged = true
                         })
-                    }
-                }
-                Picker("Active", selection: $repActiveString) {
-                    ForEach(activeOptions, id: \.self) {
-                        Text($0).onChange(of: repActiveString, perform: { value in
-                            repActive = (value == "Yes")
-//                            wrx.representation.active = repActive
-//                            repChanged = true
-                         })
-                    }
-                }
-                if !repActive {
-                    DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
-                        .onChange(of: repDateDisp, perform: { value in
-                            repDispDate = DateService.dateDate2String(inDate: value)
-//                            wrx.representation.dispositionDate = repDispDate
-//                            repChanged = true
-                        })
-                    
-                    Picker(selection: $repDispType) {
-                        ForEach(dto.dispositionTypeOptions , id: \.self) {
-                            Text($0).onChange(of: repDispType, perform: { value in
-//                                wrx.representation.dispositionType = value
-//                                repChanged = true
-                            })
-                        }
-                    } label: {
-                        Text("Action")
-                    }
-                    Picker(selection: $repDispAction) {
-                        ForEach(dao.dispositionActionOptions , id: \.self) {
-                            Text($0).onChange(of: repDispAction, perform: { value in
-//                                wrx.representation.dispositionAction = value
-//                                repChanged = true
-                            })
-                        }
-                    } label: {
-                        Text("Action")
                     }
                 }
             }
+            HStack {
+                Text("Active")
+                Picker("", selection: $repActiveString) {
+                    ForEach(activeOptions, id: \.self) {
+                        Text($0).onChange(of: repActiveString, perform: { value in
+                            repActive = (value == "Yes")
+                        })
+                    }
+                }
+            }
+            if !repActive {
+                DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
+                    .onChange(of: repDateDisp, perform: { value in
+                        repDispDate = DateService.dateDate2String(inDate: value)
+                    })
+                
+                Picker(selection: $repDispType) {
+                    ForEach(dto.dispositionTypeOptions , id: \.self) {
+                        Text($0).onChange(of: repDispType, perform: { value in
+                        })
+                    }
+                } label: {
+                    Text("Type")
+                }
+                Picker(selection: $repDispAction) {
+                    ForEach(dao.dispositionActionOptions , id: \.self) {
+                        Text($0).onChange(of: repDispAction, perform: { value in
+                        })
+                    }
+                } label: {
+                    Text("Action")
+                }
+            }
+            Spacer()
+// Top
+            HStack {
+                Button {
+                    if auditRepresentation() {
+                        Task {
+                            if repDocumentID == "" {
+                                await callResult = CVModel.addRepresentation(involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory)
+                                print("add representation returned ", callResult)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    rep = CVModel.findRepresentation(internalID:callResult.additional)
+                                    await callResult = CVModel.attachCauseToRepresentation(representationID:rep.id ?? "",involvedCause: repCause, involvedRepresentation:rep.internalID)
+                                    print("attach cause returned ", callResult)
+                                    if callResult.status == .successful {
+                                        statusMessage = ""
+                                        prepWorkArea(repid: rep.internalID)
+                                        activeScreen = .maininput
+                                    } else {
+                                        statusMessage = callResult.message
+                                    }
+                                } else {
+                                    statusMessage = callResult.message
+                                }
+                            } else {
+// TODO: need to handle the case where the attached cause changes - recriprocal pointers
+                                await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    prepWorkArea(repid: workingid)
+                                } else {
+                                    statusMessage = callResult.message
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    Text("Save")
+                }
+                .buttonStyle(CustomButton())
+                Button {
+                    prepWorkArea(repid: rep.internalID)
+                    activeScreen = .maininput
+                } label: {
+                    Text("Quit (no save")
+                }
+                .buttonStyle(CustomButton())
+            }
+// Bottom
         }
     }
     
@@ -666,17 +783,17 @@ struct EditRepresentationView: View {
             adding = true
 //            wrx = RepresentationExpansion()
 //            prepRepWorkArea(xrx: wrx)
-//            repDateAssigned = Date()
-//            repActive = true
-//            repActiveString = "Yes"
-//            repCategory = "ORIG"
-//            repDateDisp = Date()
-//            cauInternalID = 0
-//            cauCauseNo = ""
-//            cauOrigCharge = ""
-//            cliInternalID = 0
-//            cliName = ""
-//            startingFilter = ""
+            repDateAssigned = Date()
+            repActive = true
+            repActiveString = "Yes"
+            repCategory = "ORIG"
+            repDateDisp = Date()
+            cauInternalID = 0
+            cauCauseNo = ""
+            cauOrigCharge = ""
+            cliInternalID = 0
+            cliName = ""
+            startingFilter = ""
             repAdding = true
 //            repChanged = false
         }

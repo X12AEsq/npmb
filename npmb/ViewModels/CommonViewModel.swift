@@ -162,7 +162,7 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func addClient(lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
         
         let intID = nextClientID()
         let uc:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
@@ -287,8 +287,8 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func addCause(client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let intID = nextCauseID()
         let uc:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intID)
         //   let db = Firestore.firestore()
@@ -314,8 +314,8 @@ class CommonViewModel: ObservableObject {
     func updateCause(causeID:String, client:Int, causeno:String, representations:[Int], level:String, court: String, originalcharge: String, causetype: String, intid:Int) async -> FunctionReturn {
         let causeData:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intid)
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         taskCompleted = false
         
         do {
@@ -333,8 +333,8 @@ class CommonViewModel: ObservableObject {
     
     @MainActor
     func updateCause(causeID:String, updates:[String:Any]) async -> FunctionReturn {
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         taskCompleted = false
         
         do {
@@ -353,7 +353,7 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func attachCauseToRepresentation(representationID:String, involvedCause:Int, involvedRepresentation:Int) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
         let cm = self.findCause(internalID:involvedCause)
         var repids:[Int] = []
         
@@ -369,11 +369,13 @@ class CommonViewModel: ObservableObject {
         repids = []
         for rep in self.representations.filter({ $0.involvedCause == cm.internalID }) {
             repids.append(rep.internalID)
+            print("attachCauseToRepresentation adding ", rep.internalID)
         }
         
         if repids.firstIndex(of: involvedRepresentation) == nil {
             repids.append(involvedRepresentation)
         }
+        print("attachCauseToRepresentation repids ", repids)
         
         let uc:[String:Any] = ["Representations":repids]
         
@@ -494,8 +496,8 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func addRepresentation(involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let intID = nextRepresentationID()
         let ud:[String:Any] = RepresentationAny(internalID: intID, involvedClient: involvedClient, involvedCause: involvedCause, appearances: [], notes: [], active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
         //   let db = Firestore.firestore()
@@ -508,6 +510,7 @@ class CommonViewModel: ObservableObject {
             taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
+            rtn.additional = intID
             return rtn
         }
         catch {
@@ -520,8 +523,8 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func updateRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String, intid:Int) async -> FunctionReturn {
         
-    var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let ud:[String:Any] = RepresentationAny(internalID: intid, involvedClient: involvedClient, involvedCause: involvedCause, active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
         print(representationID, ud)
 
@@ -547,8 +550,8 @@ class CommonViewModel: ObservableObject {
     func updateRepresentation(representationID:String, involvedappearances:[Int]) async -> FunctionReturn {
         print("updateRepresentation entered ", representationID, involvedappearances)
         
-    var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let ud:[String:Any] = RepresentationAny(involvedAppearances: involvedappearances)
         print(representationID, ud)
 
@@ -574,8 +577,8 @@ class CommonViewModel: ObservableObject {
     func updateRepresentation(representationID:String, involvednotes:[Int]) async -> FunctionReturn {
         print("updateRepresentation entered ", representationID, involvednotes)
         
-    var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let ud:[String:Any] = RepresentationAny(involvedNotes: involvednotes)
         print(representationID, ud)
 
@@ -601,8 +604,8 @@ class CommonViewModel: ObservableObject {
     func updateRepresentation(representationID:String, involvedCause:Int, involvedClient:Int) async -> FunctionReturn {
 //        print("updateRepresentation entered ", representationID, involvednotes)
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let ud:[String:Any] = RepresentationAny(involvedCause: involvedCause, involvedClient: involvedClient)
         print(representationID, ud)
 
@@ -699,7 +702,7 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func addAppearance(involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let intID = nextAppearanceID()
         let ua:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
@@ -725,7 +728,7 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func addAppearanceToRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
         var apprs:[AppearanceModel] = []
         var apprids:[Int] = []
         
@@ -750,8 +753,8 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func updateAppearance(appearanceID:String, intID:Int, involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
-        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let ua:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
         
         taskCompleted = false
@@ -831,7 +834,7 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func addNote(client:Int, cause:Int, representation:Int, notedate:String, notetime:String, notenote:String, notecategory:String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let intID = nextNoteID()
         
@@ -862,7 +865,7 @@ class CommonViewModel: ObservableObject {
     @MainActor
     func addNoteToRepresentation(representationID:String, client:Int, cause:Int, representation:Int, notedate:String, notetime:String, notenote:String, notecategory:String) async -> FunctionReturn {
         
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "")
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
         var notes:[NotesModel] = []
         var noteids:[Int] = []
         
