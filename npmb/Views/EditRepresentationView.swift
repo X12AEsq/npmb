@@ -298,6 +298,7 @@ struct EditRepresentationView: View {
                 }
             }
         }
+// MARK: END OF MAIN VIEW; initial appearance handling
         .onAppear {
             workingid = rxid
             prepWorkArea(repid: workingid)

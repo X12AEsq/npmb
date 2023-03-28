@@ -112,6 +112,8 @@ class CommonViewModel: ObservableObject {
                     let representation = data["Representation"] as? [Int] ?? []
                     let cl:ClientModel = ClientModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, lastname:lastname, firstname: firstName, middlename: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, phone: FormattingService.fmtphone(area: area, exchange: exchange, number: number), note: note, jail: jail, representation: representation)
                     self.clients.append(cl)
+                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                    print("clientSubscribe " + String(cl.internalID) + "; " + cl.formattedName + "; " + String(self.clients.count) + "; " + debugMsg)
                     return
                 }
             }
@@ -243,6 +245,8 @@ class CommonViewModel: ObservableObject {
                     let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
                     
                     self.causes.append(ca)
+                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                    print("causeSubscribe " + String(ca.internalID) + "; " + ca.causeNo + "; " + String(self.causes.count) + "; " + debugMsg)
                     return
                 }
             }
@@ -420,7 +424,8 @@ class CommonViewModel: ObservableObject {
                     let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory)
 
                     self.representations.append(rm)
-//                    print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + String(self.representations.count))
+                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                    print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + rm.involvedAppearances.description + "; " + String(self.representations.count) + "; " + debugMsg)
                     return
                 }
             }
@@ -441,6 +446,8 @@ class CommonViewModel: ObservableObject {
     }
     
     public func findRepresentation(internalID:Int) -> RepresentationModel {
+        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+        print("findRepresentation entered " + debugMsg)
         let workRepresentations:[RepresentationModel] = representations.filter { $0.internalID == internalID }
         if workRepresentations.count == 1 {
             return workRepresentations[0]
@@ -537,11 +544,15 @@ class CommonViewModel: ObservableObject {
             print("Debug update Representation succeeded")
             rtn.status = .successful
             rtn.message = ""
+            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+            print("addRepresentation " + debugMsg)
             return rtn
         } catch {
             print("Debug update Representation failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update representation failed: " + error.localizedDescription
+            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+            print("addRepresentation " + debugMsg)
             return rtn
         }
     }
@@ -575,7 +586,7 @@ class CommonViewModel: ObservableObject {
     
     @MainActor
     func updateRepresentation(representationID:String, involvednotes:[Int]) async -> FunctionReturn {
-        print("updateRepresentation entered ", representationID, involvednotes)
+        print("updateRepresentation - notes entered ", representationID, involvednotes)
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
@@ -669,7 +680,8 @@ class CommonViewModel: ObservableObject {
           
                     let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
                     self.appearances.append(am)
-                    print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count))
+                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                    print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count) + "; " + debugMsg)
                     return
                 }
             }
@@ -716,11 +728,15 @@ class CommonViewModel: ObservableObject {
             taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
+            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+            print("addAppearance " + debugMsg)
             return rtn
         }
         catch {
             rtn.status = .IOError
             rtn.message = "Update Appearance failed: " + error.localizedDescription
+            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+            print("addAppearance " + debugMsg)
             return rtn
         }
     }
@@ -768,7 +784,7 @@ class CommonViewModel: ObservableObject {
             return rtn
         } catch {
             rtn.status = .IOError
-            rtn.message = "Update representation failed: " + error.localizedDescription
+            rtn.message = "Update appearance failed: " + error.localizedDescription
             return rtn
         }
     }
@@ -801,6 +817,9 @@ class CommonViewModel: ObservableObject {
           
                     let nm:NotesModel = NotesModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, notedate:noteDate, notetime:noteTime, notenote:noteNote, notecat:noteCategory)
                     self.notes.append(nm)
+                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                    print("noteSubscribe " + String(nm.internalID)  + "; " + debugMsg)
+
                     return
                 }
             }
