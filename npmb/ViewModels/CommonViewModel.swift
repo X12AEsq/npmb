@@ -25,6 +25,9 @@ class CommonViewModel: ObservableObject {
     
     @Published var appStatus:String = ""
     
+    @Published var lastUpdate:Date = Date()
+    @Published var lastAppearanceUpdate:Date = Date()
+    
     @Published var clients = [ClientModel]()
     @Published var causes = [CauseModel]()
     @Published var representations = [RepresentationModel]()
@@ -39,7 +42,7 @@ class CommonViewModel: ObservableObject {
 
     init() {
         userSession = auth.currentUser
-        appStatus = "npmb v1.06\n"
+        appStatus = "npmb v1.07\n"
         appStatus += "EditRepresentationView needs CRUD logic and note and appearance UI\n"
     }
     
@@ -680,6 +683,7 @@ class CommonViewModel: ObservableObject {
           
                     let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
                     self.appearances.append(am)
+                    self.setAppearanceTimeStamp()
                     let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
                     print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count) + "; " + debugMsg)
                     return
@@ -911,5 +915,32 @@ class CommonViewModel: ObservableObject {
         return workNotes.sorted { $0.noteDate < $1.noteDate }
     }
 
+// MARK: Time Stamp Functions
+    
+    func setTimeStamp() -> Void {
+        self.lastUpdate = Date()
+    }
+
+    func isLater(thisTime:Date) -> Bool {
+        if thisTime > lastUpdate { return true }
+        return false
+    }
+
+    func getTimeStamp() -> Date {
+        return self.lastUpdate
+    }
+    
+    func setAppearanceTimeStamp() -> Void {
+        self.lastAppearanceUpdate = Date()
+    }
+    
+    func getLastAppearanceTimeStamp() -> Date {
+        return self.lastAppearanceUpdate
+    }
+    
+    func appearanceRefreshOverdue(thisTime:Date) -> Bool {
+        if self.lastAppearanceUpdate > thisTime { return true }
+        return false
+    }
 
 }

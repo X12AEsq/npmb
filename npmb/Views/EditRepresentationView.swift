@@ -42,7 +42,7 @@ struct EditRepresentationView: View {
     @State var repNotes:[NotesModel] = []
     @State var repCause:Int = 0
     @State var repClient:Int = 0
-    @State var repAdding:Bool = false
+//    @State var repAdding:Bool = false
 //    @State var repChanged:Bool = false
     
     @State var cauInternalID = 0
@@ -486,6 +486,7 @@ struct EditRepresentationView: View {
             }
             HStack {
                 Text("Active")
+                Spacer()
                 Picker("", selection: $repActiveString) {
                     ForEach(activeOptions, id: \.self) {
                         Text($0).onChange(of: repActiveString, perform: { value in
@@ -495,26 +496,37 @@ struct EditRepresentationView: View {
                 }
             }
             if !repActive {
-                DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
-                    .onChange(of: repDateDisp, perform: { value in
-                        repDispDate = DateService.dateDate2String(inDate: value)
-                    })
-                
-                Picker(selection: $repDispType) {
-                    ForEach(dto.dispositionTypeOptions , id: \.self) {
-                        Text($0).onChange(of: repDispType, perform: { value in
+                HStack {
+                    DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
+                        .onChange(of: repDateDisp, perform: { value in
+                            repDispDate = DateService.dateDate2String(inDate: value)
                         })
-                    }
-                } label: {
-                    Text("Type")
                 }
-                Picker(selection: $repDispAction) {
-                    ForEach(dao.dispositionActionOptions , id: \.self) {
-                        Text($0).onChange(of: repDispAction, perform: { value in
-                        })
+                
+                HStack {
+                    Text("Disposition Type")
+                    Spacer()
+                    Picker(selection: $repDispType) {
+                        ForEach(dto.dispositionTypeOptions , id: \.self) {
+                            Text($0).onChange(of: repDispType, perform: { value in
+                            })
+                        }
+                    } label: {
+                        Text("Type")
                     }
-                } label: {
-                    Text("Action")
+                }
+                
+                HStack {
+                    Text("Disposition Action")
+                    Spacer()
+                    Picker(selection: $repDispAction) {
+                        ForEach(dao.dispositionActionOptions , id: \.self) {
+                            Text($0).onChange(of: repDispAction, perform: { value in
+                            })
+                        }
+                    } label: {
+                        Text("Action")
+                    }
                 }
             }
             Spacer()
@@ -777,7 +789,7 @@ struct EditRepresentationView: View {
             cliInternalID = cli.internalID
             cliName = cli.formattedName
             startingFilter = cau.sortFormat1
-            repAdding = false
+//            repAdding = false
 //            repChanged = false
         } else {
             saveMessage = "Add"
@@ -795,9 +807,10 @@ struct EditRepresentationView: View {
             cliInternalID = 0
             cliName = ""
             startingFilter = ""
-            repAdding = true
+//            repAdding = true
 //            repChanged = false
         }
+//        CVModel.setTimeStamp()
     }
     
     func repChanged() -> Bool {
