@@ -115,8 +115,10 @@ class CommonViewModel: ObservableObject {
                     let representation = data["Representation"] as? [Int] ?? []
                     let cl:ClientModel = ClientModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, lastname:lastname, firstname: firstName, middlename: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, phone: FormattingService.fmtphone(area: area, exchange: exchange, number: number), note: note, jail: jail, representation: representation)
                     self.clients.append(cl)
-                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                    print("clientSubscribe " + String(cl.internalID) + "; " + cl.formattedName + "; " + String(self.clients.count) + "; " + debugMsg)
+                    if cl.internalID == 419 {
+                        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                        print("clientSubscribe " + String(cl.internalID) + "; " + cl.formattedName + "; " + String(self.clients.count) + "; " + debugMsg)
+                    }
                     return
                 }
             }
@@ -248,8 +250,10 @@ class CommonViewModel: ObservableObject {
                     let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
                     
                     self.causes.append(ca)
-                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                    print("causeSubscribe " + String(ca.internalID) + "; " + ca.causeNo + "; " + String(self.causes.count) + "; " + debugMsg)
+                    if ca.internalID == 554 {
+                        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                        print("causeSubscribe " + String(ca.internalID) + "; " + ca.causeNo + "; " + String(self.causes.count) + "; " + debugMsg)
+                    }
                     return
                 }
             }
@@ -428,7 +432,9 @@ class CommonViewModel: ObservableObject {
 
                     self.representations.append(rm)
                     let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                    print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + rm.involvedAppearances.description + "; " + String(self.representations.count) + "; " + debugMsg)
+                    if rm.internalID == 254 {
+                        print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + rm.involvedAppearances.description + "; " + String(self.representations.count) + "; " + debugMsg)
+                    }
                     return
                 }
             }
@@ -536,7 +542,8 @@ class CommonViewModel: ObservableObject {
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let ud:[String:Any] = RepresentationAny(internalID: intid, involvedClient: involvedClient, involvedCause: involvedCause, active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
-        print(representationID, ud)
+        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+        print("update representation, ", representationID, ud, debugMsg)
 
         taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
@@ -548,21 +555,22 @@ class CommonViewModel: ObservableObject {
             rtn.status = .successful
             rtn.message = ""
             let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("addRepresentation " + debugMsg)
+            print("updateRepresentation " + debugMsg)
             return rtn
         } catch {
             print("Debug update Representation failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update representation failed: " + error.localizedDescription
             let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("addRepresentation " + debugMsg)
+            print("updateRepresentation " + debugMsg)
             return rtn
         }
     }
     
     @MainActor
     func updateRepresentation(representationID:String, involvedappearances:[Int]) async -> FunctionReturn {
-        print("updateRepresentation entered ", representationID, involvedappearances)
+        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+        print("updateRepresentation entered ", representationID, involvedappearances, debugMsg)
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
@@ -684,8 +692,10 @@ class CommonViewModel: ObservableObject {
                     let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
                     self.appearances.append(am)
                     self.setAppearanceTimeStamp()
-                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                    print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count) + "; " + debugMsg)
+                    if am.internalID > 550 {
+                        let debugMsg:String = self.lastAppearanceUpdate.formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+                        print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count) + "; " + debugMsg)
+                    }
                     return
                 }
             }
@@ -733,14 +743,14 @@ class CommonViewModel: ObservableObject {
             rtn.status = .successful
             rtn.message = ""
             let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("addAppearance " + debugMsg)
+            print("addAppearance success " + debugMsg, rtn)
             return rtn
         }
         catch {
             rtn.status = .IOError
             rtn.message = "Update Appearance failed: " + error.localizedDescription
             let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("addAppearance " + debugMsg)
+            print("addAppearance failure " + debugMsg, rtn)
             return rtn
         }
     }
@@ -754,6 +764,7 @@ class CommonViewModel: ObservableObject {
         
         Task {
             await rtn = self.addAppearance(involvedClient:involvedClient, involvedCause:involvedCause, involvedRepresentation:involvedRepresentation, appearDate:appearDate, appearTime:appearTime, appearNote:appearNote)
+            print("addAppearanceToRepresentation received ", rtn)
             if rtn.status != .successful {
                 return rtn
             }
@@ -765,6 +776,7 @@ class CommonViewModel: ObservableObject {
             }
 
             await rtn = self.updateRepresentation(representationID: representationID, involvedappearances:apprids)
+            print("addAppearanceToRepresentation updateRepresentation returned ", rtn)
             return rtn
         }
         return rtn

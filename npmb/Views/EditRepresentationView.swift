@@ -59,6 +59,7 @@ struct EditRepresentationView: View {
     @State var apprNote:String = ""
     @State var apprCategory:String = ""
     @State var apprInternal:Int = 0
+    @State var apprLocalUpdateDate:Date = Date()
 //    @State var apprArray:[AppearanceModel] = []
     
     @State var dateNote:Date = Date()
@@ -579,6 +580,9 @@ struct EditRepresentationView: View {
             }
 // Bottom
         }
+        .onAppear {
+            prepWorkArea(repid: workingid)
+        }
     }
     
     var inputAppr: some View {
@@ -595,23 +599,38 @@ struct EditRepresentationView: View {
             HStack {
                 Button {
                     if auditAppearance() {
-                        Task {
-                            if apprInternal == 0 {
+                        if apprInternal == 0 {
+                            Task {
                                 await callResult = CVModel.addAppearanceToRepresentation(representationID: repDocumentID, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
-                            } else {
-                                await callResult = CVModel.updateAppearance(appearanceID: apprDocumentID, intID: apprInternal, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                                print("inputAppr addAppearanceToRepresentation returned ", callResult)
+                                switch callResult.status {
+                                case .successful:
+                                    statusMessage = ""
+                                    prepWorkArea(repid: workingid)
+                                    print("successful appearance add, prepWorkArea invoked ", workingid, CVModel.lastAppearanceUpdate)
+                                case .IOError:
+                                    print("I have no idea ", callResult)
+                                    statusMessage = callResult.message
+                                default:
+                                    print("I have even less idea")
+                                }
                             }
-                            dateAppr = Date()
-                            apprNote = ""
-                            activeScreen = .maininput
-                            if callResult.status == .successful {
-                                statusMessage = ""
-                                prepWorkArea(repid: workingid)
-                                print("successful appearance add, prepWorkArea invoked")
-                            } else {
-                                statusMessage = callResult.message
+                        } else {
+                            Task {
+                                await callResult = CVModel.updateAppearance(appearanceID: apprDocumentID, intID: apprInternal, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    prepWorkArea(repid: workingid)
+                                    print("successful appearance update, prepWorkArea invoked ", workingid, CVModel.lastAppearanceUpdate)
+                                } else {
+                                    statusMessage = callResult.message
+                                }
                             }
                         }
+                        print("We're getting to here?")
+                        dateAppr = Date()
+                        apprNote = ""
+                        activeScreen = .maininput
                     }
                 } label: {
                     Text("Save Appr")
@@ -751,7 +770,8 @@ struct EditRepresentationView: View {
             rep = CVModel.findRepresentation(internalID:repid)
             repApprs = CVModel.assembleAppearances(repID: repid)
             repNotes = CVModel.assembleNotes(repID: repid)
-            print("prepWorkArea counts", repApprs, repNotes)
+            apprLocalUpdateDate = Date()
+            print("prepWorkArea counts", repApprs.count, repNotes.count, apprLocalUpdateDate, CVModel.lastAppearanceUpdate)
         }
         
         if rep.involvedCause == 0 {
