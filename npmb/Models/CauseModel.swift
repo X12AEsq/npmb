@@ -18,6 +18,7 @@ class CauseModel: Identifiable, Codable, ObservableObject {
     var level: String
     var court: String
     var originalCharge: String
+    var client:ClientModel
     
     init() {
         self.id = ""
@@ -29,6 +30,7 @@ class CauseModel: Identifiable, Codable, ObservableObject {
         self.court = ""
         self.originalCharge = ""
         self.causeType = ""
+        self.client = ClientModel()
     }
 
     init (
@@ -41,7 +43,8 @@ class CauseModel: Identifiable, Codable, ObservableObject {
         court: String,
         originalcharge: String,
         causetype: String,
-        intid:Int) {
+        intid:Int,
+        clientmodel:ClientModel) {
             self.id = fsid
             self.internalID = intid
             self.causeNo = causeno
@@ -51,6 +54,7 @@ class CauseModel: Identifiable, Codable, ObservableObject {
             self.court = court
             self.originalCharge = originalcharge
             self.causeType = causetype
+            self.client = clientmodel
         }
 }
 

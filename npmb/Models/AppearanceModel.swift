@@ -24,8 +24,9 @@ class AppearanceModel: Identifiable, Codable, Hashable, ObservableObject {
     var appearDate: String
     var appearTime: String
     var appearNote: String
+    var client:ClientModel
  
-    init (fsid:String, intid:Int, client:Int, cause:Int, representation:Int, appeardate:String, appeartime:String, appearnote:String) {
+    init (fsid:String, intid:Int, client:Int, cause:Int, representation:Int, appeardate:String, appeartime:String, appearnote:String, clientmodel:ClientModel) {
         self.id = fsid
         self.internalID = intid
         self.involvedClient = client
@@ -34,6 +35,7 @@ class AppearanceModel: Identifiable, Codable, Hashable, ObservableObject {
         self.appearDate = appeardate
         self.appearTime = appeartime
         self.appearNote = appearnote
+        self.client = clientmodel
     }
 
     init() {
@@ -45,5 +47,6 @@ class AppearanceModel: Identifiable, Codable, Hashable, ObservableObject {
         self.appearDate = ""
         self.appearTime = ""
         self.appearNote = ""
+        self.client = ClientModel()
     }
 }

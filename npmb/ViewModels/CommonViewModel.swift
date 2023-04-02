@@ -247,7 +247,7 @@ class CommonViewModel: ObservableObject {
                     let originalcharge = data["OriginalCharge"] as? String ?? ""
                     let causeType = data["CauseType"] as? String ?? ""
                     
-                    let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
+                    let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID, clientmodel: self.findClient(internalID: involvedClient))
                     
                     self.causes.append(ca)
                     if ca.internalID == 554 {
@@ -428,7 +428,7 @@ class CommonViewModel: ObservableObject {
                     let dispositionAction = data["DispositionAction"] as? String ?? ""
                     let primaryCategory = data["PrimaryCategory"] as? String ?? ""
 
-                    let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory)
+                    let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory, causemodel: self.findCause(internalID: involvedCause), apprs: self.assembleAppearances(repID: internalID))
 
                     self.representations.append(rm)
                     let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
@@ -458,11 +458,13 @@ class CommonViewModel: ObservableObject {
         let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
         print("findRepresentation entered " + debugMsg)
         let workRepresentations:[RepresentationModel] = representations.filter { $0.internalID == internalID }
+        if workRepresentations.count == 0 { return RepresentationModel() }
         if workRepresentations.count == 1 {
-            return workRepresentations[0]
-        } else {
-            return RepresentationModel()
+            let workRep:RepresentationModel = workRepresentations[0]
+            workRep.appearances = self.assembleAppearances(repID: workRep.internalID)
+            return workRep
         }
+        return RepresentationModel()
     }
 
     func RepresentationAny(internalID:Int, involvedClient:Int, involvedCause:Int, appearances:[Int], notes:[Int], active:Bool, assignedDate:String, dispositionDate:String, dispositionType:String, dispositionAction:String, primaryCategory:String) -> [String:Any] {
@@ -689,7 +691,7 @@ class CommonViewModel: ObservableObject {
                     let appearTime = data["AppearTime"] as? String ?? ""
                     let appearNote = data["AppearNote"] as? String ?? ""
           
-                    let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
+                    let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote, clientmodel: self.findClient(internalID: involvedClient))
                     self.appearances.append(am)
                     self.setAppearanceTimeStamp()
                     if am.internalID > 550 {

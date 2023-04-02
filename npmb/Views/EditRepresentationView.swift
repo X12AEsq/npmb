@@ -12,6 +12,8 @@ struct EditRepresentationView: View {
     @Environment(\.dismiss) var dismiss
     
     var rxid:Int
+    @State var origRepresentation:RepresentationModel = RepresentationModel()
+    @State var currRepresentation:RepresentationModel = RepresentationModel()
     @State var workingid:Int = 0
 //    @State var wrx:RepresentationExpansion = RepresentationExpansion()
 
@@ -301,6 +303,8 @@ struct EditRepresentationView: View {
         }
 // MARK: END OF MAIN VIEW; initial appearance handling
         .onAppear {
+            origRepresentation = CVModel.findRepresentation(internalID: rxid)
+            currRepresentation = origRepresentation
             workingid = rxid
             prepWorkArea(repid: workingid)
         }

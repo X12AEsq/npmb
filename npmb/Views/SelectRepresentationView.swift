@@ -13,7 +13,7 @@ import FirebaseFirestoreSwift
 struct SelectRepresentationView: View {
     @State private var sortOption = 1
     @State private var sortedRepresentations:[RepresentationModel] = []
-    @State private var sortedRX:[RepresentationExpansion] = []
+//    @State private var sortedRX:[RepresentationExpansion] = []
 
     @State private var sortMessage:String = "By Client"
     @State private var filterText:String = ""
@@ -28,7 +28,7 @@ struct SelectRepresentationView: View {
                 Text("Representations").font(.title)
                 HStack {
                     Button {
-                        sortedRX = sortThem(option: 1)
+                        sortedRepresentations = sortThem(option: 1)
                         sortOption = 1
                         filterText = ""
                         sortMessage = "By Client"
@@ -37,7 +37,7 @@ struct SelectRepresentationView: View {
                     }
                     .buttonStyle(CustomButton())
                     Button {
-                        sortedRX = sortThem(option: 2)
+                        sortedRepresentations = sortThem(option: 2)
                         sortOption = 2
                         filterText = ""
                         sortMessage = "By Cause"
@@ -64,10 +64,10 @@ struct SelectRepresentationView: View {
                             .padding(.bottom, 20)
                          Spacer()
                     }
-                    ForEach(sortedRX) { rx in
+                    ForEach(sortedRepresentations) { rx in
                         HStack {
-                            NavigationLink(destination: { EditRepresentationView(rxid: rx.representation.internalID) },
-                                           label: { LineLabel(option: sortOption, rx: rx) })
+                            NavigationLink(destination: { EditRepresentationView(rxid: rx.internalID) },
+                                           label: { LineLabel(option: sortOption, rm: rx) })
                             Spacer()
                         }
                     }
@@ -83,47 +83,47 @@ struct SelectRepresentationView: View {
 
     func filterThem(prefix:String, option:Int) -> Void {
         if option == 1 {
-            sortedRX = sortThem(option: option).filter { $0.client.formattedName.hasPrefix(prefix) }
+            sortedRepresentations = sortThem(option: option).filter { $0.cause.client.formattedName.hasPrefix(prefix) }
         } else {
-            sortedRX = sortThem(option: option).filter { $0.cause.causeNo.hasPrefix(prefix) }
+            sortedRepresentations = sortThem(option: option).filter { $0.cause.causeNo.hasPrefix(prefix) }
         }
     }
 
-    func sortThem(option:Int) -> [RepresentationExpansion] {
-        var rx:[RepresentationExpansion] = []
-        for item in CVModel.representations {
-            let newrx = RepresentationExpansion(rm: item)
-            newrx.client = CVModel.findClient(internalID: item.involvedClient)
-            newrx.cause = CVModel.findCause(internalID: item.involvedCause)
-            newrx.appearances = CVModel.assembleAppearances(repID: item.internalID)
-            newrx.notes = CVModel.assembleNotes(repID: item.internalID)
-            rx.append(newrx)
-        }
+    func sortThem(option:Int) -> [RepresentationModel] {
+//        var rm:[RepresentationModel] = []
+//        for item in CVModel.representations {
+//            let newrx = RepresentationExpansion(rm: item)
+//            newrx.client = CVModel.findClient(internalID: item.involvedClient)
+//            newrx.cause = CVModel.findCause(internalID: item.involvedCause)
+//            newrx.appearances = CVModel.assembleAppearances(repID: item.internalID)
+//            newrx.notes = CVModel.assembleNotes(repID: item.internalID)
+//            rx.append(newrx)
+//        }
         if option == 1 {
-            return rx.sorted { $0.client.formattedName < $1.client.formattedName }
+            return CVModel.representations.sorted { $0.cause.client.formattedName < $1.cause.client.formattedName }
         } else {
-            return rx.sorted { $0.cause.causeNo < $1.cause.causeNo }
+            return CVModel.representations.sorted { $0.cause.causeNo < $1.cause.causeNo }
         }
     }
     
-    func linkLabel(rx:RepresentationExpansion, option:Int) -> String {
-        var returnString = ""
-        if option == 1 {
-            returnString = rx.client.formattedName
-        } else {
-            returnString = rx.cause.causeNo
-        }
-        return "." + returnString
-    }
+//    func linkLabel(rx:RepresentationExpansion, option:Int) -> String {
+//        var returnString = ""
+//        if option == 1 {
+//            returnString = rx.client.formattedName
+//        } else {
+//            returnString = rx.cause.causeNo
+//        }
+//        return "." + returnString
+//    }
 }
 
 struct LineLabel: View {
     var option:Int
-    var rx:RepresentationExpansion
+    var rm:RepresentationModel
     var body: some View {
         HStack {
             Image(systemName: "rectangle.portrait.and.arrow.forward")
-            Text((option == 1) ? rx.client.formattedName : rx.cause.causeNo)
+            Text((option == 1) ? rm.cause.client.formattedName : rm.cause.causeNo)
         }
     }
 
