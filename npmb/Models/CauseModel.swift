@@ -9,6 +9,12 @@ import Foundation
 import FirebaseFirestore
 
 class CauseModel: Identifiable, Codable, ObservableObject {
+//    static func == (lhs: ClientModel, rhs: ClientModel) -> Bool {
+//            lhs.formattedName == rhs.formattedName
+//        }
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//    }
     var id:String?
     var internalID: Int             // Firebase Integer
     var causeNo: String
@@ -18,7 +24,7 @@ class CauseModel: Identifiable, Codable, ObservableObject {
     var level: String
     var court: String
     var originalCharge: String
-    var client:ClientModel
+//    var client:ClientModel
     
     init() {
         self.id = ""
@@ -30,7 +36,7 @@ class CauseModel: Identifiable, Codable, ObservableObject {
         self.court = ""
         self.originalCharge = ""
         self.causeType = ""
-        self.client = ClientModel()
+//        self.client = ClientModel()
     }
 
     init (
@@ -43,8 +49,8 @@ class CauseModel: Identifiable, Codable, ObservableObject {
         court: String,
         originalcharge: String,
         causetype: String,
-        intid:Int,
-        clientmodel:ClientModel) {
+        intid:Int) {
+//        clientmodel:ClientModel) {
             self.id = fsid
             self.internalID = intid
             self.causeNo = causeno
@@ -54,7 +60,22 @@ class CauseModel: Identifiable, Codable, ObservableObject {
             self.court = court
             self.originalCharge = originalcharge
             self.causeType = causetype
-            self.client = clientmodel
-        }
+//            self.client = clientmodel
+    }
+    
+    init(Test:Int) {
+        self.id = ""
+        self.internalID = Test
+        self.causeNo = "CauseNo" + String(Test)
+        self.involvedClient = Test
+        self.involvedRepresentations = []
+        self.level = "Level" + String(Test)
+        self.court = "Court"  + String(Test)
+        self.originalCharge = "Charge"  + String(Test)
+        self.causeType = "Type"  + String(Test)
+//        self.client = ClientModel(Test:Test)
+    }
+        
 }
 
+    

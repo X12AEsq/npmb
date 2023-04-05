@@ -133,6 +133,7 @@ struct EditCauseView: View {
                                         ActionSelect()
                                             .onTapGesture {
                                                 print("Selected " + cl.formattedName)
+                                                selectedClient = cl
                                             }
                                         Text(sortOption == 1 ? cl.formattedName : cl.sortFormat2)
                                         Spacer()

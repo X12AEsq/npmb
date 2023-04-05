@@ -33,6 +33,9 @@ class CommonViewModel: ObservableObject {
     @Published var representations = [RepresentationModel]()
     @Published var appearances = [AppearanceModel]()
     @Published var notes = [NotesModel]()
+    
+    @Published var expandedcauses = [ExpandedCause]()
+    @Published var expandedrepresentations = [ExpandedRepresentation]()
 
     var clientListener: ListenerRegistration?
     var causeListener: ListenerRegistration?
@@ -65,6 +68,11 @@ class CommonViewModel: ObservableObject {
             let authDataResult = try await auth.signIn(withEmail: email, password: password)
             userSession = authDataResult.user
             print("Debug: User signed in successfully")
+            self.clientSubscribe()
+            self.causeSubscribe()
+            self.noteSubscribe()
+            self.appearanceSubscribe()
+            self.representationSubscribe()
             return true
         } catch {
             print("Debug: Failed to sign in user with error \(error.localizedDescription)")
@@ -247,7 +255,7 @@ class CommonViewModel: ObservableObject {
                     let originalcharge = data["OriginalCharge"] as? String ?? ""
                     let causeType = data["CauseType"] as? String ?? ""
                     
-                    let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID, clientmodel: self.findClient(internalID: involvedClient))
+                    let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
                     
                     self.causes.append(ca)
                     if ca.internalID == 554 {
@@ -401,6 +409,27 @@ class CommonViewModel: ObservableObject {
             return rtn
         }
         return rtn
+    }
+    
+    func assembleExpandedCauses() -> Void {
+        self.expandedcauses = []
+        for ca in self.causes {
+            let cl = self.findClient(internalID: ca.involvedClient)
+            let xc:ExpandedCause = ExpandedCause(cause: ca, client: cl)
+            self.expandedcauses.append(xc)
+        }
+    }
+    
+    func assembleExpandedRepresentations() -> Void {
+        self.assembleExpandedCauses()
+        self.expandedrepresentations = []
+        for re in self.representations {
+            let xr:ExpandedRepresentation = ExpandedRepresentation()
+            xr.representation = re
+            let xc = self.expandedcauses.first(where: { $0.cause.internalID == re.involvedCause })
+            xr.xpcause = xc ?? ExpandedCause()
+            self.expandedrepresentations.append(xr)
+        }
     }
 
     // MARK: Representation Functions

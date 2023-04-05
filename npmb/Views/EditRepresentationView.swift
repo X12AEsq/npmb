@@ -13,46 +13,48 @@ struct EditRepresentationView: View {
     
     var rxid:Int
     @State var origRepresentation:RepresentationModel = RepresentationModel()
-    @State var currRepresentation:RepresentationModel = RepresentationModel()
+//    @State var currRepresentation:RepresentationModel = RepresentationModel()
     @State var workingid:Int = 0
 //    @State var wrx:RepresentationExpansion = RepresentationExpansion()
 
     @State var statusMessage:String = ""
     @State var saveMessage:String = ""
-    @State var rep:RepresentationModel = RepresentationModel()
-    @State var cau:CauseModel = CauseModel()
-    @State var cli:ClientModel = ClientModel()
+//    @State var rep:RepresentationModel = RepresentationModel()
+//    @State var cau:CauseModel = CauseModel()
+//    @State var cli:ClientModel = ClientModel()
     @State var selectedCause:CauseModel = CauseModel()
     
     var pc:PrimaryCategory = PrimaryCategory()
     var dto:DispositionTypeOptions = DispositionTypeOptions()
     var dao:DispositionActionOptions = DispositionActionOptions()
     var activeOptions = ["Yes", "No"]
-
-    @State var repDocumentID:String = ""
-    @State var repInternalID:Int = 0
-    @State var repAssigned:String = ""
-    @State var repDateAssigned:Date = Date()
-    @State var repCategory:String = ""
-    @State var repActive:Bool = true
-    @State var repActiveString:String = ""
-    @State var repDispDate:String = ""
-    @State var repDateDisp:Date = Date()
-    @State var repDispType:String = ""
-    @State var repDispAction:String = ""
-    @State var repApprs:[AppearanceModel] = []
+/*
+    These variables are initialized to the original input; they then become the workarea for data input. They are initialized along with origRepresentation at entry. After that, origRepresentation will not change unless there is an update or addition. If that happens, both origRepresentation and the curr** variables will be reinitialized
+*/
+    @State var currDocumentID:String = ""
+    @State var currInternalID:Int = 0
+    @State var currAssignedDate:String = ""
+    @State var currDateAssigned:Date = Date()
+    @State var currCategory:String = ""
+    @State var currActive:Bool = true
+    @State var currActiveString:String = ""
+    @State var currDispDate:String = ""
+    @State var currDateDisp:Date = Date()
+    @State var currDispType:String = ""
+    @State var currDispAction:String = ""
+    @State var currApprs:[AppearanceModel] = []
     @State var repNotes:[NotesModel] = []
-    @State var repCause:Int = 0
-    @State var repClient:Int = 0
+    @State var currInvolvedCause:Int = 0
+    @State var currInvolvedClient:Int = 0
 //    @State var repAdding:Bool = false
-//    @State var repChanged:Bool = false
+    @State var repChangedFlag:Bool = false
     
-    @State var cauInternalID = 0
-    @State var cauCauseNo = ""
-    @State var cauOrigCharge = ""
+    @State var currcauInternalID = 0
+    @State var currcauCauseNo = ""
+    @State var currcauOrigCharge = ""
     
-    @State var cliInternalID:Int = 0
-    @State var cliName:String = ""
+    @State var currcliInternalID:Int = 0
+    @State var currcliName:String = ""
     
     @State var dateAppr:Date = Date()
     @State var apprDocumentID:String = ""
@@ -127,7 +129,7 @@ struct EditRepresentationView: View {
                                             Text("Cause")
                                         }
                                         .buttonStyle(CustomButton())
-                                        if !repChanged() {
+                                        if !repChangedFlag {
                                             Button {
                                                 activeScreen = .editappearance
                                             } label: {
@@ -151,17 +153,19 @@ struct EditRepresentationView: View {
                                         Button {
                                             if auditRepresentation() {
                                                 Task {
-                                                    if repDocumentID == "" {
-                                                        await callResult = CVModel.addRepresentation(involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory)
+                                                    if currDocumentID == "" {
+                                                        await callResult = CVModel.addRepresentation(involvedClient: currInvolvedClient, involvedCause: currInvolvedCause, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory)
                                                         print("add representation returned ", callResult)
                                                         if callResult.status == .successful {
                                                             statusMessage = ""
-                                                            rep = CVModel.findRepresentation(internalID:callResult.additional)
-                                                            await callResult = CVModel.attachCauseToRepresentation(representationID:rep.id ?? "",involvedCause: repCause, involvedRepresentation:rep.internalID)
+                                                            initWorkArea(orig: callResult.additional)
+//                                                            rep = CVModel.findRepresentation(internalID:callResult.additional)
+                                                            await callResult = CVModel.attachCauseToRepresentation(representationID:origRepresentation.id ?? "",involvedCause: currInvolvedCause, involvedRepresentation:origRepresentation.internalID)
                                                             print("attach cause returned ", callResult)
                                                             if callResult.status == .successful {
                                                                 statusMessage = ""
-                                                                prepWorkArea(repid: rep.internalID)
+                                                                initWorkArea(orig: origRepresentation.internalID)
+//                                                                prepWorkArea(repid: rep.internalID)
                                                                 activeScreen = .maininput
                                                             } else {
                                                                 statusMessage = callResult.message
@@ -171,10 +175,11 @@ struct EditRepresentationView: View {
                                                         }
                                                     } else {
                         // TODO: need to handle the case where the attached cause changes - recriprocal pointers
-                                                        await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
+                                                        await callResult = CVModel.updateRepresentation(representationID: currDocumentID, involvedClient: currInvolvedClient, involvedCause: currInvolvedCause, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory, intid: currInternalID)
                                                         if callResult.status == .successful {
                                                             statusMessage = ""
-                                                            prepWorkArea(repid: workingid)
+                                                            initWorkArea(orig: currInternalID)
+//                                                            prepWorkArea(repid: workingid)
                                                         } else {
                                                             statusMessage = callResult.message
                                                         }
@@ -185,9 +190,10 @@ struct EditRepresentationView: View {
                                             Text(saveMessage)
                                         }
                                         .buttonStyle(CustomButton())
-                                        if repChanged() {
+                                        if repChangedFlag {
                                             Button {
-                                                prepWorkArea(repid: workingid)
+                                                initWorkArea(orig: currInternalID)
+//                                                            prepWorkArea(repid: workingid)
                                             } label: {
                                                 Text("Quit")
                                             }
@@ -240,15 +246,20 @@ struct EditRepresentationView: View {
                                                     HStack {
                                                         Button {
                                                             print("selectcauseutil returned ", selectedCause.causeNo)
-                                                            cau = selectedCause
-                                                            cli = CVModel.findClient(internalID: cau.involvedClient)
-                                                            cauInternalID = cau.internalID
-                                                            cauCauseNo = cau.causeNo
-                                                            cauOrigCharge = cau.originalCharge
-                                                            cliInternalID = cli.internalID
-                                                            cliName = cli.formattedName
-                                                            repCause = cauInternalID
-                                                            repClient = cliInternalID
+                                                            currcauCauseNo = selectedCause.causeNo
+                                                            currcauInternalID = selectedCause.internalID
+                                                            currcauOrigCharge = selectedCause.originalCharge
+//                                                            currcliInternalID = selectedCause.client.internalID
+//                                                            currcliName = selectedCause.client.formattedName
+//                                                            cau = selectedCause
+//                                                            cli = CVModel.findClient(internalID: cau.involvedClient)
+//                                                            cauInternalID = cau.internalID
+//                                                            cauCauseNo = cau.causeNo
+//                                                            cauOrigCharge = cau.originalCharge
+//                                                            cliInternalID = cli.internalID
+//                                                            cliName = cli.formattedName
+//                                                            currInvolvedCause = cauInternalID
+//                                                            currInvolvedClient = cliInternalID
                                                             activeScreen = .maininput
                                                         }
                                                     label: {
@@ -256,13 +267,13 @@ struct EditRepresentationView: View {
                                                     }
                                                     .buttonStyle(CustomButton())
                                                     Button {
-                                                        cau = CauseModel()
-                                                        cli = ClientModel()
-                                                        cauInternalID = 0
-                                                        cauCauseNo = ""
-                                                        cauOrigCharge = ""
-                                                        cliInternalID = 0
-                                                        cliName = ""
+//                                                        cau = CauseModel()
+//                                                        cli = ClientModel()
+//                                                        cauInternalID = 0
+//                                                        cauCauseNo = ""
+//                                                        cauOrigCharge = ""
+//                                                        cliInternalID = 0
+//                                                        cliName = ""
                                                         activeScreen = .maininput
                                                         }
                                                     label: {
@@ -303,10 +314,10 @@ struct EditRepresentationView: View {
         }
 // MARK: END OF MAIN VIEW; initial appearance handling
         .onAppear {
-            origRepresentation = CVModel.findRepresentation(internalID: rxid)
-            currRepresentation = origRepresentation
+            print("Checkpoint 3")
+            initWorkArea(orig: rxid)
             workingid = rxid
-            prepWorkArea(repid: workingid)
+//            prepWorkArea(repid: workingid)
         }
         .onRotate { newOrientation in
             if newOrientation.isLandscape || newOrientation.isPortrait {
@@ -326,6 +337,49 @@ struct EditRepresentationView: View {
         }
     }
     
+    func initWorkArea(orig:Int) -> Void {
+        if orig == 0 {
+            saveMessage = "Add"
+        } else {
+            saveMessage = "Update"
+        }
+        let xr = CVModel.expandedrepresentations.first(where: { $0.representation.internalID == rxid })
+        
+        origRepresentation = xr?.representation ?? RepresentationModel()
+        repChangedFlag = false
+/*
+ self.id = fsid
+ self.involvedClient = client
+ self.involvedCause = cause
+ self.involvedAppearances = appearances
+ self.involvedNotes = notes
+ self.active = active
+ self.dispositionDate = dispositiondate
+ self.dispositionAction = dispositionaction
+ self.cause = causemodel
+*/
+//        currRepresentation = origRepresentation
+        currInternalID = origRepresentation.internalID
+        currAssignedDate = origRepresentation.assignedDate
+        currDateAssigned = origRepresentation.DateAssigned
+        currDispDate = origRepresentation.dispositionDate
+        currDateDisp = origRepresentation.DateDisposed
+        currDispType = origRepresentation.dispositionType
+        currDispAction = origRepresentation.dispositionAction
+        currCategory = origRepresentation.primaryCategory
+        currActive = origRepresentation.active
+        print("Set point 1", currActive, origRepresentation.active)
+        currActiveString = (origRepresentation.active) ? "Yes" : "No"
+        currApprs = origRepresentation.appearances
+        
+        currcliInternalID = origRepresentation.involvedClient
+        currcliName = xr?.xpcause.client.formattedName ?? "No Client"
+
+        currcauInternalID = origRepresentation.involvedCause
+        currcauCauseNo = xr?.xpcause.cause.causeNo ?? "No Cause"
+        currcauOrigCharge = xr?.xpcause.cause.originalCharge ?? "No Cause"
+    }
+    
 // MARK: CROSS PAGE HEADER AT TOP: variable:mainsummary
 
     var mainsummary: some View {
@@ -333,49 +387,49 @@ struct EditRepresentationView: View {
             VStack (alignment: .leading) {
                 HStack {
                     Text("Representation:")
-                    Text(String(repInternalID))
+                    Text(String(currInternalID))
                 }
                 HStack {
                     Text("Assigned: ")
-                    Text(repAssigned)
+                    Text(currAssignedDate)
                 }
                 HStack {
                     Text("Category: ")
-                    Text(repCategory)
+                    Text(currCategory)
                 }
             }
             Spacer()
             VStack (alignment: .leading) {
                 HStack {
                     Text("Active:")
-                    Text((repActive) ? "yes" : "no")
+                    Text((currActive) ? "yes" : "no")
                 }
             }
             Spacer()
             VStack (alignment: .leading) {
-                if !repActive {
+                if !currActive {
                     HStack {
                         Text("Competed:")
-                        Text(repDispDate)
+                        Text(currDispDate)
                         Text(" ")
-                        Text(repDispType)
+                        Text(currDispType)
                         Text(" ")
-                        Text(repDispAction)
+                        Text(currDispAction)
                     }
                 }
                 HStack {
                     Text("Cause:")
-                    Text(String(cauInternalID))
+                    Text(String(currcauInternalID))
                     Text(" ")
-                    Text(cauCauseNo)
+                    Text(currcauCauseNo)
                     Text(" ")
-                    Text(cauOrigCharge)
+                    Text(currcauOrigCharge)
                 }
                 HStack {
                     Text("Client:")
-                    Text(String(cliInternalID))
+                    Text(String(currcliInternalID))
                     Text(" ")
-                    Text(cliName)
+                    Text(currcliName)
                 }
             }
         }
@@ -404,7 +458,7 @@ struct EditRepresentationView: View {
                             Text("Add Appearance")
                         }
                         .buttonStyle(CustomButton())
-                        ForEach(repApprs) { appr in
+                        ForEach(currApprs) { appr in
                             HStack (alignment: .top) {
                                 ActionEdit()
                                     .onTapGesture {
@@ -462,7 +516,7 @@ struct EditRepresentationView: View {
             }
         }
         .onAppear {
-            prepWorkArea(repid: workingid)
+            print("Checkpoint 1")
         }
     }
 /*
@@ -474,17 +528,21 @@ struct EditRepresentationView: View {
         VStack (alignment: .leading) {
             HStack {
                 Text("Assigned")
-                DatePicker("", selection: $repDateAssigned, displayedComponents: [.date]).padding().onChange(of: repDateAssigned, perform: { value in
-                    repAssigned = DateService.dateDate2String(inDate: repDateAssigned)
-                })
+                DatePicker("", selection: $currDateAssigned, displayedComponents: [.date]).padding().onChange(of: currDateAssigned, perform: { value in
+                        currAssignedDate = DateService.dateDate2String(inDate: value)
+                    if currAssignedDate != origRepresentation.assignedDate { print("change 1"); repChangedFlag = true }
+                    }
+                )
             }
             HStack {
                 Text("Category")
                 Spacer()
-                Picker("Category", selection: $repCategory) {
+                Picker("Category", selection: $currCategory) {
                     ForEach(pc.primaryCategories, id: \.self) {
-                        Text($0).onChange(of: repCategory, perform: { value in
-                            repCategory = value
+                        Text($0).onChange(of: currCategory, perform: { value in
+                            print("select category ", currCategory, value)
+                            currCategory = value
+                            if currCategory != origRepresentation.primaryCategory { print("change 2"); repChangedFlag = true }
                         })
                     }
                 }
@@ -492,28 +550,33 @@ struct EditRepresentationView: View {
             HStack {
                 Text("Active")
                 Spacer()
-                Picker("", selection: $repActiveString) {
+                Picker("", selection: $currActiveString) {
                     ForEach(activeOptions, id: \.self) {
-                        Text($0).onChange(of: repActiveString, perform: { value in
-                            repActive = (value == "Yes")
+                        Text($0).onChange(of: currActiveString, perform: { value in
+                            print("Set point 2", currActive, origRepresentation.active, value)
+                            currActive = (value == "Yes")
+                            if currActive != origRepresentation.active { print("change 3"); repChangedFlag = true }
                         })
                     }
                 }
             }
-            if !repActive {
+            if !currActive {
                 HStack {
-                    DatePicker(selection: $repDateDisp, displayedComponents: [.date], label: {Text("Disposed")}).padding()
-                        .onChange(of: repDateDisp, perform: { value in
-                            repDispDate = DateService.dateDate2String(inDate: value)
+                    Text("Disposed")
+                    DatePicker("", selection: $currDateDisp, displayedComponents: [.date]).padding()
+                        .onChange(of: currDateDisp, perform: { value in
+                            currDispDate = DateService.dateDate2String(inDate: value)
+                            if currDispDate != origRepresentation.dispositionDate { print("change 4"); repChangedFlag = true }
                         })
                 }
                 
                 HStack {
                     Text("Disposition Type")
                     Spacer()
-                    Picker(selection: $repDispType) {
+                    Picker(selection: $currDispType) {
                         ForEach(dto.dispositionTypeOptions , id: \.self) {
-                            Text($0).onChange(of: repDispType, perform: { value in
+                            Text($0).onChange(of: currDispType, perform: { value in
+                                if currDispType != origRepresentation.dispositionType { print("change 5"); repChangedFlag = true }
                             })
                         }
                     } label: {
@@ -524,9 +587,10 @@ struct EditRepresentationView: View {
                 HStack {
                     Text("Disposition Action")
                     Spacer()
-                    Picker(selection: $repDispAction) {
+                    Picker(selection: $currDispAction) {
                         ForEach(dao.dispositionActionOptions , id: \.self) {
-                            Text($0).onChange(of: repDispAction, perform: { value in
+                            Text($0).onChange(of: currDispAction, perform: { value in
+                                if currDispAction != origRepresentation.dispositionAction { print("change 6"); repChangedFlag = true }
                             })
                         }
                     } label: {
@@ -540,17 +604,20 @@ struct EditRepresentationView: View {
                 Button {
                     if auditRepresentation() {
                         Task {
-                            if repDocumentID == "" {
-                                await callResult = CVModel.addRepresentation(involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory)
+                            if currDocumentID == "" {
+                                await callResult = CVModel.addRepresentation(involvedClient: currInvolvedClient, involvedCause: currInvolvedCause, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory)
                                 print("add representation returned ", callResult)
                                 if callResult.status == .successful {
                                     statusMessage = ""
-                                    rep = CVModel.findRepresentation(internalID:callResult.additional)
-                                    await callResult = CVModel.attachCauseToRepresentation(representationID:rep.id ?? "",involvedCause: repCause, involvedRepresentation:rep.internalID)
+                                    repChangedFlag = false
+                                    initWorkArea(orig: callResult.additional)
+//                                    rep = CVModel.findRepresentation(internalID:callResult.additional)
+                                    await callResult = CVModel.attachCauseToRepresentation(representationID:currDocumentID, involvedCause: currInvolvedCause, involvedRepresentation:currInternalID)
                                     print("attach cause returned ", callResult)
                                     if callResult.status == .successful {
                                         statusMessage = ""
-                                        prepWorkArea(repid: rep.internalID)
+                                        initWorkArea(orig: currInternalID)
+//                                        prepWorkArea(repid: rep.internalID)
                                         activeScreen = .maininput
                                     } else {
                                         statusMessage = callResult.message
@@ -560,10 +627,12 @@ struct EditRepresentationView: View {
                                 }
                             } else {
 // TODO: need to handle the case where the attached cause changes - recriprocal pointers
-                                await callResult = CVModel.updateRepresentation(representationID: rep.id!, involvedClient: repClient, involvedCause: repCause, active: repActive, assignedDate: repAssigned, dispositionDate: repDispDate, dispositionType: repDispType, dispositionAction: repDispAction, primaryCategory: repCategory, intid: repInternalID)
+                                await callResult = CVModel.updateRepresentation(representationID: currDocumentID, involvedClient: currInvolvedClient, involvedCause: currInvolvedCause, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory, intid: currInternalID)
                                 if callResult.status == .successful {
                                     statusMessage = ""
-                                    prepWorkArea(repid: workingid)
+                                    repChangedFlag = false
+                                    initWorkArea(orig: currInternalID)
+//                                    prepWorkArea(repid: workingid)
                                 } else {
                                     statusMessage = callResult.message
                                 }
@@ -575,7 +644,8 @@ struct EditRepresentationView: View {
                 }
                 .buttonStyle(CustomButton())
                 Button {
-                    prepWorkArea(repid: rep.internalID)
+//                    prepWorkArea(repid: rep.internalID)
+                    initWorkArea(orig: origRepresentation.internalID)
                     activeScreen = .maininput
                 } label: {
                     Text("Quit (no save")
@@ -585,7 +655,8 @@ struct EditRepresentationView: View {
 // Bottom
         }
         .onAppear {
-            prepWorkArea(repid: workingid)
+            print("checkpoint 2")
+            initWorkArea(orig: rxid)
         }
     }
     
@@ -605,12 +676,13 @@ struct EditRepresentationView: View {
                     if auditAppearance() {
                         if apprInternal == 0 {
                             Task {
-                                await callResult = CVModel.addAppearanceToRepresentation(representationID: repDocumentID, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                                await callResult = CVModel.addAppearanceToRepresentation(representationID: currDocumentID, involvedClient: currInvolvedClient, involvedCause: currInvolvedCause, involvedRepresentation: currInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
                                 print("inputAppr addAppearanceToRepresentation returned ", callResult)
                                 switch callResult.status {
                                 case .successful:
                                     statusMessage = ""
-                                    prepWorkArea(repid: workingid)
+                                    initWorkArea(orig: currInternalID)
+//                                    prepWorkArea(repid: workingid)
                                     print("successful appearance add, prepWorkArea invoked ", workingid, CVModel.lastAppearanceUpdate)
                                 case .IOError:
                                     print("I have no idea ", callResult)
@@ -621,10 +693,11 @@ struct EditRepresentationView: View {
                             }
                         } else {
                             Task {
-                                await callResult = CVModel.updateAppearance(appearanceID: apprDocumentID, intID: apprInternal, involvedClient: repClient, involvedCause: repCause, involvedRepresentation: repInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                                await callResult = CVModel.updateAppearance(appearanceID: apprDocumentID, intID: apprInternal, involvedClient: currInvolvedClient, involvedCause: currInvolvedCause, involvedRepresentation: currInternalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
                                 if callResult.status == .successful {
                                     statusMessage = ""
-                                    prepWorkArea(repid: workingid)
+                                    initWorkArea(orig: currInternalID)
+//                                    prepWorkArea(repid: workingid)
                                     print("successful appearance update, prepWorkArea invoked ", workingid, CVModel.lastAppearanceUpdate)
                                 } else {
                                     statusMessage = callResult.message
@@ -674,7 +747,7 @@ struct EditRepresentationView: View {
                     if auditNote() {
                         Task {
                             if noteInternal == 0 {
-                                await callResult = CVModel.addNoteToRepresentation(representationID: repDocumentID, client: repClient, cause: repCause, representation: repInternalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
+                                await callResult = CVModel.addNoteToRepresentation(representationID: currDocumentID, client: currInvolvedClient, cause: currInvolvedCause, representation: currInternalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
                             } else {
                                 // CVModel.updateNote ....
                             }
@@ -684,7 +757,8 @@ struct EditRepresentationView: View {
                             activeScreen = .maininput
                             if callResult.status == .successful {
                                 statusMessage = ""
-                                prepWorkArea(repid: workingid)
+                                initWorkArea(orig: currInternalID)
+//                                    prepWorkArea(repid: workingid)
                             } else {
                                 statusMessage = callResult.message
                             }
@@ -715,18 +789,18 @@ struct EditRepresentationView: View {
     
     func auditRepresentation() -> Bool {
         statusMessage = ""
-        if repCause == 0 { recordError(er:"invalid cause for representation") }
-        if repClient == 0 { recordError(er:"invalid client for representation") }
+        if currInvolvedCause == 0 { recordError(er:"invalid cause for representation") }
+        if currInvolvedClient == 0 { recordError(er:"invalid client for representation") }
         if statusMessage == "" { return true }
         return false
     }
     
     func auditAppearance() -> Bool {
         statusMessage = ""
-        if repDocumentID == "" { recordError(er:"unknown document id for representation") }
-        if repInternalID == 0 { recordError(er:"unknown internal id for representation") }
-        if repCause == 0 { recordError(er:"invalid cause for representation") }
-        if repClient == 0 { recordError(er:"invalid client for representation") }
+        if currDocumentID == "" { recordError(er:"unknown document id for representation") }
+        if currInternalID == 0 { recordError(er:"unknown internal id for representation") }
+        if currInvolvedCause == 0 { recordError(er:"invalid cause for representation") }
+        if currInvolvedClient == 0 { recordError(er:"invalid client for representation") }
         if apprDate == "" { recordError(er: "invalid appearance date")}
         if apprTime == "" { recordError(er: "invalid appearance time")}
         if statusMessage == "" { return true }
@@ -735,10 +809,10 @@ struct EditRepresentationView: View {
     
     func auditNote() -> Bool {
         statusMessage = ""
-        if repDocumentID == "" { recordError(er:"unknown document id for representation") }
-        if repInternalID == 0 { recordError(er:"unknown internal id for representation") }
-        if repCause == 0 { recordError(er:"invalid cause for representation") }
-        if repClient == 0 { recordError(er:"invalid client for representation") }
+        if currDocumentID == "" { recordError(er:"unknown document id for representation") }
+        if currInternalID == 0 { recordError(er:"unknown internal id for representation") }
+        if currInvolvedCause == 0 { recordError(er:"invalid cause for representation") }
+        if currInvolvedClient == 0 { recordError(er:"invalid client for representation") }
         if noteDate == "" { recordError(er: "invalid note date")}
         if noteTime == "" { recordError(er: "invalid note time")}
         if statusMessage == "" { return true }
@@ -751,9 +825,9 @@ struct EditRepresentationView: View {
     }
 
     func recordCauseSelection(cm:CauseModel) -> Void {
-        if rep.involvedCause != cm.internalID {
-            
-        }
+//        if rep.involvedCause != cm.internalID {
+//
+//        }
 //        wrx.cause = cm
 //        wrx.client = CVModel.findClient(internalID:cm.involvedClient)
 //        cauInternalID = cm.internalID
@@ -765,90 +839,92 @@ struct EditRepresentationView: View {
 //        }
     }
     
-    func prepWorkArea(repid:Int) -> Void {
-        if repid == 0 {
-            rep = RepresentationModel()
-            repApprs = []
-            repNotes = []
-        } else {
-            rep = CVModel.findRepresentation(internalID:repid)
-            repApprs = CVModel.assembleAppearances(repID: repid)
-            repNotes = CVModel.assembleNotes(repID: repid)
-            apprLocalUpdateDate = Date()
-            print("prepWorkArea counts", repApprs.count, repNotes.count, apprLocalUpdateDate, CVModel.lastAppearanceUpdate)
-        }
-        
-        if rep.involvedCause == 0 {
-            cau = CauseModel()
-        } else {
-            cau = CVModel.findCause(internalID: rep.involvedCause)
-        }
-        
-        if rep.involvedClient == 0 {
-            cli = ClientModel()
-        } else {
-            cli = CVModel.findClient(internalID: rep.involvedClient)
-        }
-        repClient = rep.involvedClient
-        repCause = rep.involvedCause
-        repActive = rep.active
-        repCategory = rep.primaryCategory
-        repInternalID = rep.internalID
-        repDocumentID = rep.id ?? ""
-        repAssigned = rep.assignedDate
-        repDateAssigned = DateService.dateString2Date(inDate: repAssigned)
-        repActiveString = (rep.active) ? "Yes" : "No"
-        repDispDate = rep.dispositionDate
-        repDateDisp = DateService.dateString2Date(inDate: repDispDate)
-        repDispType = rep.dispositionType
-        repDispAction = rep.dispositionAction
-        if rep.internalID != 0 {
-            saveMessage = "Update"
-            adding = false
+//    func prepWorkArea(repid:Int) -> Void {
+//        if repid == 0 {
+//            rep = RepresentationModel()
+//            repApprs = []
+//            repNotes = []
+//        } else {
+//            rep = CVModel.findRepresentation(internalID:repid)
+//            repApprs = CVModel.assembleAppearances(repID: repid)
+//            repNotes = CVModel.assembleNotes(repID: repid)
+//            apprLocalUpdateDate = Date()
+//            print("prepWorkArea counts", repApprs.count, repNotes.count, apprLocalUpdateDate, CVModel.lastAppearanceUpdate)
+//        }
+//
+//        if rep.involvedCause == 0 {
+//            cau = CauseModel()
+//        } else {
+//            cau = CVModel.findCause(internalID: rep.involvedCause)
+//        }
+//
+//        if rep.involvedClient == 0 {
+//            cli = ClientModel()
+//        } else {
+//            cli = CVModel.findClient(internalID: rep.involvedClient)
+//        }
+//        repClient = rep.involvedClient
+//        repCause = rep.involvedCause
+//        repActive = rep.active
+//        repActiveString = (rep.active) ? "Yes" : "No"
+//        repCategory = rep.primaryCategory
+//        repInternalID = rep.internalID
+//        repDocumentID = rep.id ?? ""
+//        repAssigned = rep.assignedDate
+//        repDateAssigned = DateService.dateString2Date(inDate: repAssigned)
+//        repDispDate = rep.dispositionDate
+//        repDateDisp = DateService.dateString2Date(inDate: repDispDate)
+//        repDispType = rep.dispositionType
+//        repDispAction = rep.dispositionAction
+//        if rep.internalID != 0 {
+//            saveMessage = "Update"
+//            adding = false
 //            repAppearances = rep.appearances
 //            repNotes = rep.notes
-            cauInternalID = cau.internalID
-            cauCauseNo = cau.causeNo
-            cauOrigCharge = cau.originalCharge
-            cliInternalID = cli.internalID
-            cliName = cli.formattedName
-            startingFilter = cau.sortFormat1
+//            cauInternalID = cau.internalID
+//            cauCauseNo = cau.causeNo
+//            cauOrigCharge = cau.originalCharge
+//            cliInternalID = cli.internalID
+//            cliName = cli.formattedName
+//            startingFilter = cau.sortFormat1
 //            repAdding = false
 //            repChanged = false
-        } else {
-            saveMessage = "Add"
-            adding = true
+//        } else {
+//            saveMessage = "Add"
+//            adding = true
 //            wrx = RepresentationExpansion()
 //            prepRepWorkArea(xrx: wrx)
-            repDateAssigned = Date()
-            repActive = true
-            repActiveString = "Yes"
-            repCategory = "ORIG"
-            repDateDisp = Date()
-            cauInternalID = 0
-            cauCauseNo = ""
-            cauOrigCharge = ""
-            cliInternalID = 0
-            cliName = ""
-            startingFilter = ""
+//            repDateAssigned = Date()
+//            repActive = true
+//            repActiveString = "Yes"
+//            repCategory = "ORIG"
+//            repDateDisp = Date()
+//            cauInternalID = 0
+//            cauCauseNo = ""
+//            cauOrigCharge = ""
+//            cliInternalID = 0
+//            cliName = ""
+//            startingFilter = ""
 //            repAdding = true
 //            repChanged = false
-        }
+//        }
 //        CVModel.setTimeStamp()
-    }
+//    }
     
-    func repChanged() -> Bool {
-        if repClient != rep.involvedClient { return true }
-        if repCause != rep.involvedCause { return true }
-        if repActive != rep.active { return true }
-        if repCategory != rep.primaryCategory { return true }
-        if repInternalID != rep.internalID { return true }
-        if repAssigned != rep.assignedDate { return true }
-        if repDispDate != rep.dispositionDate { return true }
-        if repDispType != rep.dispositionType { return true }
-        if repDispAction != rep.dispositionAction { return true }
-        return false
-    }
+//    func repChanged() -> Bool {
+//        repChangedFlag = false
+//        if origRepresentation.involvedClient != currInvolvedClient { repChangedFlag = true }
+//        if origRepresentation.involvedCause != currInvolvedCause { repChangedFlag = true }
+//        print("Set point 3", currActive, origRepresentation.active)
+//        if origRepresentation.active != currActive { repChangedFlag = true }
+//        if origRepresentation.primaryCategory != currCategory { repChangedFlag = true }
+//        if origRepresentation.internalID != currInternalID { repChangedFlag = true }
+//        if origRepresentation.assignedDate != currAssignedDate { repChangedFlag = true }
+//        if origRepresentation.dispositionDate != currDispDate { repChangedFlag = true }
+//        if origRepresentation.dispositionType != currDispType { repChangedFlag = true }
+//        if origRepresentation.dispositionAction != currDispAction { repChangedFlag = true }
+//        return repChangedFlag
+//    }
     func recordAppearance(appr:AppearanceModel) async -> Void {
 //        if wrx.representation.internalID == 0 {
 //            wrx.representation = await CVModel.addRepresentation(involvedClient: wrx.representation.involvedClient, involvedCause: wrx.representation.involvedCause, active: wrx.representation.active, assignedDate: wrx.representation.assignedDate, dispositionDate: wrx.representation.dispositionDate, dispositionType: wrx.representation.dispositionType, dispositionAction: wrx.representation.dispositionAction, primaryCategory: wrx.representation.primaryCategory)

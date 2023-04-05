@@ -7,6 +7,12 @@
 
 import Foundation
 class RepresentationExpansion: Identifiable, Codable, ObservableObject {
+    static func == (lhs: RepresentationExpansion, rhs: RepresentationExpansion) -> Bool {
+            lhs.representation.internalID == rhs.representation.internalID
+        }
+    //    func hash(into hasher: inout Hasher) {
+    //        hasher.combine(id)
+    //    }
     var representation:RepresentationModel
     var client:ClientModel
     var cause:CauseModel

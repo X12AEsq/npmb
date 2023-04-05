@@ -71,15 +71,15 @@ struct EditClientView: View {
                 }
 
                 Section(header: Text("Client Name").background(Color.blue).foregroundColor(.white)) {
-                    TextField("Last Name", text: $lastName)
-                    TextField("First Name", text: $firstName)
-                    TextField("Middle Name", text:$middleName)
-                    TextField("Suffix", text:$suffix)
+                    TextField("Last Name", text: $lastName).disableAutocorrection(true)
+                    TextField("First Name", text: $firstName).disableAutocorrection(true)
+                    TextField("Middle Name", text:$middleName).disableAutocorrection(true)
+                    TextField("Suffix", text:$suffix).disableAutocorrection(true)
                 }
                 
                 Section(header: Text("Address").background(Color.blue).foregroundColor(.white)) {
-                    TextField("Street", text: $street)
-                    TextField("City", text: $city)
+                    TextField("Street", text: $street).disableAutocorrection(true)
+                    TextField("City", text: $city).disableAutocorrection(true)
                     Picker("State", selection: $state) {
                         ForEach(so.stateOptions, id: \.self) {
                             Text($0)
