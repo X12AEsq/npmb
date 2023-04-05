@@ -98,5 +98,4 @@ struct DateService {
         let work = formatter.string(from: inDate)
         return work
     }
-
 }
