@@ -12,9 +12,11 @@ class ExpandedRepresentation: Identifiable {
     }
     var representation:RepresentationModel
     var xpcause:ExpandedCause
+    var appearances:[AppearanceModel]
     
     init() {
         self.representation = RepresentationModel()
         self.xpcause = ExpandedCause()
+        self.appearances = [AppearanceModel]()
     }
 }

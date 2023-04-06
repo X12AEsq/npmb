@@ -16,6 +16,8 @@
 		3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105500129BADFA3004002DD /* DispositionActionOptions.swift */; };
 		312EA24829BD2B6000B61D0A /* DeviceRotationViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */; };
 		312F6DC929D91D8E00267C48 /* RepresentationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312F6DC829D91D8E00267C48 /* RepresentationExtension.swift */; };
+		31322A7029DDF755009FDB30 /* EditRepSelectCause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31322A6F29DDF755009FDB30 /* EditRepSelectCause.swift */; };
+		31322A7229DE0C9B009FDB30 /* EditRepInputMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31322A7129DE0C9B009FDB30 /* EditRepInputMain.swift */; };
 		3137595A29B91A6B000482F2 /* AvailableCourts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595929B91A6B000482F2 /* AvailableCourts.swift */; };
 		3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595B29B93086000482F2 /* AppearanceModel.swift */; };
 		3137595E29B93092000482F2 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3137595D29B93092000482F2 /* NotesModel.swift */; };
@@ -66,6 +68,8 @@
 		3105500129BADFA3004002DD /* DispositionActionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionActionOptions.swift; sourceTree = "<group>"; };
 		312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRotationViewModifier.swift; sourceTree = "<group>"; };
 		312F6DC829D91D8E00267C48 /* RepresentationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentationExtension.swift; sourceTree = "<group>"; };
+		31322A6F29DDF755009FDB30 /* EditRepSelectCause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepSelectCause.swift; sourceTree = "<group>"; };
+		31322A7129DE0C9B009FDB30 /* EditRepInputMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepInputMain.swift; sourceTree = "<group>"; };
 		3137595929B91A6B000482F2 /* AvailableCourts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableCourts.swift; sourceTree = "<group>"; };
 		3137595B29B93086000482F2 /* AppearanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceModel.swift; sourceTree = "<group>"; };
 		3137595D29B93092000482F2 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
@@ -218,6 +222,8 @@
 				313A657129BB8F8C009B484D /* SelectCauseUtil.swift */,
 				31035C6F29BA488800D95B49 /* SelectRepresentationView.swift */,
 				31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */,
+				31322A6F29DDF755009FDB30 /* EditRepSelectCause.swift */,
+				31322A7129DE0C9B009FDB30 /* EditRepInputMain.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -339,6 +345,7 @@
 				318BD07229AA9D280063BAA1 /* FormattingService.swift in Sources */,
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
+				31322A7029DDF755009FDB30 /* EditRepSelectCause.swift in Sources */,
 				31054FFC29BAAC97004002DD /* DateService.swift in Sources */,
 				3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */,
 				3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */,
@@ -362,6 +369,7 @@
 				316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */,
 				318BD07529AA9FD60063BAA1 /* EditClientView.swift in Sources */,
 				317D987A29B1825400709C32 /* CauseExtension.swift in Sources */,
+				31322A7229DE0C9B009FDB30 /* EditRepInputMain.swift in Sources */,
 				3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */,
 				3147C83029DCFB38005B56F7 /* ExpandedRepresentation.swift in Sources */,
 				318BD05C29AA800C0063BAA1 /* CustomButton.swift in Sources */,

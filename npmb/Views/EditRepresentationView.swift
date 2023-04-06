@@ -21,13 +21,9 @@ struct EditRepresentationView: View {
     @State var saveMessage:String = ""
 //    @State var rep:RepresentationModel = RepresentationModel()
 //    @State var cau:CauseModel = CauseModel()
-//    @State var cli:ClientModel = ClientModel()
+    @State var selectedClient:ClientModel = ClientModel()
     @State var selectedCause:CauseModel = CauseModel()
     
-    var pc:PrimaryCategory = PrimaryCategory()
-    var dto:DispositionTypeOptions = DispositionTypeOptions()
-    var dao:DispositionActionOptions = DispositionActionOptions()
-    var activeOptions = ["Yes", "No"]
 /*
     These variables are initialized to the original input; they then become the workarea for data input. They are initialized along with origRepresentation at entry. After that, origRepresentation will not change unless there is an update or addition. If that happens, both origRepresentation and the curr** variables will be reinitialized
 */
@@ -72,22 +68,229 @@ struct EditRepresentationView: View {
     @State var noteNote:String = ""
     @State var noteCategory:String = "NOTE"
     @State var noteInternal:Int = 0
+    
+    @State var xr:ExpandedRepresentation = ExpandedRepresentation()
 
     @State var startingFilter:String = ""
-    @State var activeScreen = NextAction.maininput
+//    @State var activeScreen = NextAction.maininput
     @State private var orientation = UIDeviceOrientation.portrait
     @State var callResult:FunctionReturn = FunctionReturn()
     @State var adding:Bool = false
     
+    @State private var showingSelCause = false
+    @State private var showingInpMain = false
+
+/*
     enum NextAction {
         case maininput
         case editappearance
         case editnote
         case selectcause
     }
-    
+ */
     var NoteCatOptions = ["TODO", "NOTE", "DONE"]
     
+    var body: some View {
+        VStack (alignment: .leading) {
+            if statusMessage != "" {
+                Text(statusMessage)
+            }
+            ScrollView {
+                VStack (alignment: .leading) {
+                    HStack {
+                        Text("Representation:")
+                        Text(String(currInternalID))
+                        Spacer()
+                    }
+                    HStack {
+                        Text("Assigned: ")
+                        Text(currAssignedDate)
+                        Spacer()
+                    }
+                    HStack {
+                        Text("Category: ")
+                        Text(currCategory)
+                        Spacer()
+                    }
+                    HStack {
+                        Text("Active:")
+                        Text((currActive) ? "yes" : "no")
+                        Spacer()
+                    }
+
+                }
+                VStack (alignment: .leading) {
+                    if !currActive {
+                        HStack {
+                            Text("Competed:")
+                            Text(currDispDate)
+                            Text(" ")
+                            Text(currDispType)
+                            Text(" ")
+                            Text(currDispAction)
+                            Spacer()
+                        }
+                    }
+                    HStack {
+                        Text("Cause:")
+                        Text(String(currcauInternalID))
+                        Text(" ")
+                        Text(currcauCauseNo)
+                        Text(" ")
+                        Text(currcauOrigCharge)
+                        Spacer()
+                    }
+                    HStack {
+                        Text("Client:")
+                        Text(String(currcliInternalID))
+                        Text(" ")
+                        Text(currcliName)
+                        Spacer()
+                    }
+                }
+                VStack (alignment: .leading) {
+                        
+                    ForEach(xr.appearances, id: \.id) { appearance in
+                        GeometryReader { geo in
+                            HStack {
+                                Text(String(appearance.internalID)).frame(width: geo.size.width * 0.05, alignment: .trailing)
+                                Text(appearance.appearDate).frame(width: geo.size.width * 0.1, alignment: .trailing)
+                                Text(appearance.appearTime).frame(width: geo.size.width * 0.05, alignment: .trailing)
+                                Text(appearance.appearNote).frame(width: geo.size.width * 0.25, alignment: .leading)
+                            }
+                        }
+                    }
+
+                }
+            }
+            HStack {
+                if repChanged() {
+                    Button {
+                        print("add/update")
+                        if auditRepresentation() {
+                            Task {
+                                await callResult =                             CVModel.addRepresentation(involvedClient: currcliInternalID, involvedCause: currcauInternalID, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    initWorkArea(orig: callResult.additional)
+                                } else {
+                                    statusMessage = callResult.message
+                                }
+                            }
+                        }
+                    } label: {
+                        Text(saveMessage)
+                    }
+                    .buttonStyle(CustomButton())
+                }
+                Button {
+                    print("Main")
+                    showingInpMain.toggle()
+                } label: {
+                    Text("Main")
+                }
+                .buttonStyle(CustomButton())
+                .sheet(isPresented: $showingInpMain, onDismiss: {
+                    currInvolvedCause = currcauInternalID
+                    currInvolvedClient = currcliInternalID
+                })  { EditRepInputMain(currDateAssigned: $currDateAssigned, currAssignedDate: $currAssignedDate, currCategory: $currCategory, currActiveString: $currActiveString, currActive: $currActive, currDateDisp: $currDateDisp, currDispDate: $currDispDate, currDispType: $currDispType, currDispAction: $currDispAction) }
+                Button {
+                    print("Cause")
+                    showingSelCause.toggle()
+                    print("Sel Cause Returned")
+                    print("curr cause variables ", currcauCauseNo, currcauInternalID, currcauOrigCharge)
+                } label: {
+                    Text("Cause")
+                }
+                .buttonStyle(CustomButton())
+                .sheet(isPresented: $showingSelCause, onDismiss: {
+                    print("selectcauseutil returned ", selectedCause.causeNo, selectedCause.internalID, selectedCause.originalCharge)
+                    currcauCauseNo = selectedCause.causeNo
+                    currcauInternalID = selectedCause.internalID
+                    currcauOrigCharge = selectedCause.originalCharge
+                    selectedClient = CVModel.findClient(internalID: selectedCause.involvedClient)
+                    currcliInternalID = selectedClient.internalID
+                    currcliName = selectedClient.formattedName
+                }) {
+                    EditRepSelectCause(selectedCause: $selectedCause)
+                }
+           }
+        }
+        .padding(.leading, 10.0)
+        .onAppear {
+            print("checkpoint 2")
+            initWorkArea(orig: rxid)
+        }
+    }
+    
+    func initWorkArea(orig:Int) -> Void {
+        if orig == 0 {
+            saveMessage = "Add"
+        } else {
+            saveMessage = "Update"
+        }
+        xr = CVModel.expandedrepresentations.first(where: { $0.representation.internalID == rxid }) ?? ExpandedRepresentation()
+        
+        origRepresentation = xr.representation
+//        repChangedFlag = false
+
+        currInternalID = origRepresentation.internalID
+        if currInternalID != 0 {
+            currAssignedDate = origRepresentation.assignedDate
+            currDateAssigned = origRepresentation.DateAssigned
+            currDispDate = origRepresentation.dispositionDate
+            currDateDisp = origRepresentation.DateDisposed
+        } else {
+            currDateAssigned = Date()
+            currDateAssigned = Date()
+            currDateDisp = currDateAssigned
+            currAssignedDate = DateService.dateDate2String(inDate: currDateAssigned)
+            currDispDate = DateService.dateDate2String(inDate: currDateDisp)
+        }
+        currDispType = origRepresentation.dispositionType
+        currDispAction = origRepresentation.dispositionAction
+        currCategory = origRepresentation.primaryCategory
+        currActive = origRepresentation.active
+        print("Set point 1", currActive, origRepresentation.active)
+        currActiveString = (origRepresentation.active) ? "Yes" : "No"
+        currApprs = origRepresentation.appearances
+        
+        currcliInternalID = origRepresentation.involvedClient
+        currcliName = xr.xpcause.client.formattedName
+
+        currcauInternalID = origRepresentation.involvedCause
+        currcauCauseNo = xr.xpcause.cause.causeNo
+        currcauOrigCharge = xr.xpcause.cause.originalCharge
+    }
+    
+    func repChanged() -> Bool {
+        if origRepresentation.involvedClient != currInvolvedClient { return true }
+        if origRepresentation.involvedCause != currInvolvedCause { return true }
+        if origRepresentation.active != currActive { return true }
+        if origRepresentation.primaryCategory != currCategory { return true }
+        if origRepresentation.internalID != currInternalID { return true }
+        if origRepresentation.assignedDate != currAssignedDate { return true }
+        if origRepresentation.dispositionDate != currDispDate { return true }
+        if origRepresentation.dispositionType != currDispType { return true }
+        if origRepresentation.dispositionAction != currDispAction { return true }
+        return false
+    }
+    
+    func auditRepresentation() -> Bool {
+        statusMessage = ""
+        if currInvolvedCause == 0 { recordError(er:"invalid cause for representation") }
+        if currInvolvedClient == 0 { recordError(er:"invalid client for representation") }
+        if statusMessage == "" { return true }
+        return false
+    }
+    
+    func recordError(er:String) {
+        if statusMessage != "" { statusMessage = statusMessage + "\n" + er }
+        else { statusMessage = er }
+    }
+
+
+/*
     var body: some View {
         GeometryReader { geo in
             VStack (alignment: .leading) {
@@ -245,10 +448,12 @@ struct EditRepresentationView: View {
                                                     Spacer()
                                                     HStack {
                                                         Button {
-                                                            print("selectcauseutil returned ", selectedCause.causeNo)
+                                                            print("selectcauseutil returned ", selectedCause.causeNo, selectedCause.internalID, selectedCause.originalCharge)
                                                             currcauCauseNo = selectedCause.causeNo
                                                             currcauInternalID = selectedCause.internalID
                                                             currcauOrigCharge = selectedCause.originalCharge
+                                                            print("curr cause variables ", currcauCauseNo, currcauInternalID, currcauOrigCharge)
+//                                                            xr.xpcause.cause = selectedCause
 //                                                            currcliInternalID = selectedCause.client.internalID
 //                                                            currcliName = selectedCause.client.formattedName
 //                                                            cau = selectedCause
@@ -343,9 +548,9 @@ struct EditRepresentationView: View {
         } else {
             saveMessage = "Update"
         }
-        let xr = CVModel.expandedrepresentations.first(where: { $0.representation.internalID == rxid })
+        xr = CVModel.expandedrepresentations.first(where: { $0.representation.internalID == rxid }) ?? ExpandedRepresentation()
         
-        origRepresentation = xr?.representation ?? RepresentationModel()
+        origRepresentation = xr.representation
         repChangedFlag = false
 /*
  self.id = fsid
@@ -373,11 +578,11 @@ struct EditRepresentationView: View {
         currApprs = origRepresentation.appearances
         
         currcliInternalID = origRepresentation.involvedClient
-        currcliName = xr?.xpcause.client.formattedName ?? "No Client"
+        currcliName = xr.xpcause.client.formattedName
 
         currcauInternalID = origRepresentation.involvedCause
-        currcauCauseNo = xr?.xpcause.cause.causeNo ?? "No Cause"
-        currcauOrigCharge = xr?.xpcause.cause.originalCharge ?? "No Cause"
+        currcauCauseNo = xr.xpcause.cause.causeNo
+        currcauOrigCharge = xr.xpcause.cause.originalCharge
     }
     
 // MARK: CROSS PAGE HEADER AT TOP: variable:mainsummary
@@ -930,7 +1135,7 @@ struct EditRepresentationView: View {
 //            wrx.representation = await CVModel.addRepresentation(involvedClient: wrx.representation.involvedClient, involvedCause: wrx.representation.involvedCause, active: wrx.representation.active, assignedDate: wrx.representation.assignedDate, dispositionDate: wrx.representation.dispositionDate, dispositionType: wrx.representation.dispositionType, dispositionAction: wrx.representation.dispositionAction, primaryCategory: wrx.representation.primaryCategory)
 //        }
     }
-
+*/
 }
 
 //struct EditRepresentationView_Previews: PreviewProvider {

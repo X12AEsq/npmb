@@ -92,7 +92,7 @@ class CommonViewModel: ObservableObject {
             return false
         }
     }
-    
+        
     // MARK: Client Functions
     
     func clientSubscribe() {
@@ -428,6 +428,7 @@ class CommonViewModel: ObservableObject {
             xr.representation = re
             let xc = self.expandedcauses.first(where: { $0.cause.internalID == re.involvedCause })
             xr.xpcause = xc ?? ExpandedCause()
+            xr.appearances = self.assembleAppearances(repID: xr.representation.internalID)
             self.expandedrepresentations.append(xr)
         }
     }
@@ -720,13 +721,13 @@ class CommonViewModel: ObservableObject {
                     let appearTime = data["AppearTime"] as? String ?? ""
                     let appearNote = data["AppearNote"] as? String ?? ""
           
-                    let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote, clientmodel: self.findClient(internalID: involvedClient))
+                    let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
                     self.appearances.append(am)
-                    self.setAppearanceTimeStamp()
-                    if am.internalID > 550 {
-                        let debugMsg:String = self.lastAppearanceUpdate.formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                        print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count) + "; " + debugMsg)
-                    }
+//                    self.setAppearanceTimeStamp()
+//                    if am.internalID > 550 {
+//                        let debugMsg:String = self.lastAppearanceUpdate.formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+//                        print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count) + "; " + debugMsg)
+//                    }
                     return
                 }
             }
