@@ -126,6 +126,8 @@ struct LineLabel: View {
         HStack {
             Image(systemName: "rectangle.portrait.and.arrow.forward")
             Text((option == 1) ? rm.xpcause.client.formattedName : rm.xpcause.cause.causeNo)
+            Text(" ")
+            Text((rm.representation.active) ? "Open" : "Closed")
         }
     }
 

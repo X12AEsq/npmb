@@ -458,7 +458,7 @@ class CommonViewModel: ObservableObject {
                     let dispositionAction = data["DispositionAction"] as? String ?? ""
                     let primaryCategory = data["PrimaryCategory"] as? String ?? ""
 
-                    let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory, causemodel: self.findCause(internalID: involvedCause), apprs: self.assembleAppearances(repID: internalID))
+                    let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory, causemodel: self.findCause(internalID: involvedCause))
 
                     self.representations.append(rm)
                     let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
@@ -491,7 +491,7 @@ class CommonViewModel: ObservableObject {
         if workRepresentations.count == 0 { return RepresentationModel() }
         if workRepresentations.count == 1 {
             let workRep:RepresentationModel = workRepresentations[0]
-            workRep.appearances = self.assembleAppearances(repID: workRep.internalID)
+//            workRep.appearances = self.assembleAppearances(repID: workRep.internalID)
             return workRep
         }
         return RepresentationModel()
@@ -758,6 +758,11 @@ class CommonViewModel: ObservableObject {
     }
     
     @MainActor
+    func addAppearance(aAppr:AppearanceModel)  async -> FunctionReturn {
+        return await self.addAppearance(involvedClient: aAppr.involvedClient, involvedCause: aAppr.involvedCause, involvedRepresentation: aAppr.involvedRepresentation, appearDate: aAppr.appearDate, appearTime: aAppr.appearTime, appearNote: aAppr.appearNote)
+    }
+    
+    @MainActor
     func addAppearance(involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
@@ -765,24 +770,34 @@ class CommonViewModel: ObservableObject {
         let intID = nextAppearanceID()
         let ua:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
         
-        let reprRef = db.collection("appearances")
+        let re:RepresentationModel = self.findRepresentation(internalID: involvedRepresentation)
+        if re.internalID != involvedRepresentation {
+            rtn.status = .IOError
+            rtn.message = "Add Appearance failed: Matching represention not found"
+            rtn.additional = -1
+            return rtn
+        }
         
-        taskCompleted = false
+        var apprArray:[Int] = []
+        
+        let reprRef = db.collection("appearances")
         
         do {
             try await reprRef.document().setData(ua)
-            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
-            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("addAppearance success " + debugMsg, rtn)
+            rtn.additional = intID
+            apprArray = re.involvedAppearances
+            apprArray.append(intID)
+            await rtn = self.updateRepresentation(representationID: re.id ?? "", involvedappearances: apprArray)
             return rtn
         }
         catch {
             rtn.status = .IOError
-            rtn.message = "Update Appearance failed: " + error.localizedDescription
-            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("addAppearance failure " + debugMsg, rtn)
+            rtn.message = "Add Appearance failed: " + error.localizedDescription
+            rtn.additional = -1
+//            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
+//            print("addAppearance failure " + debugMsg, rtn)
             return rtn
         }
     }

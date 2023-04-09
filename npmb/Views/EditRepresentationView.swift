@@ -23,6 +23,7 @@ struct EditRepresentationView: View {
 //    @State var cau:CauseModel = CauseModel()
     @State var selectedClient:ClientModel = ClientModel()
     @State var selectedCause:CauseModel = CauseModel()
+    @State var selectedAppearance:AppearanceModel = AppearanceModel()
     
 /*
     These variables are initialized to the original input; they then become the workarea for data input. They are initialized along with origRepresentation at entry. After that, origRepresentation will not change unless there is an update or addition. If that happens, both origRepresentation and the curr** variables will be reinitialized
@@ -38,7 +39,7 @@ struct EditRepresentationView: View {
     @State var currDateDisp:Date = Date()
     @State var currDispType:String = ""
     @State var currDispAction:String = ""
-    @State var currApprs:[AppearanceModel] = []
+//    @State var currApprs:[AppearanceModel] = []
     @State var repNotes:[NotesModel] = []
     @State var currInvolvedCause:Int = 0
     @State var currInvolvedClient:Int = 0
@@ -57,9 +58,12 @@ struct EditRepresentationView: View {
     @State var apprDate:String = ""
     @State var apprTime:String = ""
     @State var apprNote:String = ""
-    @State var apprCategory:String = ""
     @State var apprInternal:Int = 0
-    @State var apprLocalUpdateDate:Date = Date()
+    @State var apprClient:Int = 0
+    @State var apprCause:Int = 0
+    @State var apprRepresentation:Int = 0
+    @State var apprChanged:Bool = false
+//    @State var apprLocalUpdateDate:Date = Date()
 //    @State var apprArray:[AppearanceModel] = []
     
     @State var dateNote:Date = Date()
@@ -79,6 +83,7 @@ struct EditRepresentationView: View {
     
     @State private var showingSelCause = false
     @State private var showingInpMain = false
+    @State private var showingInpAppearance = false
 
 /*
     enum NextAction {
@@ -98,23 +103,23 @@ struct EditRepresentationView: View {
             ScrollView {
                 VStack (alignment: .leading) {
                     HStack {
-                        Text("Representation:")
-                        Text(String(currInternalID))
+                        Text("Representation:").font(.system(.body, design: .monospaced))
+                        Text(String(currInternalID)).font(.system(.body, design: .monospaced))
                         Spacer()
                     }
                     HStack {
-                        Text("Assigned: ")
-                        Text(currAssignedDate)
+                        Text("Assigned: ").font(.system(.body, design: .monospaced))
+                        Text(currAssignedDate).font(.system(.body, design: .monospaced))
                         Spacer()
                     }
                     HStack {
-                        Text("Category: ")
-                        Text(currCategory)
+                        Text("Category: ").font(.system(.body, design: .monospaced))
+                        Text(currCategory).font(.system(.body, design: .monospaced))
                         Spacer()
                     }
                     HStack {
-                        Text("Active:")
-                        Text((currActive) ? "yes" : "no")
+                        Text("Active:").font(.system(.body, design: .monospaced))
+                        Text((currActive) ? "yes" : "no").font(.system(.body, design: .monospaced))
                         Spacer()
                     }
 
@@ -122,46 +127,76 @@ struct EditRepresentationView: View {
                 VStack (alignment: .leading) {
                     if !currActive {
                         HStack {
-                            Text("Competed:")
-                            Text(currDispDate)
-                            Text(" ")
-                            Text(currDispType)
-                            Text(" ")
-                            Text(currDispAction)
+                            Text("Competed:").font(.system(.body, design: .monospaced))
+                            Text(currDispDate).font(.system(.body, design: .monospaced))
+                            Text(" ").font(.system(.body, design: .monospaced))
+                            Text(currDispType).font(.system(.body, design: .monospaced))
+                            Text(" ").font(.system(.body, design: .monospaced))
+                            Text(currDispAction).font(.system(.body, design: .monospaced))
                             Spacer()
                         }
                     }
                     HStack {
-                        Text("Cause:")
-                        Text(String(currcauInternalID))
-                        Text(" ")
-                        Text(currcauCauseNo)
-                        Text(" ")
-                        Text(currcauOrigCharge)
+                        Text("Cause:").font(.system(.body, design: .monospaced))
+                        Text(String(currcauInternalID)).font(.system(.body, design: .monospaced))
+                        Text(" ").font(.system(.body, design: .monospaced))
+                        Text(currcauCauseNo).font(.system(.body, design: .monospaced))
+                        Text(" ").font(.system(.body, design: .monospaced))
+                        Text(currcauOrigCharge).font(.system(.body, design: .monospaced))
                         Spacer()
                     }
                     HStack {
-                        Text("Client:")
-                        Text(String(currcliInternalID))
-                        Text(" ")
-                        Text(currcliName)
+                        Text("Client:").font(.system(.body, design: .monospaced))
+                        Text(String(currcliInternalID)).font(.system(.body, design: .monospaced))
+                        Text(" ").font(.system(.body, design: .monospaced))
+                        Text(currcliName).font(.system(.body, design: .monospaced))
                         Spacer()
                     }
                 }
+                .padding(.bottom, 20.0)
                 VStack (alignment: .leading) {
-                        
+                    HStack {
+                        Button {
+                            initAppearanceWorkArea(orig: AppearanceModel())
+                            showingInpAppearance.toggle()
+                        } label: {
+                            Text("Add new appearance").font(.system(.body, design: .monospaced))
+                        }
+                        .sheet(isPresented: $showingInpAppearance, onDismiss: {
+                            if apprChanged {
+                                print("checkpoint 3")
+                                initWorkArea(orig: xr.representation.internalID)
+                            }
+                        })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
+                        }
+//                            .presentationDetents([.fraction(0.25)])
+
+                        Spacer()
+                    }
+
                     ForEach(xr.appearances, id: \.id) { appearance in
                         GeometryReader { geo in
                             HStack {
-                                Text(String(appearance.internalID)).frame(width: geo.size.width * 0.05, alignment: .trailing)
-                                Text(appearance.appearDate).frame(width: geo.size.width * 0.1, alignment: .trailing)
-                                Text(appearance.appearTime).frame(width: geo.size.width * 0.05, alignment: .trailing)
-                                Text(appearance.appearNote).frame(width: geo.size.width * 0.25, alignment: .leading)
+                                Button {
+                                    initAppearanceWorkArea(orig: appearance)
+                                    showingInpAppearance.toggle()
+                                } label: {
+                                    Text(appearance.stringLabel).font(.system(.body, design: .monospaced))
+                                }
+                                .sheet(isPresented: $showingInpAppearance, onDismiss: {
+                                    if apprChanged {
+                                        print("checkpoint 4")
+                                        initWorkArea(orig: xr.representation.internalID)
+                                    }
+                                })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
+//                                        .presentationDetents([.fraction(0.25)])
+                                    }
                             }
                         }
                     }
 
                 }
+                
             }
             HStack {
                 if repChanged() {
@@ -253,7 +288,7 @@ struct EditRepresentationView: View {
         currActive = origRepresentation.active
         print("Set point 1", currActive, origRepresentation.active)
         currActiveString = (origRepresentation.active) ? "Yes" : "No"
-        currApprs = origRepresentation.appearances
+//        currApprs = origRepresentation.appearances
         
         currcliInternalID = origRepresentation.involvedClient
         currcliName = xr.xpcause.client.formattedName
@@ -282,6 +317,27 @@ struct EditRepresentationView: View {
         if currInvolvedClient == 0 { recordError(er:"invalid client for representation") }
         if statusMessage == "" { return true }
         return false
+    }
+    
+    func initAppearanceWorkArea(orig:AppearanceModel) {
+        if orig.internalID == 0 {
+            dateAppr = Date()
+            orig.appearDate = DateService.dateDate2String(inDate:dateAppr)
+            orig.appearTime = DateService.dateTime2String(inDate:dateAppr)
+            orig.involvedRepresentation = currInternalID
+            orig.involvedCause = currcauInternalID
+            orig.involvedClient = currcliInternalID
+        }
+        apprDocumentID = orig.id ?? ""
+        apprDate = orig.appearDate
+        apprTime = orig.appearTime
+        apprNote = orig.appearNote
+        apprCause = orig.involvedClient
+        apprClient = orig.involvedClient
+        apprRepresentation = orig.involvedRepresentation
+        apprInternal = orig.internalID
+        dateAppr =  DateService.dateString2Date(inDate:orig.appearDate, inTime:orig.appearTime)
+        apprChanged = false
     }
     
     func recordError(er:String) {

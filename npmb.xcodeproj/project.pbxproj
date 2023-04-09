@@ -52,6 +52,8 @@
 		318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD07C29AAA87D0063BAA1 /* YesNoModel.swift */; };
 		318BD07F29AAB2270063BAA1 /* SelectClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD07E29AAB2270063BAA1 /* SelectClientView.swift */; };
 		318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD08029AAB3320063BAA1 /* ClientExtension.swift */; };
+		3191681029DF424800C96B92 /* AppearanceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3191680F29DF424800C96B92 /* AppearanceExtension.swift */; };
+		3191681229DF4AEA00C96B92 /* EditRepInputAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */; };
 		31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748429B6F2100007D08B /* ActionEdit.swift */; };
 		31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748629B6F4620007D08B /* ActionSelect.swift */; };
 		31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */; };
@@ -101,6 +103,8 @@
 		318BD07C29AAA87D0063BAA1 /* YesNoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YesNoModel.swift; sourceTree = "<group>"; };
 		318BD07E29AAB2270063BAA1 /* SelectClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectClientView.swift; sourceTree = "<group>"; };
 		318BD08029AAB3320063BAA1 /* ClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientExtension.swift; sourceTree = "<group>"; };
+		3191680F29DF424800C96B92 /* AppearanceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceExtension.swift; sourceTree = "<group>"; };
+		3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepInputAppearance.swift; sourceTree = "<group>"; };
 		31B6748429B6F2100007D08B /* ActionEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEdit.swift; sourceTree = "<group>"; };
 		31B6748629B6F4620007D08B /* ActionSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSelect.swift; sourceTree = "<group>"; };
 		31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionReturn.swift; sourceTree = "<group>"; };
@@ -189,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				3137595B29B93086000482F2 /* AppearanceModel.swift */,
+				3191680F29DF424800C96B92 /* AppearanceExtension.swift */,
 				313BC3AA29AF025900D99BB8 /* CauseModel.swift */,
 				317D987929B1825400709C32 /* CauseExtension.swift */,
 				318BD06E29AA9BC00063BAA1 /* ClientModel.swift */,
@@ -224,6 +229,7 @@
 				31035C7529BA58EB00D95B49 /* EditRepresentationView.swift */,
 				31322A6F29DDF755009FDB30 /* EditRepSelectCause.swift */,
 				31322A7129DE0C9B009FDB30 /* EditRepInputMain.swift */,
+				3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -346,6 +352,7 @@
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
 				31322A7029DDF755009FDB30 /* EditRepSelectCause.swift in Sources */,
+				3191681229DF4AEA00C96B92 /* EditRepInputAppearance.swift in Sources */,
 				31054FFC29BAAC97004002DD /* DateService.swift in Sources */,
 				3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */,
 				3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */,
@@ -375,6 +382,7 @@
 				318BD05C29AA800C0063BAA1 /* CustomButton.swift in Sources */,
 				31035C7429BA4BB000D95B49 /* RepresentationExpansion.swift in Sources */,
 				312F6DC929D91D8E00267C48 /* RepresentationExtension.swift in Sources */,
+				3191681029DF424800C96B92 /* AppearanceExtension.swift in Sources */,
 				318BD07F29AAB2270063BAA1 /* SelectClientView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

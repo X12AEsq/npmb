@@ -21,9 +21,8 @@ class RepresentationModel: Identifiable, Codable, ObservableObject {
     var dispositionAction:String    // PROB, DEF, PTD, C ...
     var primaryCategory:String      // ORIG, MTA, MTR, ...
     var cause:CauseModel
-    var appearances:[AppearanceModel]
     
-    init (fsid:String, intid:Int, client:Int, cause:Int, appearances:[Int], notes:[Int], active:Bool, assigneddate:String, dispositiondate:String, dispositionaction:String, dispositiontype:String, primarycategory:String, causemodel:CauseModel, apprs:[AppearanceModel]) {
+    init (fsid:String, intid:Int, client:Int, cause:Int, appearances:[Int], notes:[Int], active:Bool, assigneddate:String, dispositiondate:String, dispositionaction:String, dispositiontype:String, primarycategory:String, causemodel:CauseModel) {
         self.id = fsid
         self.internalID = intid
         self.involvedClient = client
@@ -37,7 +36,6 @@ class RepresentationModel: Identifiable, Codable, ObservableObject {
         self.dispositionType = dispositiontype
         self.primaryCategory = primarycategory
         self.cause = causemodel
-        self.appearances = apprs
     }
 
     init() {
@@ -54,6 +52,5 @@ class RepresentationModel: Identifiable, Codable, ObservableObject {
         self.dispositionAction = "DEF"
         self.primaryCategory = "ORIG"
         self.cause = CauseModel()
-        self.appearances = []
     }
 }
