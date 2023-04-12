@@ -54,17 +54,26 @@ struct SelectCauseUtil: View {
                 filterText = startingFilter ?? ""
             }
         }
-            
+/*
+ ForEach(sortedRepresentations) { rx in
+     HStack {
+         NavigationLink(destination: { EditRepresentationView(rxid: rx.representation.internalID) },
+                        label: { LineLabel(option: sortOption, rm: rx) })
+         Spacer()
+     }
+ }
+*/
         ScrollView {
             VStack (alignment: .leading) {
                 ForEach(sortedCauses) { cause in
                     HStack {
-                        ActionSelect()
+//                        ActionSelect()
+                        Text(linkLabel(cause:cause, option:sortOption))
                             .onTapGesture {
                                 selectedCause = cause
                                 filterText = (sortOption == 1) ? cause.sortFormat1 : cause.sortFormat2
-                            }
-                        Text(linkLabel(cause:cause, option:sortOption))
+                            }.foregroundColor(.blue)
+//                        Text(linkLabel(cause:cause, option:sortOption))
                         Spacer()
                     }
                 }
@@ -75,6 +84,11 @@ struct SelectCauseUtil: View {
             }
         }
         .listStyle(.plain)
+    }
+    
+    func itsSelected(cause:CauseModel) {
+        selectedCause = cause
+        filterText = (sortOption == 1) ? cause.sortFormat1 : cause.sortFormat2
     }
     
     func filterThem(prefix:String, option:Int) -> Void {

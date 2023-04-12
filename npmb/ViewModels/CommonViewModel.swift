@@ -4,7 +4,13 @@
 //
 //  Created by Morris Albers on 2/25/23.
 //
-
+/*
+ if UIDevice.current.localizedModel == "iPhone" {
+      print("This is an iPhone")
+ } else if UIDevice.current.localizedModel == "iPad" {
+      print("This is an iPad")
+ }
+*/
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
@@ -45,8 +51,10 @@ class CommonViewModel: ObservableObject {
 
     init() {
         userSession = auth.currentUser
-        appStatus = "npmb v1.07\n"
-        appStatus += "EditRepresentationView needs CRUD logic and note and appearance UI\n"
+        appStatus = "npmb v1.08\n"
+        appStatus += "EditRepresentationView note UI\n"
+        appStatus += "Watch note array in representation record, may be malfunctioning\n"
+        appStatus += "Problem adding appearance to newly added representation"
     }
     
     // MARK: Login Functions
@@ -180,6 +188,7 @@ class CommonViewModel: ObservableObject {
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
         
         let intID = nextClientID()
+        print("nextClientID returned " + String(intID))
         let uc:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
 
         let reprRef = db.collection("clients")
@@ -429,6 +438,7 @@ class CommonViewModel: ObservableObject {
             let xc = self.expandedcauses.first(where: { $0.cause.internalID == re.involvedCause })
             xr.xpcause = xc ?? ExpandedCause()
             xr.appearances = self.assembleAppearances(repID: xr.representation.internalID)
+            xr.notes = self.assembleNotes(repID: xr.representation.internalID)
             self.expandedrepresentations.append(xr)
         }
     }
@@ -486,8 +496,9 @@ class CommonViewModel: ObservableObject {
     
     public func findRepresentation(internalID:Int) -> RepresentationModel {
         let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-        print("findRepresentation entered " + debugMsg)
+        print("findRepresentation entered ", String(internalID), debugMsg)
         let workRepresentations:[RepresentationModel] = representations.filter { $0.internalID == internalID }
+        print ("findRepresentation representation count", String(workRepresentations.count))
         if workRepresentations.count == 0 { return RepresentationModel() }
         if workRepresentations.count == 1 {
             let workRep:RepresentationModel = workRepresentations[0]
@@ -600,10 +611,10 @@ class CommonViewModel: ObservableObject {
     }
     
     @MainActor
-    func updateRepresentation(representationID:String, involvedappearances:[Int]) async -> FunctionReturn {
+    func updateRepresentationAppearances(representationID:String, involvedappearances:[Int]) async -> FunctionReturn {
         let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-        print("updateRepresentation entered ", representationID, involvedappearances, debugMsg)
-        
+        print("updateRepresentation - appearances entered ", representationID, involvedappearances, debugMsg)
+
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let ud:[String:Any] = RepresentationAny(involvedAppearances: involvedappearances)
@@ -611,7 +622,7 @@ class CommonViewModel: ObservableObject {
 
         taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
-        
+
         do {
             try await reprRef.setData(ud, merge: true)
             taskCompleted = true
@@ -628,7 +639,7 @@ class CommonViewModel: ObservableObject {
     }
     
     @MainActor
-    func updateRepresentation(representationID:String, involvednotes:[Int]) async -> FunctionReturn {
+    func updateRepresentationNotes(representationID:String, involvednotes:[Int]) async -> FunctionReturn {
         print("updateRepresentation - notes entered ", representationID, involvednotes)
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
@@ -683,21 +694,21 @@ class CommonViewModel: ObservableObject {
 
     // MARK: Representation Expansion Functions
     
-    public func findRepresentationExpansion(internalID:Int) -> RepresentationExpansion {
-        let rx = RepresentationExpansion()
-        rx.representation = findRepresentation(internalID: internalID)
-        rx.client = findClient(internalID: rx.representation.involvedClient)
-        rx.cause = findCause(internalID: rx.representation.involvedCause)
-        return rx
-    }
-    
-    public func findRepresentationExpansion(representation:RepresentationModel) -> RepresentationExpansion {
-        let rx = RepresentationExpansion()
-        rx.representation = representation
-        rx.client = findClient(internalID: rx.representation.involvedClient)
-        rx.cause = findCause(internalID: rx.representation.involvedCause)
-        return rx
-    }
+//    public func findRepresentationExpansion(internalID:Int) -> RepresentationExpansion {
+//        let rx = RepresentationExpansion()
+//        rx.representation = findRepresentation(internalID: internalID)
+//        rx.client = findClient(internalID: rx.representation.involvedClient)
+//        rx.cause = findCause(internalID: rx.representation.involvedCause)
+//        return rx
+//    }
+//    
+//    public func findRepresentationExpansion(representation:RepresentationModel) -> RepresentationExpansion {
+//        let rx = RepresentationExpansion()
+//        rx.representation = representation
+//        rx.client = findClient(internalID: rx.representation.involvedClient)
+//        rx.cause = findCause(internalID: rx.representation.involvedCause)
+//        return rx
+//    }
     
     // MARK: Appearance Functions
 
@@ -764,6 +775,7 @@ class CommonViewModel: ObservableObject {
     
     @MainActor
     func addAppearance(involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
+        print("addAppearance entered")
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
@@ -777,6 +789,7 @@ class CommonViewModel: ObservableObject {
             rtn.additional = -1
             return rtn
         }
+        print("addAppearance representation recovered ", re.id ?? "document id blank?", re.internalID)
         
         var apprArray:[Int] = []
         
@@ -789,7 +802,7 @@ class CommonViewModel: ObservableObject {
             rtn.additional = intID
             apprArray = re.involvedAppearances
             apprArray.append(intID)
-            await rtn = self.updateRepresentation(representationID: re.id ?? "", involvedappearances: apprArray)
+            await rtn = self.updateRepresentationAppearances(representationID: re.id ?? "", involvedappearances: apprArray)
             return rtn
         }
         catch {
@@ -802,32 +815,32 @@ class CommonViewModel: ObservableObject {
         }
     }
 
-    @MainActor
-    func addAppearanceToRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
-        
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
-        var apprs:[AppearanceModel] = []
-        var apprids:[Int] = []
-        
-        Task {
-            await rtn = self.addAppearance(involvedClient:involvedClient, involvedCause:involvedCause, involvedRepresentation:involvedRepresentation, appearDate:appearDate, appearTime:appearTime, appearNote:appearNote)
-            print("addAppearanceToRepresentation received ", rtn)
-            if rtn.status != .successful {
-                return rtn
-            }
-            
-            apprs = assembleAppearances(repID:involvedRepresentation)
-            apprids = []
-            for appr in apprs {
-                apprids.append(appr.internalID)
-            }
-
-            await rtn = self.updateRepresentation(representationID: representationID, involvedappearances:apprids)
-            print("addAppearanceToRepresentation updateRepresentation returned ", rtn)
-            return rtn
-        }
-        return rtn
-    }
+//    @MainActor
+//    func addAppearanceToRepresentation(representationID:String, involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
+//        
+//        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+//        var apprs:[AppearanceModel] = []
+//        var apprids:[Int] = []
+//        
+//        Task {
+//            await rtn = self.addAppearance(involvedClient:involvedClient, involvedCause:involvedCause, involvedRepresentation:involvedRepresentation, appearDate:appearDate, appearTime:appearTime, appearNote:appearNote)
+//            print("addAppearanceToRepresentation received ", rtn)
+//            if rtn.status != .successful {
+//                return rtn
+//            }
+//            
+//            apprs = assembleAppearances(repID:involvedRepresentation)
+//            apprids = []
+//            for appr in apprs {
+//                apprids.append(appr.internalID)
+//            }
+//
+//            await rtn = self.updateRepresentation(representationID: representationID, involvedappearances:apprids)
+//            print("addAppearanceToRepresentation updateRepresentation returned ", rtn)
+//            return rtn
+//        }
+//        return rtn
+//    }
 
     @MainActor
     func updateAppearance(appearanceID:String, intID:Int, involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
@@ -922,52 +935,61 @@ class CommonViewModel: ObservableObject {
         
         let un:[String:Any] = self.NoteAny(intid:intID, client:client, cause:cause, representation:representation, notedate:notedate, notetime:notetime, notenote:notenote, notecategory:notecategory)
         
-        let reprRef = db.collection("notes")
+        let re:RepresentationModel = self.findRepresentation(internalID: representation)
+        if re.internalID != representation {
+            rtn.status = .IOError
+            rtn.message = "Add Note failed: Matching representation not found"
+            rtn.additional = -1
+            return rtn
+        }
         
-        taskCompleted = false
+        var noteArray:[Int] = []
+        
+        let reprRef = db.collection("notes")
         
         do {
             try await reprRef.document().setData(un)
-            taskCompleted = true
-            print("Debug update Note ", rtn)
             rtn.status = .successful
             rtn.message = ""
-            print("addNote returning 1: ", rtn)
+            rtn.additional = intID
+            noteArray = re.involvedAppearances
+            noteArray.append(intID)
+            await rtn = self.updateRepresentationNotes(representationID: re.id ?? "", involvednotes: noteArray)
             return rtn
         }
         catch {
             print("Debug update Note failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update Note failed: " + error.localizedDescription
-            print("addNote returning 2: ", rtn)
+            rtn.additional = -1
             return rtn
         }
     }
 
-    @MainActor
-    func addNoteToRepresentation(representationID:String, client:Int, cause:Int, representation:Int, notedate:String, notetime:String, notenote:String, notecategory:String) async -> FunctionReturn {
-        
-        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
-        var notes:[NotesModel] = []
-        var noteids:[Int] = []
-        
-        Task {
-            await rtn = self.addNote(client: client, cause: cause, representation: representation, notedate: notedate, notetime: notetime, notenote: notenote, notecategory: notecategory)
-            if rtn.status != .successful {
-                return rtn
-            }
-            
-            notes = assembleNotes(repID:representation)
-            noteids = []
-            for note in notes {
-                noteids.append(note.internalID)
-            }
-
-            await rtn = self.updateRepresentation(representationID: representationID, involvednotes: noteids)
-            return rtn
-        }
-        return rtn
-    }
+//    @MainActor
+//    func addNoteToRepresentation(representationID:String, client:Int, cause:Int, representation:Int, notedate:String, notetime:String, notenote:String, notecategory:String) async -> FunctionReturn {
+//        
+//        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+//        var notes:[NotesModel] = []
+//        var noteids:[Int] = []
+//        
+//        Task {
+//            await rtn = self.addNote(client: client, cause: cause, representation: representation, notedate: notedate, notetime: notetime, notenote: notenote, notecategory: notecategory)
+//            if rtn.status != .successful {
+//                return rtn
+//            }
+//            
+//            notes = assembleNotes(repID:representation)
+//            noteids = []
+//            for note in notes {
+//                noteids.append(note.internalID)
+//            }
+//
+//            await rtn = self.updateRepresentation(representationID: representationID, involvednotes: noteids)
+//            return rtn
+//        }
+//        return rtn
+//    }
 
     public func assembleNotes(repID:Int) -> [NotesModel] {
         let workNotes:[NotesModel] = notes.filter { $0.involvedRepresentation == repID }

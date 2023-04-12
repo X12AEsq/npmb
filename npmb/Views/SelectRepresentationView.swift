@@ -18,7 +18,7 @@ struct SelectRepresentationView: View {
     @State private var sortMessage:String = "By Client"
     @State private var filterText:String = ""
     @State private var selectedRepresentation:RepresentationModel = RepresentationModel()
-    @State private var selectedRX:RepresentationExpansion = RepresentationExpansion()
+//    @State private var selectedRX:RepresentationExpansion = RepresentationExpansion()
     
     @EnvironmentObject var CVModel:CommonViewModel
 
@@ -125,7 +125,12 @@ struct LineLabel: View {
     var body: some View {
         HStack {
             Image(systemName: "rectangle.portrait.and.arrow.forward")
-            Text((option == 1) ? rm.xpcause.client.formattedName : rm.xpcause.cause.causeNo)
+            if option == 1 {
+                Text(rm.xpcause.client.formattedName + " " + rm.xpcause.cause.causeNo + "-" + rm.representation.primaryCategory)
+            } else {
+                Text(rm.xpcause.cause.causeNo + "-" + rm.representation.primaryCategory + " " + rm.xpcause.client.formattedName)
+            }
+//            Text((option == 1) ? rm.xpcause.client.formattedName + " " + rm.xpcause.cause.causeNo : rm.xpcause.cause.causeNo + " " + rm.xpcause.client.formattedName,
             Text(" ")
             Text((rm.representation.active) ? "Open" : "Closed")
         }

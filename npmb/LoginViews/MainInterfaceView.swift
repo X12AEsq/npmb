@@ -56,6 +56,12 @@ struct MainInterfaceView: View {
                             SelectRepresentationView()
                         }
                         .font(.title)
+                        .padding(.bottom, 10.0)
+                        NavigationLink("Documents") {
+// ShareLink(item: "Check out this new feature on iOS 16")
+                            Text("Documents")
+                        }
+                        .font(.title)
                         Spacer()
                     }
                     .padding(.bottom, 10.0)

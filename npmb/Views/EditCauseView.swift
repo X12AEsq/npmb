@@ -130,7 +130,8 @@ struct EditCauseView: View {
                             VStack (alignment: .leading) {
                                 ForEach(sortedClients) { cl in
                                     HStack {
-                                        ActionSelect()
+                                        Text(sortOption == 1 ? cl.formattedName : cl.sortFormat2).foregroundColor(.blue)
+//                                        ActionSelect()
                                             .onTapGesture {
                                                 print("Selected " + cl.formattedName)
                                                 selectedClient = cl
@@ -227,19 +228,19 @@ struct EditCauseView: View {
         }
     }
     
-    var selClient: some View {
-        ScrollView {
-            VStack (alignment: .leading) {
-                ForEach(sortedClients) { cl in
-                    VStack {
-                        HStack {
-                            Text(cl.formattedName)
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    var selClient: some View {
+//        ScrollView {
+//            VStack (alignment: .leading) {
+//                ForEach(sortedClients) { cl in
+//                    VStack {
+//                        HStack {
+//                            Text(cl.formattedName)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 //struct EditCauseView_Previews: PreviewProvider {

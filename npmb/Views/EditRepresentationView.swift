@@ -67,12 +67,17 @@ struct EditRepresentationView: View {
 //    @State var apprArray:[AppearanceModel] = []
     
     @State var dateNote:Date = Date()
+    @State var noteDocumentID:String = ""
     @State var noteDate:String = ""
     @State var noteTime:String = ""
     @State var noteNote:String = ""
     @State var noteCategory:String = "NOTE"
     @State var noteInternal:Int = 0
-    
+    @State var noteClient:Int = 0
+    @State var noteCause:Int = 0
+    @State var noteRepresentation:Int = 0
+    @State var noteChanged:Bool = false
+
     @State var xr:ExpandedRepresentation = ExpandedRepresentation()
 
     @State var startingFilter:String = ""
@@ -84,6 +89,7 @@ struct EditRepresentationView: View {
     @State private var showingSelCause = false
     @State private var showingInpMain = false
     @State private var showingInpAppearance = false
+    @State private var showingInpNote = false
 
 /*
     enum NextAction {
@@ -122,7 +128,7 @@ struct EditRepresentationView: View {
                         Text((currActive) ? "yes" : "no").font(.system(.body, design: .monospaced))
                         Spacer()
                     }
-
+                    
                 }
                 VStack (alignment: .leading) {
                     if !currActive {
@@ -154,6 +160,7 @@ struct EditRepresentationView: View {
                     }
                 }
                 .padding(.bottom, 20.0)
+                // MARK: Appearances display
                 VStack (alignment: .leading) {
                     HStack {
                         Button {
@@ -169,11 +176,9 @@ struct EditRepresentationView: View {
                             }
                         })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
                         }
-//                            .presentationDetents([.fraction(0.25)])
-
                         Spacer()
                     }
-
+                    
                     ForEach(xr.appearances, id: \.id) { appearance in
                         GeometryReader { geo in
                             HStack {
@@ -189,15 +194,53 @@ struct EditRepresentationView: View {
                                         initWorkArea(orig: xr.representation.internalID)
                                     }
                                 })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
-//                                        .presentationDetents([.fraction(0.25)])
-                                    }
+                                }
                             }
                         }
                     }
-
+                }
+                .padding(.bottom, 20.0)
+                // MARK: Notes display
+                VStack (alignment: .leading) {
+                    HStack {
+                        Button {
+                            initNoteWorkArea(orig: NotesModel())
+                            showingInpNote.toggle()
+                        } label: {
+                            Text("Add new note").font(.system(.body, design: .monospaced))
+                        }
+                        .sheet(isPresented: $showingInpNote, onDismiss: {
+                            if noteChanged {
+                                print("checkpoint 4")
+                                initWorkArea(orig: xr.representation.internalID)
+                            }
+                        })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged)
+                        }
+                        Spacer()
+                    }
                 }
                 
+                ForEach(xr.notes, id: \.id) { note in
+                    GeometryReader { geo in
+                        HStack {
+                            Button {
+                                initNoteWorkArea(orig: note)
+                                showingInpNote.toggle()
+                            } label: {
+                                Text(note.stringLabel).font(.system(.body, design: .monospaced))
+                            }
+                            .sheet(isPresented: $showingInpNote, onDismiss: {
+                                if noteChanged {
+                                    print("checkpoint 4")
+                                    initWorkArea(orig: xr.representation.internalID)
+                                }
+                            })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged)
+                            }
+                        }
+                    }
+                }
             }
+
             HStack {
                 if repChanged() {
                     Button {
@@ -246,9 +289,19 @@ struct EditRepresentationView: View {
                     selectedClient = CVModel.findClient(internalID: selectedCause.involvedClient)
                     currcliInternalID = selectedClient.internalID
                     currcliName = selectedClient.formattedName
+                    currInvolvedCause = currcauInternalID
+                    currInvolvedClient = currcliInternalID
                 }) {
                     EditRepSelectCause(selectedCause: $selectedCause)
                 }
+                Button {
+                    print("checkpoint 2a")
+                    initWorkArea(orig: rxid)
+                    statusMessage = "Refreshed"
+                } label: {
+                    Text("Refresh")
+                }
+                .buttonStyle(CustomGreenButton())
            }
         }
         .padding(.leading, 10.0)
@@ -264,6 +317,10 @@ struct EditRepresentationView: View {
         } else {
             saveMessage = "Update"
         }
+        
+        CVModel.assembleExpandedCauses()
+        CVModel.assembleExpandedRepresentations()
+
         xr = CVModel.expandedrepresentations.first(where: { $0.representation.internalID == rxid }) ?? ExpandedRepresentation()
         
         origRepresentation = xr.representation
@@ -299,7 +356,7 @@ struct EditRepresentationView: View {
     }
     
     func repChanged() -> Bool {
-        if origRepresentation.involvedClient != currInvolvedClient { return true }
+        if origRepresentation.involvedClient != currcliInternalID { return true }
         if origRepresentation.involvedCause != currInvolvedCause { return true }
         if origRepresentation.active != currActive { return true }
         if origRepresentation.primaryCategory != currCategory { return true }
@@ -340,6 +397,28 @@ struct EditRepresentationView: View {
         apprChanged = false
     }
     
+    func initNoteWorkArea(orig:NotesModel) {
+        if orig.internalID == 0 {
+            dateNote = Date()
+            orig.noteDate = DateService.dateDate2String(inDate:dateAppr)
+            orig.noteTime = DateService.dateTime2String(inDate:dateAppr)
+            orig.noteCategory = "ORIG"
+            orig.involvedRepresentation = currInternalID
+            orig.involvedCause = currcauInternalID
+            orig.involvedClient = currcliInternalID
+        }
+        noteDocumentID = orig.id ?? ""
+        noteDate = orig.noteDate
+        noteTime = orig.noteTime
+        noteNote = orig.noteNote
+        noteCause = orig.involvedClient
+        noteClient = orig.involvedClient
+        noteRepresentation = orig.involvedRepresentation
+        noteInternal = orig.internalID
+        dateNote =  DateService.dateString2Date(inDate:orig.noteDate, inTime:orig.noteTime)
+        noteChanged = false
+    }
+
     func recordError(er:String) {
         if statusMessage != "" { statusMessage = statusMessage + "\n" + er }
         else { statusMessage = er }

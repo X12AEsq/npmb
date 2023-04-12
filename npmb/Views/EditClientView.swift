@@ -157,6 +157,7 @@ struct EditClientView: View {
                 dismiss()
             } else {
                 statusMessage = callResult.message
+                print("add failed " + statusMessage)
             }
         }
     }
