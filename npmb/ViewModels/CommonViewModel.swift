@@ -433,14 +433,19 @@ class CommonViewModel: ObservableObject {
         self.assembleExpandedCauses()
         self.expandedrepresentations = []
         for re in self.representations {
-            let xr:ExpandedRepresentation = ExpandedRepresentation()
-            xr.representation = re
-            let xc = self.expandedcauses.first(where: { $0.cause.internalID == re.involvedCause })
-            xr.xpcause = xc ?? ExpandedCause()
-            xr.appearances = self.assembleAppearances(repID: xr.representation.internalID)
-            xr.notes = self.assembleNotes(repID: xr.representation.internalID)
+            let xr:ExpandedRepresentation = assembleExpandedRepresentation(re: re)
             self.expandedrepresentations.append(xr)
         }
+    }
+    
+    func assembleExpandedRepresentation(re:RepresentationModel) -> ExpandedRepresentation {
+        let xr:ExpandedRepresentation = ExpandedRepresentation()
+        xr.representation = re
+        let xc = self.expandedcauses.first(where: { $0.cause.internalID == re.involvedCause })
+        xr.xpcause = xc ?? ExpandedCause()
+        xr.appearances = self.assembleAppearances(repID: xr.representation.internalID)
+        xr.notes = self.assembleNotes(repID: xr.representation.internalID)
+        return xr
     }
 
     // MARK: Representation Functions

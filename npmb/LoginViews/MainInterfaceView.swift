@@ -58,8 +58,7 @@ struct MainInterfaceView: View {
                         .font(.title)
                         .padding(.bottom, 10.0)
                         NavigationLink("Documents") {
-// ShareLink(item: "Check out this new feature on iOS 16")
-                            Text("Documents")
+                            DocumentMenuView()
                         }
                         .font(.title)
                         Spacer()

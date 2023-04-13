@@ -57,6 +57,11 @@
 		3191681229DF4AEA00C96B92 /* EditRepInputAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */; };
 		31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748429B6F2100007D08B /* ActionEdit.swift */; };
 		31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748629B6F4620007D08B /* ActionSelect.swift */; };
+		31DDC17929E705E20071EC59 /* DocumentMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC17829E705E20071EC59 /* DocumentMenuView.swift */; };
+		31DDC17B29E708130071EC59 /* DocumentDocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC17A29E708130071EC59 /* DocumentDocket.swift */; };
+		31DDC17E29E708C40071EC59 /* CustomDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC17D29E708C40071EC59 /* CustomDismissButton.swift */; };
+		31DDC18029E70AC60071EC59 /* CustomNarrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC17F29E70AC60071EC59 /* CustomNarrowButton.swift */; };
+		31DDC18229E748370071EC59 /* ExpandedAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC18129E748370071EC59 /* ExpandedAppearance.swift */; };
 		31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */; };
 		31F36A3029B190750059D122 /* EditCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F36A2F29B190750059D122 /* EditCauseView.swift */; };
 		31FA892829E454FA0033AAC7 /* NotesExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FA892729E454FA0033AAC7 /* NotesExtension.swift */; };
@@ -112,6 +117,11 @@
 		3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepInputAppearance.swift; sourceTree = "<group>"; };
 		31B6748429B6F2100007D08B /* ActionEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEdit.swift; sourceTree = "<group>"; };
 		31B6748629B6F4620007D08B /* ActionSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSelect.swift; sourceTree = "<group>"; };
+		31DDC17829E705E20071EC59 /* DocumentMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentMenuView.swift; sourceTree = "<group>"; };
+		31DDC17A29E708130071EC59 /* DocumentDocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentDocket.swift; sourceTree = "<group>"; };
+		31DDC17D29E708C40071EC59 /* CustomDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDismissButton.swift; sourceTree = "<group>"; };
+		31DDC17F29E70AC60071EC59 /* CustomNarrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNarrowButton.swift; sourceTree = "<group>"; };
+		31DDC18129E748370071EC59 /* ExpandedAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedAppearance.swift; sourceTree = "<group>"; };
 		31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionReturn.swift; sourceTree = "<group>"; };
 		31F36A2F29B190750059D122 /* EditCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCauseView.swift; sourceTree = "<group>"; };
 		31FA892729E454FA0033AAC7 /* NotesExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExtension.swift; sourceTree = "<group>"; };
@@ -153,6 +163,7 @@
 		318BD04529AA7DBC0063BAA1 /* npmb */ = {
 			isa = PBXGroup;
 			children = (
+				31DDC17C29E708A50071EC59 /* ButtonStyles */,
 				318BD07629AAA06F0063BAA1 /* Enumerations */,
 				318BD07929AAA1170063BAA1 /* Extensions */,
 				318BD05429AA7F9E0063BAA1 /* LoginViews */,
@@ -180,12 +191,10 @@
 		318BD05429AA7F9E0063BAA1 /* LoginViews */ = {
 			isa = PBXGroup;
 			children = (
-				318BD05729AA800C0063BAA1 /* CustomButton.swift */,
 				318BD05529AA800B0063BAA1 /* CustomTextField.swift */,
 				318BD05629AA800C0063BAA1 /* LoginView.swift */,
 				318BD05829AA800C0063BAA1 /* MainInterfaceView.swift */,
 				318BD05929AA800C0063BAA1 /* RegistrationView.swift */,
-				31FA892929E47A6E0033AAC7 /* CustomGreenButton.swift */,
 			);
 			path = LoginViews;
 			sourceTree = "<group>";
@@ -214,6 +223,7 @@
 				312F6DC829D91D8E00267C48 /* RepresentationExtension.swift */,
 				3147C82D29DCF87A005B56F7 /* ExpandedCause.swift */,
 				3147C82F29DCFB38005B56F7 /* ExpandedRepresentation.swift */,
+				31DDC18129E748370071EC59 /* ExpandedAppearance.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -242,6 +252,8 @@
 				3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */,
 				318D7B5529E36D3D00256FDC /* EditRepInpNote.swift */,
 				31FA892B29E499140033AAC7 /* CauseLineLabel.swift */,
+				31DDC17829E705E20071EC59 /* DocumentMenuView.swift */,
+				31DDC17A29E708130071EC59 /* DocumentDocket.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -270,6 +282,17 @@
 				312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		31DDC17C29E708A50071EC59 /* ButtonStyles */ = {
+			isa = PBXGroup;
+			children = (
+				318BD05729AA800C0063BAA1 /* CustomButton.swift */,
+				31FA892929E47A6E0033AAC7 /* CustomGreenButton.swift */,
+				31DDC17D29E708C40071EC59 /* CustomDismissButton.swift */,
+				31DDC17F29E70AC60071EC59 /* CustomNarrowButton.swift */,
+			);
+			path = ButtonStyles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -361,6 +384,7 @@
 				31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */,
 				318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */,
 				31F36A3029B190750059D122 /* EditCauseView.swift in Sources */,
+				31DDC17929E705E20071EC59 /* DocumentMenuView.swift in Sources */,
 				31FA892829E454FA0033AAC7 /* NotesExtension.swift in Sources */,
 				318BD07229AA9D280063BAA1 /* FormattingService.swift in Sources */,
 				31FA892A29E47A6E0033AAC7 /* CustomGreenButton.swift in Sources */,
@@ -368,6 +392,7 @@
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
 				31322A7029DDF755009FDB30 /* EditRepSelectCause.swift in Sources */,
 				3191681229DF4AEA00C96B92 /* EditRepInputAppearance.swift in Sources */,
+				31DDC18229E748370071EC59 /* ExpandedAppearance.swift in Sources */,
 				31054FFC29BAAC97004002DD /* DateService.swift in Sources */,
 				3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */,
 				3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */,
@@ -377,6 +402,7 @@
 				3137595E29B93092000482F2 /* NotesModel.swift in Sources */,
 				318D7B5629E36D3D00256FDC /* EditRepInpNote.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
+				31DDC17B29E708130071EC59 /* DocumentDocket.swift in Sources */,
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
 				31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */,
@@ -389,12 +415,14 @@
 				318BD06F29AA9BC00063BAA1 /* ClientModel.swift in Sources */,
 				318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */,
 				313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */,
+				31DDC18029E70AC60071EC59 /* CustomNarrowButton.swift in Sources */,
 				318D7B5829E370C100256FDC /* NoteCats.swift in Sources */,
 				316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */,
 				318BD07529AA9FD60063BAA1 /* EditClientView.swift in Sources */,
 				317D987A29B1825400709C32 /* CauseExtension.swift in Sources */,
 				31322A7229DE0C9B009FDB30 /* EditRepInputMain.swift in Sources */,
 				3137595C29B93086000482F2 /* AppearanceModel.swift in Sources */,
+				31DDC17E29E708C40071EC59 /* CustomDismissButton.swift in Sources */,
 				3147C83029DCFB38005B56F7 /* ExpandedRepresentation.swift in Sources */,
 				318BD05C29AA800C0063BAA1 /* CustomButton.swift in Sources */,
 				312F6DC929D91D8E00267C48 /* RepresentationExtension.swift in Sources */,

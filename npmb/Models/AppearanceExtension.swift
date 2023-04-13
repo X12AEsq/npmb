@@ -17,5 +17,12 @@ extension AppearanceModel {
         work += "-"
         work += self.appearNote
         return work
-   }
+    }
+    
+    var sortSequence:String {
+        var work:String = ""
+        work += FormattingService.rjf(base: self.appearDate, len: 10, zeroFill: false)
+        work += FormattingService.rjf(base: self.appearTime, len: 4, zeroFill: false)
+        return work
+    }
 }
