@@ -59,6 +59,7 @@ struct SelectClientView: View {
                 VStack (alignment: .leading) {
                     HStack {
                         NavigationLink(destination: { EditClientView() }, label: { Text("Add New Client") })
+                            .padding(.bottom, 20)
                         Spacer()
                     }
                     ForEach(sortedClients) { client in

@@ -215,6 +215,7 @@ struct EditRepresentationView: View {
                                 initWorkArea(orig: xr.representation.internalID)
                             }
                         })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged)
+                            
                         }
                         Spacer()
                     }
@@ -242,24 +243,38 @@ struct EditRepresentationView: View {
             }
 
             HStack {
+                Spacer()
                 if repChanged() {
                     Button {
                         print("add/update")
                         if auditRepresentation() {
-                            Task {
-                                await callResult =                             CVModel.addRepresentation(involvedClient: currcliInternalID, involvedCause: currcauInternalID, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory)
-                                if callResult.status == .successful {
-                                    statusMessage = ""
-                                    initWorkArea(orig: callResult.additional)
-                                } else {
-                                    statusMessage = callResult.message
+                            if currDocumentID == "" {
+                                Task {
+                                    await callResult =                             CVModel.addRepresentation(involvedClient: currcliInternalID, involvedCause: currcauInternalID, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory)
+                                    if callResult.status == .successful {
+                                        statusMessage = ""
+                                        initWorkArea(orig: callResult.additional)
+                                    } else {
+                                        statusMessage = callResult.message
+                                    }
+                                }
+                            } else {
+                                Task {
+                                    await callResult = CVModel.updateRepresentation(representationID: currDocumentID, involvedClient: currcliInternalID, involvedCause: currcauInternalID, active: currActive, assignedDate: currAssignedDate, dispositionDate: currDispDate, dispositionType: currDispType, dispositionAction: currDispAction, primaryCategory: currCategory, intid: currInternalID)
+                                    if callResult.status == .successful {
+                                        statusMessage = ""
+                                        initWorkArea(orig: currInternalID)
+                                    } else {
+                                        statusMessage = callResult.message
+                                    }
                                 }
                             }
                         }
+                        print("add/update done")
                     } label: {
                         Text(saveMessage)
                     }
-                    .buttonStyle(CustomButton())
+                    .buttonStyle(CustomNarrowButton())
                 }
                 Button {
                     print("Main")
@@ -267,7 +282,7 @@ struct EditRepresentationView: View {
                 } label: {
                     Text("Main")
                 }
-                .buttonStyle(CustomButton())
+                .buttonStyle(CustomNarrowButton())
                 .sheet(isPresented: $showingInpMain, onDismiss: {
                     currInvolvedCause = currcauInternalID
                     currInvolvedClient = currcliInternalID
@@ -280,7 +295,7 @@ struct EditRepresentationView: View {
                 } label: {
                     Text("Cause")
                 }
-                .buttonStyle(CustomButton())
+                .buttonStyle(CustomNarrowButton())
                 .sheet(isPresented: $showingSelCause, onDismiss: {
                     print("selectcauseutil returned ", selectedCause.causeNo, selectedCause.internalID, selectedCause.originalCharge)
                     currcauCauseNo = selectedCause.causeNo
@@ -302,7 +317,8 @@ struct EditRepresentationView: View {
                     Text("Refresh")
                 }
                 .buttonStyle(CustomGreenButton())
-           }
+                Spacer()
+            }
         }
         .padding(.leading, 10.0)
         .onAppear {
@@ -321,12 +337,15 @@ struct EditRepresentationView: View {
         CVModel.assembleExpandedCauses()
         CVModel.assembleExpandedRepresentations()
 
+        print("initWorkArea ", orig, rxid)
         xr = CVModel.expandedrepresentations.first(where: { $0.representation.internalID == rxid }) ?? ExpandedRepresentation()
         
         origRepresentation = xr.representation
 //        repChangedFlag = false
 
         currInternalID = origRepresentation.internalID
+        currDocumentID = origRepresentation.id ?? ""
+        
         if currInternalID != 0 {
             currAssignedDate = origRepresentation.assignedDate
             currDateAssigned = origRepresentation.DateAssigned

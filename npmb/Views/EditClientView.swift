@@ -47,6 +47,7 @@ struct EditClientView: View {
             Form {
                 Section(header: Text("Action").background(Color.blue).foregroundColor(.white)) {
                     HStack {
+                        Spacer()
                         Button {
                             if saveMessage == "Update" {
                                 updateClient()
@@ -56,7 +57,7 @@ struct EditClientView: View {
                         } label: {
                             Text(saveMessage)
                         }
-                        .buttonStyle(CustomButton())
+                        .buttonStyle(CustomNarrowButton())
                         if saveMessage == "Update" {
                             Button {
                                 print("Select delete")
@@ -67,6 +68,7 @@ struct EditClientView: View {
                             .frame(maxWidth: .infinity, maxHeight: 55)
                             .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
                         }
+                        Spacer()
                     }
                 }
 

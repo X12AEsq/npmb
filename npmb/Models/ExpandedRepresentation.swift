@@ -21,4 +21,36 @@ class ExpandedRepresentation: Identifiable {
         self.appearances = [AppearanceModel]()
         self.notes = [NotesModel]()
     }
+    
+    var printLine:String {
+        var line:String = ""
+        line += FormattingService.ljf(base: self.xpcause.cause.causeNo, len: 11)
+        line += FormattingService.ljf(base: self.xpcause.client.formattedName, len: 32)
+        line += FormattingService.ljf(base: self.xpcause.cause.level, len: 4)
+        line += FormattingService.ljf(base: self.xpcause.cause.court, len: 6)
+        if !self.representation.active {
+            line += FormattingService.ljf(base: self.representation.dispositionType, len: 5)
+            line += FormattingService.ljf(base: self.representation.dispositionAction, len: 5)
+        } else {
+            line += FormattingService.ljf(base: " ", len: 5)
+            line += FormattingService.ljf(base: " ", len: 5)
+        }
+//        line += " "
+//        line += FormattingService.rjf(base: self.appearance.appearDate, len: 10, zeroFill: false)
+//        line += " "
+//        line += FormattingService.rjf(base: self.appearance.appearTime, len: 4, zeroFill: false)
+//        line += " "
+//        line += FormattingService.ljf(base: self.cause.causeNo, len: 9)
+//        line += " "
+//        line += FormattingService.ljf(base: self.cause.originalCharge, len: 12)
+//        line += " "
+//        line += self.client.formattedName
+       return line
+    }
+    
+    var sortSequence1:String {
+        var line:String = ""
+        line += FormattingService.ljf(base: self.xpcause.client.formattedName, len: 32)
+        return line
+    }
 }

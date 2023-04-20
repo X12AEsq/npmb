@@ -59,6 +59,7 @@ struct SelectCauseView: View {
                 VStack (alignment: .leading) {
                     HStack {
                         NavigationLink(destination: { EditCauseView() }, label: { Text("Add New Cause") })
+                            .padding(.bottom, 20)
                         Spacer()
                     }
                     ForEach(sortedCauses) { cause in

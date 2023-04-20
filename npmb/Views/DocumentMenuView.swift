@@ -11,6 +11,7 @@ import SwiftUI
 struct DocumentMenuView: View {
     @EnvironmentObject var CVModel:CommonViewModel
     @State private var showingDocket = false
+    @State private var showingReport = false
     @State var actionIntDate:Date = Date()
     @State var actionExtDate:String = DateService.dateDate2String(inDate: Date())
 
@@ -27,8 +28,7 @@ struct DocumentMenuView: View {
             }.frame(minWidth: 75, maxWidth: 300)
 
                 Button {
-                    print("Action goes here")
-                    showingDocket.toggle()
+                     showingDocket.toggle()
                 } label: {
                     Text("Docket for " + actionExtDate).font(.system(.body, design: .monospaced))
                 }
@@ -36,7 +36,19 @@ struct DocumentMenuView: View {
                 .sheet(isPresented: $showingDocket, onDismiss: {
                     print("Dismissed")
                 })
-            { DocumentDocket(docketDate: actionExtDate) }
+                { DocumentDocket(docketDate: actionExtDate) }
+
+            Button {
+                showingReport.toggle()
+            } label: {
+                Text("Report for " + actionExtDate).font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingReport, onDismiss: {
+                print("Dismissed")
+            })
+            { DocumentStatement(docketDate: actionExtDate) }
+        
                 Spacer()
         }
     }
