@@ -7,6 +7,16 @@
 
 import Foundation
 struct DateService {
+    
+    public static var monthNames:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    
+    public static func monthName(numMonth:Int) -> String {
+        if numMonth < 1 || numMonth > 12 {
+            return "Undefined"
+        }
+        return self.monthNames[numMonth - 1]
+    }
+
     public static func trimStringDate(date:String) -> [String] {
         if date == "" { return ["", "", ""] }
         let trimmedDate = date.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -18,7 +28,6 @@ struct DateService {
         if pieces.count == 1 { return ["",""] + pieces }
         return(["9999","99","99"])
     }
-    
     
     public static func dateString2Date(inDate:String) -> Date {
         return dateString2Date(inDate: inDate, inTime: "120000")

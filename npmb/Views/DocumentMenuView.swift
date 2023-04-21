@@ -27,17 +27,28 @@ struct DocumentMenuView: View {
                 Spacer()
             }.frame(minWidth: 75, maxWidth: 300)
 
-                Button {
-                     showingDocket.toggle()
-                } label: {
-                    Text("Docket for " + actionExtDate).font(.system(.body, design: .monospaced))
-                }
-                .buttonStyle(CustomNarrowButton())
-                .sheet(isPresented: $showingDocket, onDismiss: {
-                    print("Dismissed")
-                })
-                { DocumentDocket(docketDate: actionExtDate) }
+            Button {
+                 showingDocket.toggle()
+            } label: {
+                Text("Docket for " + actionExtDate).font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingDocket, onDismiss: {
+                print("Dismissed")
+            })
+            { DocumentDocket(docketDate: actionExtDate) }
 
+//            Button {
+//                showingReport.toggle()
+//            } label: {
+//                Text("Open Cases on " + actionExtDate).font(.system(.body, design: .monospaced))
+//            }
+//            .buttonStyle(CustomNarrowButton())
+//            .sheet(isPresented: $showingReport, onDismiss: {
+//                print("Document Open Case Dismissed")
+//            })
+//            { DocumentOpenCase(docketDate: actionExtDate) }
+            
             Button {
                 showingReport.toggle()
             } label: {
@@ -45,11 +56,11 @@ struct DocumentMenuView: View {
             }
             .buttonStyle(CustomNarrowButton())
             .sheet(isPresented: $showingReport, onDismiss: {
-                print("Dismissed")
+                print("Document Statement Dismissed")
             })
             { DocumentStatement(docketDate: actionExtDate) }
-        
-                Spacer()
+
+            Spacer()
         }
     }
     

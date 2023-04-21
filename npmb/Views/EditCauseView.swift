@@ -34,6 +34,7 @@ struct EditCauseView: View {
 
     var oo:OffenseOptions = OffenseOptions()
     var ac:AvailableCourts = AvailableCourts()
+    var cto:CauseTypeOptions = CauseTypeOptions()
 
     var cause:CauseModel?
 
@@ -176,7 +177,7 @@ struct EditCauseView: View {
                     internalID = 0
                     causeNo = ""
                     representations = []
-                    causeType = ""
+                    causeType = CauseTypeOptions.defaultCauseTypeOption()
                     causeCourt = ""
                     causeOriginalCharge = ""
                     selectedClient = ClientModel()

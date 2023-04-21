@@ -25,7 +25,7 @@ struct DocumentStatement: View {
     @State var header2Printed:Bool = false
     @State var header3Printed:Bool = false
     var docketDate:String
-    var monthName:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+//    var monthName:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     
     var body: some View {
         ScrollView {
@@ -48,25 +48,25 @@ struct DocumentStatement: View {
                 VStack {
                     Text("Closed items")
                     ForEach(closed, id: \.representation.id) { docketEntry in
-                        if docketEntry.xpcause.cause.level != "CPS" {
+//                        if docketEntry.xpcause.cause.level != "CPS" {
                             Text(docketEntry.printLine).font(.system(.body, design: .monospaced))
-                        }
+//                        }
                     }
                 }
                 VStack {
                     Text("Assigned items")
                     ForEach(assigned, id: \.representation.id) { docketEntry in
-                        if docketEntry.xpcause.cause.level != "CPS" {
+//                        if docketEntry.xpcause.cause.level != "CPS" {
                             Text(docketEntry.printLine).font(.system(.body, design: .monospaced))
-                        }
+//                        }
                     }
                 }
                 VStack {
                     Text("Open items")
                     ForEach(opencase, id: \.representation.id) { docketEntry in
-                        if docketEntry.xpcause.cause.level != "CPS" {
+//                        if docketEntry.xpcause.cause.level != "CPS" {
                             Text(docketEntry.printLine).font(.system(.body, design: .monospaced))
-                        }
+//                        }
                     }
                 }
                 HStack {
@@ -93,17 +93,17 @@ struct DocumentStatement: View {
         }.onAppear( perform: { initWorkArea() } )
     }
     
-    var headerLine:String {
-        var line:String = ""
-        line += FormattingService.ljf(base: "Cause No", len: 11)
-        line += FormattingService.ljf(base: "Client Name", len: 32)
-        line += FormattingService.ljf(base: "Lev", len: 4)
-        line += FormattingService.ljf(base: "Court", len: 6)
-        line += FormattingService.ljf(base: "Proc", len: 5)
-        line += FormattingService.ljf(base: "Disp", len: 5)
-        line += "\n\n"
-        return line
-    }
+//    var headerLine:String {
+//        var line:String = ""
+//        line += FormattingService.ljf(base: "Cause No", len: 11)
+//        line += FormattingService.ljf(base: "Client Name", len: 32)
+//        line += FormattingService.ljf(base: "Lev", len: 4)
+//        line += FormattingService.ljf(base: "Court", len: 6)
+//        line += FormattingService.ljf(base: "Proc", len: 5)
+//        line += FormattingService.ljf(base: "Disp", len: 5)
+//        line += "\n\n"
+//        return line
+//    }
     
     func initWorkArea() {
         assigned = []
@@ -123,13 +123,14 @@ struct DocumentStatement: View {
         if array.count > 0 { reportYear = array[0] } else { reportYear = "9999" }
         if array.count > 1 {
             reportMonth = array[1]
-            var myIdx = Int(array[1]) ?? 99
-            myIdx -= 1
-            if myIdx < 90 {
-                reportMonthName = monthName[myIdx]
-            } else {
-                reportMonthName = "XXXXX"
-            }
+            reportMonthName = DateService.monthName(numMonth: Int(array[1]) ?? 99)
+//            var myIdx = Int(array[1]) ?? 99
+//            myIdx -= 1
+//            if myIdx < 90 {
+//                reportMonthName = monthName[myIdx]
+//            } else {
+//                reportMonthName = "XXXXX"
+//            }
         } else {
             reportMonth = "99"
             reportMonthName = "XXXXX"
@@ -147,7 +148,9 @@ struct DocumentStatement: View {
                 assigned.append(xrin)
                 reportNrAssigned += 1
             }
-            if xrin.xpcause.cause.level != "CPS" {
+            if xrin.xpcause.cause.level != "CPS"
+                && xrin.xpcause.cause.level != "GS"
+                && xrin.xpcause.cause.causeType != "Priv"{
                 if xrin.representation.active {
                     opencase.append(xrin)
                     reportNrOpen += 1
@@ -169,36 +172,38 @@ struct DocumentStatement: View {
     }
     
     func createTextFile() {
-        report = "Morris E. Albers II, PLLC Report for " + reportMonthName + ", " + reportYear + "\n\n"
-        
+        report = "Morris E. Albers II, PLLC Report for " + reportMonthName + ", " + reportYear + "\n"
+        report += "Assigned this month:" + String(reportNrAssigned) + "; Closed this month:" + String(reportNrClosed) + "; Total active:" + String(reportNrOpen) + "\n\n"
+
         for xr in assigned {
             if !header1Printed {
                 report += "\n"
                 report += "Assigned\n"
-                report += headerLine
+                report += xr.headerLine
                 header1Printed = true
             }
-            report += xr.printLine.replacingOccurrences(of: " ", with: "%") + "\n"
+//            report += xr.printLine.replacingOccurrences(of: " ", with: "%") + "\n"
+            report += xr.printLine + "\n"
         }
         
         for xr in closed {
             if !header2Printed {
                 report += "\n"
                 report += "Closed\n"
-                report += headerLine
+                report += xr.headerLine
                 header2Printed = true
             }
-            report += xr.printLine.replacingOccurrences(of: " ", with: "%") + "\n"
+            report += xr.printLine + "\n"
         }
         
         for xr in opencase {
             if !header3Printed {
                 report += "\n"
                 report += "Open Items\n"
-                report += headerLine
+                report += xr.headerLine
                 header3Printed = true
             }
-            report += xr.printLine.replacingOccurrences(of: " ", with: "%") + "\n"
+            report += xr.printLine + "\n"
         }
     }
 }

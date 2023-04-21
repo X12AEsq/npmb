@@ -35,7 +35,7 @@ class CauseModel: Identifiable, Codable, ObservableObject {
         self.level = ""
         self.court = ""
         self.originalCharge = ""
-        self.causeType = ""
+        self.causeType = CauseTypeOptions.defaultCauseTypeOption()
 //        self.client = ClientModel()
     }
 
