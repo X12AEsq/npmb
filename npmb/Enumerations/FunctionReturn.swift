@@ -22,6 +22,25 @@ struct FunctionReturn {
         self.message = message
         self.additional = additional
     }
+    
+    func printLine() -> String {
+        
+        var pL:String = ""
+        switch self.status {
+        case .successful:
+            pL = ".successful "
+        case .empty:
+            pL = ".empty"
+        case .IOError:
+            pL = ".IOError"
+        }
+
+        pL += ":"
+        pL += self.message
+        pL += ":"
+        pL += String(self.additional)
+        return pL
+    }
 }
 
 enum ReturnType {

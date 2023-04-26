@@ -40,11 +40,11 @@ class ClientModel: Identifiable, Hashable, Codable, ObservableObject {
         self.suffix = ""
         self.street = ""
         self.city = ""
-        self.state = ""
+        self.state = StateOptions.defaultStateOption()
         self.zip = ""
         self.phone = ""
         self.note = ""
-        self.jail = ""
+        self.jail = "N"
         self.representation = []
     }
     

@@ -80,7 +80,7 @@ struct SelectCauseUtil: View {
             }
             .onAppear {
                 sortedCauses = sortThem(option: 1)
-                print("sorted causes using option 1")
+                CVModel.logItem(viewModel: "SelectCauseUtil", item: "sorted causes using option 1")
             }
         }
         .listStyle(.plain)

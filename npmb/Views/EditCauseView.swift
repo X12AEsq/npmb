@@ -63,7 +63,7 @@ struct EditCauseView: View {
                         .buttonStyle(CustomButton())
                         if saveMessage == "Update" {
                             Button("Delete", role: .destructive) {
-                                print("Select delete")
+                                CVModel.logItem(viewModel: "EditClientView", item: "Select delete")
                             }
                             .font(.headline.bold())
                             .frame(maxWidth: .infinity, maxHeight: 55)
@@ -134,7 +134,7 @@ struct EditCauseView: View {
                                         Text(sortOption == 1 ? cl.formattedName : cl.sortFormat2).foregroundColor(.blue)
 //                                        ActionSelect()
                                             .onTapGesture {
-                                                print("Selected " + cl.formattedName)
+                                                CVModel.logItem(viewModel: "EditClientView", item: "Selected " + cl.formattedName)
                                                 selectedClient = cl
                                             }
                                         Text(sortOption == 1 ? cl.formattedName : cl.sortFormat2)
@@ -157,8 +157,7 @@ struct EditCauseView: View {
                     $0.formattedName < $1.formattedName
                 }
                 if let cause = cause {
-                    print(cause)
-                    causeID = cause.id!
+                     causeID = cause.id!
                     internalID = cause.internalID
                     causeNo = cause.causeNo
                     causeType = cause.causeType

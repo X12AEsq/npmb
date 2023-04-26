@@ -19,13 +19,13 @@ struct EditClientView: View {
     @State var suffix:String = ""
     @State var street:String = ""
     @State var city:String = ""
-    @State var state:String = ""
+    @State var state:String = StateOptions.defaultStateOption()
     @State var zip:String = ""
     @State var areacode:String = ""
     @State var exchange:String = ""
     @State var telnumber:String = ""
     @State var note:String = ""
-    @State var jail:String = ""
+    @State var jail:String = "N"
     @State var representation:[Int] = []
     @State var saveMessage:String = ""
     @State var callResult:FunctionReturn = FunctionReturn()
@@ -60,7 +60,7 @@ struct EditClientView: View {
                         .buttonStyle(CustomNarrowButton())
                         if saveMessage == "Update" {
                             Button {
-                                print("Select delete")
+                                CVModel.logItem(viewModel: "EditClientView", item: "Delete button)")
                             } label: {
                                 Text("Delete Client")
                             }
@@ -138,13 +138,13 @@ struct EditClientView: View {
                 suffix = ""
                 street = ""
                 city = ""
-                state = ""
+                state = StateOptions.defaultStateOption()
                 zip = ""
                 areacode = ""
                 exchange = ""
                 telnumber = ""
                 note = ""
-                jail = ""
+                jail = "N"
                 representation = []
                 saveMessage = "Add"
             }
@@ -159,7 +159,7 @@ struct EditClientView: View {
                 dismiss()
             } else {
                 statusMessage = callResult.message
-                print("add failed " + statusMessage)
+                CVModel.logItem(viewModel: "EditClientView", item: "add failed " + statusMessage)
             }
         }
     }

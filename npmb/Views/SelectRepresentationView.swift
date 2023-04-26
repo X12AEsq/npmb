@@ -81,6 +81,9 @@ struct SelectRepresentationView: View {
             .listStyle(.plain)
 //            .navigationTitle("Which Representation?")
         }
+        .onAppear {
+            CVModel.logItem(viewModel: "SelectRepresentation", item: "Entered")
+        }
     }
 
     func filterThem(prefix:String, option:Int) -> Void {

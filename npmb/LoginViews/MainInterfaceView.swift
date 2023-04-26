@@ -11,12 +11,12 @@ import SwiftUI
 
 struct MainInterfaceView: View {
     
-    enum Route: Hashable {
-        case causes
-        case clients
-    }
+//    enum Route: Hashable {
+//        case causes
+//        case clients
+//    }
 
-    @State private var showingEditVehicleView = false
+    @State private var showingLogView = false
 //    @State private var presentedViews:[String] = ["MainInterfaceView"]
     
     @EnvironmentObject var CVModel:CommonViewModel
@@ -40,6 +40,7 @@ struct MainInterfaceView: View {
                         .clipShape(Capsule())
                 }
                 Text(CVModel.appStatus)
+                if CVModel.inTesting { Text("Test in Progress") }
                 NavigationStack {
                     VStack(alignment: .leading) {
                         NavigationLink("Clients") {
@@ -71,10 +72,49 @@ struct MainInterfaceView: View {
                         .foregroundColor(.primary)
 
                         .navigationTitle("Albers Law Practice")
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            CVModel.inTesting.toggle()
+                            if !CVModel.inTesting {
+                                CVModel.testLog = ""
+                            }
+                        } label: {
+                            Text("Toggle Testing")
+                        }
+                        .buttonStyle(CustomNarrowButton())
+                        if CVModel.inTesting {
+                            Button {
+                                showingLogView.toggle()
+                            } label: {
+                                Text("Show log")
+                            }
+                            .buttonStyle(CustomNarrowButton())
+                            .sheet(isPresented: $showingLogView) {
+                                LogView
+                            }
+                            if CVModel.testLog != "" {
+                                Spacer()
+                                ShareLink(item: CVModel.testLog)
+                            }
+//                            Spacer()
+                        }
+                        Spacer()
+                    }
+
                 }
                 
                 Spacer()
 //            }
+        }
+    }
+    
+    var LogView: some View {
+        ScrollView {
+            VStack (alignment: .leading) {
+                Text(CVModel.testLog)
+            }
         }
     }
 }

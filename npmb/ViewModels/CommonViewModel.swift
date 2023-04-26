@@ -10,6 +10,10 @@
  } else if UIDevice.current.localizedModel == "iPad" {
       print("This is an iPad")
  }
+ 
+ func something(completion: @escaping (Result<Int, Error) -> ()) {
+     completion(.success(Int("something")))
+ }
 */
 import Foundation
 import FirebaseFirestore
@@ -42,6 +46,9 @@ class CommonViewModel: ObservableObject {
     
     @Published var expandedcauses = [ExpandedCause]()
     @Published var expandedrepresentations = [ExpandedRepresentation]()
+    
+    @Published var inTesting:Bool = false
+    public var testLog:String = ""
 
     var clientListener: ListenerRegistration?
     var causeListener: ListenerRegistration?
@@ -57,6 +64,18 @@ class CommonViewModel: ObservableObject {
         appStatus += "Problem adding appearance to newly added representation"
     }
     
+    // MARK: Utility functions
+    
+    func logItem(viewModel:String, item:String) {
+        if inTesting {
+            if item != "" {
+                let msgDate:String = Date().formatted(date: .numeric, time: .shortened)
+                let debugMsg:String = msgDate + " " + viewModel + ": " + item + "\n"
+                testLog += debugMsg
+            }
+        }
+    }
+    
     // MARK: Login Functions
     
     @MainActor
@@ -64,9 +83,13 @@ class CommonViewModel: ObservableObject {
         do {
             let authDataResult = try await auth.createUser(withEmail: email, password: password)
             userSession = authDataResult.user
-            print("Debug: User created successfully")
-        } catch {
-            print("Debug: Failed to create user with error \(error.localizedDescription)")
+            if inTesting {
+                logItem(viewModel: "createUser", item: "User created successfully")
+            }
+         } catch {
+             if inTesting {
+                 logItem(viewModel: "createUser", item: "Failed to create user with error \(error.localizedDescription)")
+             }
         }
     }
     
@@ -75,7 +98,9 @@ class CommonViewModel: ObservableObject {
         do {
             let authDataResult = try await auth.signIn(withEmail: email, password: password)
             userSession = authDataResult.user
-            print("Debug: User signed in successfully")
+            if inTesting {
+                logItem(viewModel: "signIn", item: "User signed in successfully")
+            }
             self.clientSubscribe()
             self.causeSubscribe()
             self.noteSubscribe()
@@ -83,7 +108,9 @@ class CommonViewModel: ObservableObject {
             self.representationSubscribe()
             return true
         } catch {
-            print("Debug: Failed to sign in user with error \(error.localizedDescription)")
+            if inTesting {
+                logItem(viewModel: "signIn", item: "Failed to sign in user with error \(error.localizedDescription)")
+            }
             return false
         }
     }
@@ -93,10 +120,14 @@ class CommonViewModel: ObservableObject {
         do {
             try auth.signOut()
             userSession = nil
-            print("Debug: User signed out successfully")
+            if inTesting {
+                logItem(viewModel: "signout", item: "User signed out successfully")
+            }
             return true
         } catch {
-            print("Debug: Failed to sign out user with error \(error.localizedDescription)")
+            if inTesting {
+                logItem(viewModel: "signout", item: "Failed to sign out user with error \(error.localizedDescription)")
+            }
             return false
         }
     }
@@ -131,10 +162,6 @@ class CommonViewModel: ObservableObject {
                     let representation = data["Representation"] as? [Int] ?? []
                     let cl:ClientModel = ClientModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, lastname:lastname, firstname: firstName, middlename: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, phone: FormattingService.fmtphone(area: area, exchange: exchange, number: number), note: note, jail: jail, representation: representation)
                     self.clients.append(cl)
-                    if cl.internalID == 419 {
-                        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                        print("clientSubscribe " + String(cl.internalID) + "; " + cl.formattedName + "; " + String(self.clients.count) + "; " + debugMsg)
-                    }
                     return
                 }
             }
@@ -188,7 +215,6 @@ class CommonViewModel: ObservableObject {
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
         
         let intID = nextClientID()
-        print("nextClientID returned " + String(intID))
         let uc:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
 
         let reprRef = db.collection("clients")
@@ -236,9 +262,10 @@ class CommonViewModel: ObservableObject {
         
         do {
             try await db.collection("clients").document(clientID).updateData(clientData)
-            taskCompleted = true
         } catch {
-            print("Debug updateClient failed \(error.localizedDescription)")
+            if inTesting {
+                logItem(viewModel: "updateClient", item: "failed \(error.localizedDescription)")
+            }
         }
     }
     
@@ -267,10 +294,6 @@ class CommonViewModel: ObservableObject {
                     let ca:CauseModel = CauseModel(fsid: queryDocumentSnapshot.documentID, client: involvedClient, causeno: causeNo, representations: representations, involvedClient: involvedClient, level: level, court: court, originalcharge: originalcharge, causetype: causeType, intid: internalID)
                     
                     self.causes.append(ca)
-                    if ca.internalID == 554 {
-                        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                        print("causeSubscribe " + String(ca.internalID) + "; " + ca.causeNo + "; " + String(self.causes.count) + "; " + debugMsg)
-                    }
                     return
                 }
             }
@@ -397,13 +420,27 @@ class CommonViewModel: ObservableObject {
         repids = []
         for rep in self.representations.filter({ $0.involvedCause == cm.internalID }) {
             repids.append(rep.internalID)
-            print("attachCauseToRepresentation adding ", rep.internalID)
+            if inTesting {
+                logItem(viewModel: "attachCauseToRepresentation", item: "adding " + String(rep.internalID))
+            }
         }
         
         if repids.firstIndex(of: involvedRepresentation) == nil {
             repids.append(involvedRepresentation)
         }
-        print("attachCauseToRepresentation repids ", repids)
+        if inTesting {
+            var msg:String = ""
+            if repids.count > 0 {
+                for element in repids {
+                    if msg == "" {
+                        msg = String(element)
+                    } else {
+                        msg = ", " + String(element)
+                    }
+                }
+            }
+            logItem(viewModel: "attachCauseToRepresentation", item: msg + ";. ")
+        }
         
         let uc:[String:Any] = ["Representations":repids]
         
@@ -476,10 +513,6 @@ class CommonViewModel: ObservableObject {
                     let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory, causemodel: self.findCause(internalID: involvedCause))
 
                     self.representations.append(rm)
-                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                    if rm.internalID == 254 {
-                        print("representationsubscribe " + String(rm.internalID) + "; " + rm.primaryCategory + "; " + rm.involvedAppearances.description + "; " + String(self.representations.count) + "; " + debugMsg)
-                    }
                     return
                 }
             }
@@ -500,10 +533,7 @@ class CommonViewModel: ObservableObject {
     }
     
     public func findRepresentation(internalID:Int) -> RepresentationModel {
-        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-        print("findRepresentation entered ", String(internalID), debugMsg)
         let workRepresentations:[RepresentationModel] = representations.filter { $0.internalID == internalID }
-        print ("findRepresentation representation count", String(workRepresentations.count))
         if workRepresentations.count == 0 { return RepresentationModel() }
         if workRepresentations.count == 1 {
             let workRep:RepresentationModel = workRepresentations[0]
@@ -590,53 +620,37 @@ class CommonViewModel: ObservableObject {
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let ud:[String:Any] = RepresentationAny(internalID: intid, involvedClient: involvedClient, involvedCause: involvedCause, active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
-        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-        print("update representation, ", representationID, ud, debugMsg)
 
         taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
         
         do {
             try await reprRef.setData(ud, merge: true)
-            taskCompleted = true
-            print("Debug update Representation succeeded")
             rtn.status = .successful
             rtn.message = ""
-            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("updateRepresentation " + debugMsg)
             return rtn
         } catch {
-            print("Debug update Representation failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update representation failed: " + error.localizedDescription
-            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-            print("updateRepresentation " + debugMsg)
             return rtn
         }
     }
     
     @MainActor
     func updateRepresentationAppearances(representationID:String, involvedappearances:[Int]) async -> FunctionReturn {
-        let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-        print("updateRepresentation - appearances entered ", representationID, involvedappearances, debugMsg)
 
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let ud:[String:Any] = RepresentationAny(involvedAppearances: involvedappearances)
-        print(representationID, ud)
 
-        taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
 
         do {
             try await reprRef.setData(ud, merge: true)
-            taskCompleted = true
-            print("Debug update Representation succeeded")
             rtn.status = .successful
             rtn.message = ""
             return rtn
         } catch {
-            print("Debug update Representation failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update representation failed: " + error.localizedDescription
             return rtn
@@ -645,25 +659,19 @@ class CommonViewModel: ObservableObject {
     
     @MainActor
     func updateRepresentationNotes(representationID:String, involvednotes:[Int]) async -> FunctionReturn {
-        print("updateRepresentation - notes entered ", representationID, involvednotes)
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let ud:[String:Any] = RepresentationAny(involvedNotes: involvednotes)
-        print(representationID, ud)
 
-        taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
         
         do {
             try await reprRef.setData(ud, merge: true)
-            taskCompleted = true
-            print("Debug update Representation succeeded")
             rtn.status = .successful
             rtn.message = ""
             return rtn
         } catch {
-            print("Debug update Representation failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update representation failed: " + error.localizedDescription
             return rtn
@@ -672,12 +680,10 @@ class CommonViewModel: ObservableObject {
     
     @MainActor
     func updateRepresentation(representationID:String, involvedCause:Int, involvedClient:Int) async -> FunctionReturn {
-//        print("updateRepresentation entered ", representationID, involvednotes)
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
         let ud:[String:Any] = RepresentationAny(involvedCause: involvedCause, involvedClient: involvedClient)
-        print(representationID, ud)
 
         taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
@@ -685,12 +691,10 @@ class CommonViewModel: ObservableObject {
         do {
             try await reprRef.setData(ud, merge: true)
             taskCompleted = true
-            print("Debug update Representation succeeded")
             rtn.status = .successful
             rtn.message = ""
             return rtn
         } catch {
-            print("Debug update Representation failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update representation failed: " + error.localizedDescription
             return rtn
@@ -739,11 +743,6 @@ class CommonViewModel: ObservableObject {
           
                     let am:AppearanceModel = AppearanceModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation: involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
                     self.appearances.append(am)
-//                    self.setAppearanceTimeStamp()
-//                    if am.internalID > 550 {
-//                        let debugMsg:String = self.lastAppearanceUpdate.formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-//                        print("appearancesubscribe " + String(am.internalID) + "; " + am.appearDate + "; " + String(self.appearances.count) + "; " + debugMsg)
-//                    }
                     return
                 }
             }
@@ -780,7 +779,6 @@ class CommonViewModel: ObservableObject {
     
     @MainActor
     func addAppearance(involvedClient:Int, involvedCause:Int, involvedRepresentation:Int, appearDate:String, appearTime:String, appearNote:String) async -> FunctionReturn {
-        print("addAppearance entered")
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
@@ -794,7 +792,6 @@ class CommonViewModel: ObservableObject {
             rtn.additional = -1
             return rtn
         }
-        print("addAppearance representation recovered ", re.id ?? "document id blank?", re.internalID)
         
         var apprArray:[Int] = []
         
@@ -814,8 +811,6 @@ class CommonViewModel: ObservableObject {
             rtn.status = .IOError
             rtn.message = "Add Appearance failed: " + error.localizedDescription
             rtn.additional = -1
-//            let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-//            print("addAppearance failure " + debugMsg, rtn)
             return rtn
         }
     }
@@ -854,13 +849,11 @@ class CommonViewModel: ObservableObject {
 
         let ua:[String:Any] = self.AppearanceAny(intid:intID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, appeardate:appearDate, appeartime:appearTime, appearnote:appearNote)
         
-        taskCompleted = false
         let reprRef = db.collection("appearances").document(appearanceID)
         
         do {
             try await reprRef.setData(ua, merge: true)
-            taskCompleted = true
-            rtn.status = .successful
+             rtn.status = .successful
             rtn.message = ""
             return rtn
         } catch {
@@ -898,8 +891,6 @@ class CommonViewModel: ObservableObject {
           
                     let nm:NotesModel = NotesModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, representation:involvedRepresentation, notedate:noteDate, notetime:noteTime, notenote:noteNote, notecat:noteCategory)
                     self.notes.append(nm)
-                    let debugMsg:String = Date().formatted(Date.FormatStyle().secondFraction(.milliseconds(4)))
-                    print("noteSubscribe " + String(nm.internalID)  + "; " + debugMsg)
 
                     return
                 }
@@ -957,13 +948,12 @@ class CommonViewModel: ObservableObject {
             rtn.status = .successful
             rtn.message = ""
             rtn.additional = intID
-            noteArray = re.involvedAppearances
+            noteArray = re.involvedNotes
             noteArray.append(intID)
             await rtn = self.updateRepresentationNotes(representationID: re.id ?? "", involvednotes: noteArray)
             return rtn
         }
         catch {
-            print("Debug update Note failed \(error.localizedDescription)")
             rtn.status = .IOError
             rtn.message = "Update Note failed: " + error.localizedDescription
             rtn.additional = -1

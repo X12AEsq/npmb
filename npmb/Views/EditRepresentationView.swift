@@ -171,7 +171,6 @@ struct EditRepresentationView: View {
                         }
                         .sheet(isPresented: $showingInpAppearance, onDismiss: {
                             if apprChanged {
-                                print("checkpoint 3")
                                 initWorkArea(orig: xr.representation.internalID)
                             }
                         })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
@@ -190,7 +189,6 @@ struct EditRepresentationView: View {
                                 }
                                 .sheet(isPresented: $showingInpAppearance, onDismiss: {
                                     if apprChanged {
-                                        print("checkpoint 4")
                                         initWorkArea(orig: xr.representation.internalID)
                                     }
                                 })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
@@ -211,7 +209,6 @@ struct EditRepresentationView: View {
                         }
                         .sheet(isPresented: $showingInpNote, onDismiss: {
                             if noteChanged {
-                                print("checkpoint 4")
                                 initWorkArea(orig: xr.representation.internalID)
                             }
                         })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged)
@@ -232,7 +229,6 @@ struct EditRepresentationView: View {
                             }
                             .sheet(isPresented: $showingInpNote, onDismiss: {
                                 if noteChanged {
-                                    print("checkpoint 4")
                                     initWorkArea(orig: xr.representation.internalID)
                                 }
                             })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged)
@@ -246,7 +242,7 @@ struct EditRepresentationView: View {
                 Spacer()
                 if repChanged() {
                     Button {
-                        print("add/update")
+                        CVModel.logItem(viewModel: "EditRepresentationView", item: "add/update")
                         if auditRepresentation() {
                             if currDocumentID == "" {
                                 Task {
@@ -270,14 +266,13 @@ struct EditRepresentationView: View {
                                 }
                             }
                         }
-                        print("add/update done")
+                        CVModel.logItem(viewModel: "EditRepresentationView", item: "add/update done")
                     } label: {
                         Text(saveMessage)
                     }
                     .buttonStyle(CustomNarrowButton())
                 }
                 Button {
-                    print("Main")
                     showingInpMain.toggle()
                 } label: {
                     Text("Main")
@@ -288,16 +283,12 @@ struct EditRepresentationView: View {
                     currInvolvedClient = currcliInternalID
                 })  { EditRepInputMain(currDateAssigned: $currDateAssigned, currAssignedDate: $currAssignedDate, currCategory: $currCategory, currActiveString: $currActiveString, currActive: $currActive, currDateDisp: $currDateDisp, currDispDate: $currDispDate, currDispType: $currDispType, currDispAction: $currDispAction) }
                 Button {
-                    print("Cause")
                     showingSelCause.toggle()
-                    print("Sel Cause Returned")
-                    print("curr cause variables ", currcauCauseNo, currcauInternalID, currcauOrigCharge)
                 } label: {
                     Text("Cause")
                 }
                 .buttonStyle(CustomNarrowButton())
                 .sheet(isPresented: $showingSelCause, onDismiss: {
-                    print("selectcauseutil returned ", selectedCause.causeNo, selectedCause.internalID, selectedCause.originalCharge)
                     currcauCauseNo = selectedCause.causeNo
                     currcauInternalID = selectedCause.internalID
                     currcauOrigCharge = selectedCause.originalCharge
@@ -310,7 +301,7 @@ struct EditRepresentationView: View {
                     EditRepSelectCause(selectedCause: $selectedCause)
                 }
                 Button {
-                    print("checkpoint 2a")
+                    CVModel.logItem(viewModel: "EditRepresentationView", item: "checkpoint 2a")
                     initWorkArea(orig: rxid)
                     statusMessage = "Refreshed"
                 } label: {
@@ -322,7 +313,7 @@ struct EditRepresentationView: View {
         }
         .padding(.leading, 10.0)
         .onAppear {
-            print("checkpoint 2")
+            CVModel.logItem(viewModel: "EditRepresentationView", item: "checkpoint 2")
             initWorkArea(orig: rxid)
         }
     }
@@ -337,7 +328,7 @@ struct EditRepresentationView: View {
         CVModel.assembleExpandedCauses()
         CVModel.assembleExpandedRepresentations()
 
-        print("initWorkArea ", orig, rxid)
+        CVModel.logItem(viewModel: "EditRepresentationView", item: "initWorkArea " + String(orig) + "; " + String(rxid))
         xr = CVModel.expandedrepresentations.first(where: { $0.representation.internalID == rxid }) ?? ExpandedRepresentation()
         
         origRepresentation = xr.representation
@@ -362,7 +353,6 @@ struct EditRepresentationView: View {
         currDispAction = origRepresentation.dispositionAction
         currCategory = origRepresentation.primaryCategory
         currActive = origRepresentation.active
-        print("Set point 1", currActive, origRepresentation.active)
         currActiveString = (origRepresentation.active) ? "Yes" : "No"
 //        currApprs = origRepresentation.appearances
         
