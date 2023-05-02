@@ -49,6 +49,7 @@ struct EditRepInputAppearance: View {
             }
             Spacer()
             HStack {
+// TODO: Need to distinguish between add new and update old
                 if apprChange() {
                     Button {
                         Task {

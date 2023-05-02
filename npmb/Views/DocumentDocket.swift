@@ -56,7 +56,7 @@ struct DocumentDocket: View {
                 docketed.append(xa)
             }
         }
-        docketed = docketed.sorted(by: { $0.appearance.sortSequence < $1.appearance.sortSequence} )
+        docketed = docketed.sorted(by: { $0.sortSequence < $1.sortSequence} )
     }
     
     func createTextFile() {

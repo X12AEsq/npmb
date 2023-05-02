@@ -12,6 +12,7 @@ struct DocumentMenuView: View {
     @EnvironmentObject var CVModel:CommonViewModel
     @State private var showingDocket = false
     @State private var showingReport = false
+    @State private var showingCaseList = false
     @State var actionIntDate:Date = Date()
     @State var actionExtDate:String = DateService.dateDate2String(inDate: Date())
 
@@ -37,17 +38,6 @@ struct DocumentMenuView: View {
                 print("Dismissed")
             })
             { DocumentDocket(docketDate: actionExtDate) }
-
-//            Button {
-//                showingReport.toggle()
-//            } label: {
-//                Text("Open Cases on " + actionExtDate).font(.system(.body, design: .monospaced))
-//            }
-//            .buttonStyle(CustomNarrowButton())
-//            .sheet(isPresented: $showingReport, onDismiss: {
-//                print("Document Open Case Dismissed")
-//            })
-//            { DocumentOpenCase(docketDate: actionExtDate) }
             
             Button {
                 showingReport.toggle()
@@ -59,6 +49,17 @@ struct DocumentMenuView: View {
                 print("Document Statement Dismissed")
             })
             { DocumentStatement(docketDate: actionExtDate) }
+            
+            Button {
+                showingCaseList.toggle()
+            } label: {
+                Text("Cases as of " + actionExtDate).font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingCaseList, onDismiss: {
+                print("Document Case List Dismissed")
+            })
+            { DocumentAllCases(docketDate: actionExtDate) }
 
             Spacer()
         }

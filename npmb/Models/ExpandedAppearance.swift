@@ -41,4 +41,14 @@ class ExpandedAppearance {
         line += self.client.formattedName
        return line
     }
+    
+    var sortSequence:String {
+        var work:String = ""
+        work += FormattingService.rjf(base: self.appearance.appearDate, len: 10, zeroFill: false)
+        work += FormattingService.rjf(base: self.appearance.appearTime, len: 4, zeroFill: false)
+        work += " "
+        work += self.client.formattedName
+        return work
+    }
+
 }

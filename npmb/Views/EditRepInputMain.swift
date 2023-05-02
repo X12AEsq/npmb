@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EditRepInputMain: View {
+    @EnvironmentObject var CVModel:CommonViewModel
     @Environment(\.dismiss) var dismiss
 
     @Binding var currDateAssigned:Date
@@ -31,9 +32,7 @@ struct EditRepInputMain: View {
                 Text("Assigned")
                 DatePicker("", selection: $currDateAssigned, displayedComponents: [.date]).padding().onChange(of: currDateAssigned, perform: { value in
                     currAssignedDate = DateService.dateDate2String(inDate: value)
-                    //                    if currAssignedDate != origRepresentation.assignedDate { print("change 1"); repChangedFlag = true }
-                }
-                )
+                })
             }
             HStack {
                 Text("Category")
@@ -41,9 +40,8 @@ struct EditRepInputMain: View {
                 Picker("Category", selection: $currCategory) {
                     ForEach(pc.primaryCategories, id: \.self) {
                         Text($0).onChange(of: currCategory, perform: { value in
-                            print("select category ", currCategory, value)
+                            recordError(er: "select category " + currCategory + ", " + value)
                             currCategory = value
-                            //                            if currCategory != origRepresentation.primaryCategory { print("change 2"); repChangedFlag = true }
                         })
                     }
                 }
@@ -54,9 +52,7 @@ struct EditRepInputMain: View {
                 Picker("", selection: $currActiveString) {
                     ForEach(activeOptions, id: \.self) {
                         Text($0).onChange(of: currActiveString, perform: { value in
-                            //                            print("Set point 2", currActive, origRepresentation.active, value)
                             currActive = (value == "Yes")
-                            //                            if currActive != origRepresentation.active { print("change 3"); repChangedFlag = true }
                         })
                     }
                 }
@@ -67,7 +63,6 @@ struct EditRepInputMain: View {
                     DatePicker("", selection: $currDateDisp, displayedComponents: [.date]).padding()
                         .onChange(of: currDateDisp, perform: { value in
                             currDispDate = DateService.dateDate2String(inDate: value)
-                            //                            if currDispDate != origRepresentation.dispositionDate { print("change 4"); repChangedFlag = true }
                         })
                 }
                 
@@ -77,7 +72,6 @@ struct EditRepInputMain: View {
                     Picker(selection: $currDispType) {
                         ForEach(dto.dispositionTypeOptions , id: \.self) {
                             Text($0).onChange(of: currDispType, perform: { value in
-                                //                                if currDispType != origRepresentation.dispositionType { print("change 5"); repChangedFlag = true }
                             })
                         }
                     } label: {
@@ -91,7 +85,6 @@ struct EditRepInputMain: View {
                     Picker(selection: $currDispAction) {
                         ForEach(dao.dispositionActionOptions , id: \.self) {
                             Text($0).onChange(of: currDispAction, perform: { value in
-                                //                                if currDispAction != origRepresentation.dispositionAction { print("change 6"); repChangedFlag = true }
                             })
                         }
                     } label: {
@@ -109,7 +102,13 @@ struct EditRepInputMain: View {
         .background(.black)
 
     }
-    
+ 
+    func recordError(er:String) {
+//        if statusMessage != "" { statusMessage = statusMessage + "\n" + er }
+//        else { statusMessage = er }
+        CVModel.logItem(viewModel:"EditRepresentationMain", item:er)
+    }
+
 }
 
 //struct EditRepInputMain_Previews: PreviewProvider {
