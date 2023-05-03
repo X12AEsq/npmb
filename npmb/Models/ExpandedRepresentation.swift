@@ -22,6 +22,14 @@ class ExpandedRepresentation: Identifiable {
         self.notes = [NotesModel]()
     }
     
+    var nextDate:String {
+        let aprs:[AppearanceModel] = self.appearances.sorted { $0.appearDate > $1.appearDate }
+        if aprs.count == 0 {
+            return ""
+        }
+        return aprs[0].appearDate
+    }
+    
     var printLine:String {
         var line:String = ""
         line += FormattingService.ljf(base: self.xpcause.cause.causeNo, len: 11)
@@ -57,6 +65,21 @@ class ExpandedRepresentation: Identifiable {
         line += FormattingService.ljf(base: "Court", len: 6)
         line += FormattingService.ljf(base: "Proc", len: 5)
         line += FormattingService.ljf(base: "Disp", len: 5)
+        line += "\n\n"
+        return line
+    }
+    
+    var headerLine3:String {
+        var line:String = ""
+        line += FormattingService.rjf(base: "Rcd", len: 3, zeroFill: false)
+        line += " "
+        line += FormattingService.ljf(base: "Cause No", len: 11)
+        line += FormattingService.ljf(base: "Client Name", len: 32)
+        line += FormattingService.ljf(base: "Lev", len: 4)
+        line += FormattingService.ljf(base: "Court", len: 6)
+        line += FormattingService.ljf(base: "Proc", len: 5)
+        line += FormattingService.ljf(base: "Disp", len: 5)
+        line += FormattingService.ljf(base: "Next", len: 5)
         line += "\n\n"
         return line
     }

@@ -12,13 +12,13 @@ struct EditRepInputNote: View {
     @EnvironmentObject var CVModel:CommonViewModel
     @Binding var xr:ExpandedRepresentation
     @Binding var dateNote:Date
-//    @Binding var noteDocumentID:String
+    @Binding var noteDocumentID:String
     @Binding var noteDate:String
     @Binding var noteTime:String
     @Binding var noteCategory:String
     @Binding var noteNote:String
     @Binding var noteChanged:Bool
-//    @Binding var noteInternal:Int
+    @Binding var noteInternal:Int
 //    @Binding var noteClient:Int
 //    @Binding var noteCause:Int
 //    @Binding var noteRepresentation:Int
@@ -67,16 +67,28 @@ struct EditRepInputNote: View {
                 if noteChange() {
                     Button {
                         Task {
-//                            await callResult = CVModel.addAppearance(involvedClient: xr.xpcause.client.internalID, involvedCause: xr.xpcause.cause.internalID, involvedRepresentation: xr.representation.internalID, appearDate: noteDate, appearTime: noteTime, appearNote: noteNote)
-                            await callResult = CVModel.addNote(client: xr.xpcause.client.internalID, cause: xr.xpcause.cause.internalID, representation: xr.representation.internalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
-                            if callResult.status == .successful {
-                                statusMessage = ""
-                                noteChanged = true
-                                dismiss()
+                            if noteDocumentID == "" {
+                                await callResult = CVModel.addNote(client: xr.xpcause.client.internalID, cause: xr.xpcause.cause.internalID, representation: xr.representation.internalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    noteChanged = true
+                                    dismiss()
+                                } else {
+                                    statusMessage = callResult.message
+                                    CVModel.logItem(viewModel: "EditRepInpNote-add", item: callResult.message)
+                                }
                             } else {
-                                statusMessage = callResult.message
+                                await callResult = CVModel.updateNote(noteID:noteDocumentID, intID: noteInternal, client: xr.xpcause.client.internalID, cause: xr.xpcause.cause.internalID, representation: xr.representation.internalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    noteChanged = true
+                                    dismiss()
+                                } else {
+                                    statusMessage = callResult.message
+                                    CVModel.logItem(viewModel: "EditRepInpNote-update", item: callResult.message)
+                                }
+
                             }
-                            
                         }
                     } label: {
                         Text("Save")

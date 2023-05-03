@@ -66,6 +66,14 @@ struct FormattingService {
         if pieces.count == 1 { return ["",""] + pieces }
         return(["999","999","9999"])
     }
+    
+    public static func spaces(len:Int) -> String {
+        var workBase = ""
+        while workBase.count < len {
+            workBase += " "
+        }
+        return workBase
+    }
 
 }
 

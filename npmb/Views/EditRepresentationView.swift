@@ -174,7 +174,7 @@ struct EditRepresentationView: View {
                             if apprChanged {
                                 initWorkArea(orig: xr.representation.internalID)
                             }
-                        })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
+                        })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDocumentID: $apprDocumentID, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged, apprInternal: $apprInternal)
                         }
                         Spacer()
                     }
@@ -192,7 +192,7 @@ struct EditRepresentationView: View {
                                     if apprChanged {
                                         initWorkArea(orig: xr.representation.internalID)
                                     }
-                                })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged)
+                                })  { EditRepInputAppearance(xr: $xr, dateAppr: $dateAppr, apprDocumentID: $apprDocumentID, apprDate: $apprDate, apprTime: $apprTime, apprNote: $apprNote, apprChanged: $apprChanged, apprInternal: $apprInternal)
                                 }
                             }
                         }
@@ -212,7 +212,7 @@ struct EditRepresentationView: View {
                             if noteChanged {
                                 initWorkArea(orig: xr.representation.internalID)
                             }
-                        })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged)
+                        })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDocumentID: $noteDocumentID, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged, noteInternal: $noteInternal)
                             
                         }
                         Spacer()
@@ -232,7 +232,7 @@ struct EditRepresentationView: View {
                                 if noteChanged {
                                     initWorkArea(orig: xr.representation.internalID)
                                 }
-                            })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged)
+                            })  { EditRepInputNote(xr: $xr, dateNote: $dateNote, noteDocumentID: $noteDocumentID, noteDate: $noteDate, noteTime: $noteTime, noteCategory: $noteCategory, noteNote: $noteNote, noteChanged: $noteChanged, noteInternal: $noteInternal)
                             }
                         }
                     }

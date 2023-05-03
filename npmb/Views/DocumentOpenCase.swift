@@ -17,6 +17,8 @@ struct DocumentOpenCase: View {
     @State var reportMonth:String = ""
     @State var reportMonthName:String = ""
     @State var header1Printed:Bool = false
+    @State var lineNr:Int = 0
+    @State var rcdNr:Int = 0
     var docketDate:String
     
     var body: some View {
@@ -67,6 +69,8 @@ struct DocumentOpenCase: View {
         report = ""
         reportNrOpen = 0
         header1Printed = false
+        lineNr = 0
+        rcdNr = 0
         let array = docketDate.components(separatedBy: "-")
         if array.count > 0 { reportYear = array[0] } else { reportYear = "9999" }
         if array.count > 1 {
@@ -88,17 +92,32 @@ struct DocumentOpenCase: View {
     }
     
     func createTextFile() {
-        report = "Morris E. Albers II, PLLC Open Items Report for " + reportMonthName + ", " + reportYear + "\n"
-        report += "Total active:" + String(reportNrOpen) + "\n\n"
-
         for xr in opencase {
-            if !header1Printed {
-                report += "\n"
-                report += "Open Items\n"
-                report += xr.headerLine
-                header1Printed = true
+            if rcdNr == 0 {
+                report = "Morris E. Albers II, PLLC Open Items Report for " + reportMonthName + ", " + reportYear + "\n"
+                report += "Total active:" + String(reportNrOpen) + "\n\n"
+
+                report += FormattingService.spaces(len: 4) + "Open Items\n"
+                report += xr.headerLine3
+                lineNr = 2
+            } else {
+                if lineNr > 65 {
+                    report += "\u{0c}"
+                    report += "Morris E. Albers II, PLLC Open Items Report for " + reportMonthName + ", " + reportYear + "\n"
+                    report += "Total active:" + String(reportNrOpen) + "\n\n"
+
+                    report += FormattingService.spaces(len: 4) + "Open Items\n"
+                    report += xr.headerLine3
+                    lineNr = 2
+                }
             }
-            report += xr.printLine + "\n"
+            lineNr += 1
+            rcdNr += 1
+            report += FormattingService.rjf(base: String(rcdNr), len: 3, zeroFill: false)
+            report += " "
+            report += xr.printLine
+            report += FormattingService.ljf(base: xr.nextDate, len: 11)
+            report += "\n"
         }
     }
 }

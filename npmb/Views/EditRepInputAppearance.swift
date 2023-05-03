@@ -12,12 +12,12 @@ struct EditRepInputAppearance: View {
     @EnvironmentObject var CVModel:CommonViewModel
     @Binding var xr:ExpandedRepresentation
     @Binding var dateAppr:Date
-//    @Binding var apprDocumentID:String
+    @Binding var apprDocumentID:String
     @Binding var apprDate:String
     @Binding var apprTime:String
     @Binding var apprNote:String
     @Binding var apprChanged:Bool
-//    @Binding var apprInternal:Int
+    @Binding var apprInternal:Int
 //    @Binding var apprClient:Int
 //    @Binding var apprCause:Int
 //    @Binding var apprRepresentation:Int
@@ -53,15 +53,27 @@ struct EditRepInputAppearance: View {
                 if apprChange() {
                     Button {
                         Task {
-                            await callResult = CVModel.addAppearance(involvedClient: xr.xpcause.client.internalID, involvedCause: xr.xpcause.cause.internalID, involvedRepresentation: xr.representation.internalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
-                            if callResult.status == .successful {
-                                statusMessage = ""
-                                apprChanged = true
-                                dismiss()
+                            if apprDocumentID == "" {
+                                await callResult = CVModel.addAppearance(involvedClient: xr.xpcause.client.internalID, involvedCause: xr.xpcause.cause.internalID, involvedRepresentation: xr.representation.internalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    apprChanged = true
+                                    dismiss()
+                                } else {
+                                    statusMessage = callResult.message
+                                    CVModel.logItem(viewModel: "EditRepInpAppearance-add", item: callResult.message)
+                                }
                             } else {
-                                statusMessage = callResult.message
+                                await callResult = CVModel.updateAppearance(appearanceID:apprDocumentID, intID: apprInternal, involvedClient: xr.xpcause.client.internalID, involvedCause: xr.xpcause.cause.internalID, involvedRepresentation: xr.representation.internalID, appearDate: apprDate, appearTime: apprTime, appearNote: apprNote)
+                                if callResult.status == .successful {
+                                    statusMessage = ""
+                                    apprChanged = true
+                                    dismiss()
+                                } else {
+                                    statusMessage = callResult.message
+                                    CVModel.logItem(viewModel: "EditRepInpAppearance-update", item: callResult.message)
+                                }
                             }
-                            
                         }
                     } label: {
                         Text("Save")

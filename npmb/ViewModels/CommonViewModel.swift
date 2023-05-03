@@ -961,30 +961,26 @@ class CommonViewModel: ObservableObject {
         }
     }
 
-//    @MainActor
-//    func addNoteToRepresentation(representationID:String, client:Int, cause:Int, representation:Int, notedate:String, notetime:String, notenote:String, notecategory:String) async -> FunctionReturn {
-//        
-//        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
-//        var notes:[NotesModel] = []
-//        var noteids:[Int] = []
-//        
-//        Task {
-//            await rtn = self.addNote(client: client, cause: cause, representation: representation, notedate: notedate, notetime: notetime, notenote: notenote, notecategory: notecategory)
-//            if rtn.status != .successful {
-//                return rtn
-//            }
-//            
-//            notes = assembleNotes(repID:representation)
-//            noteids = []
-//            for note in notes {
-//                noteids.append(note.internalID)
-//            }
-//
-//            await rtn = self.updateRepresentation(representationID: representationID, involvednotes: noteids)
-//            return rtn
-//        }
-//        return rtn
-//    }
+    @MainActor
+    func updateNote(noteID:String, intID:Int, client:Int, cause:Int, representation:Int, notedate:String, notetime:String, notenote:String, notecategory:String) async -> FunctionReturn {
+        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
+        let ua:[String:Any] = self.NoteAny(intid:intID, client:client, cause:cause, representation:representation, notedate:notedate, notetime:notetime, notenote:notenote, notecategory: notecategory)
+        
+        let reprRef = db.collection("notes").document(noteID)
+        
+        do {
+            try await reprRef.setData(ua, merge: true)
+             rtn.status = .successful
+            rtn.message = ""
+            return rtn
+        } catch {
+            rtn.status = .IOError
+            rtn.message = "Update appearance failed: " + error.localizedDescription
+            return rtn
+        }
+    }
 
     public func assembleNotes(repID:Int) -> [NotesModel] {
         let workNotes:[NotesModel] = notes.filter { $0.involvedRepresentation == repID }
