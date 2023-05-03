@@ -90,6 +90,7 @@ struct EditRepresentationView: View {
     @State private var showingInpMain = false
     @State private var showingInpAppearance = false
     @State private var showingInpNote = false
+    @State private var showingPrintStatus = false
 
 /*
     enum NextAction {
@@ -272,6 +273,7 @@ struct EditRepresentationView: View {
                     }
                     .buttonStyle(CustomNarrowButton())
                 }
+                
                 Button {
                     showingInpMain.toggle()
                 } label: {
@@ -282,6 +284,7 @@ struct EditRepresentationView: View {
                     currInvolvedCause = currcauInternalID
                     currInvolvedClient = currcliInternalID
                 })  { EditRepInputMain(currDateAssigned: $currDateAssigned, currAssignedDate: $currAssignedDate, currCategory: $currCategory, currActiveString: $currActiveString, currActive: $currActive, currDateDisp: $currDateDisp, currDispDate: $currDispDate, currDispType: $currDispType, currDispAction: $currDispAction) }
+                
                 Button {
                     showingSelCause.toggle()
                 } label: {
@@ -300,6 +303,18 @@ struct EditRepresentationView: View {
                 }) {
                     EditRepSelectCause(selectedCause: $selectedCause)
                 }
+                
+                Button {
+                    showingPrintStatus.toggle()
+                } label: {
+                    Text("Print")
+                }
+                .buttonStyle(CustomGreenButton())
+                .sheet(isPresented: $showingPrintStatus, onDismiss: {
+                    print("Print Status List Dismissed")
+                })
+                { PrintRepresentationStatus(xr: xr) }
+                
                 Button {
                     CVModel.logItem(viewModel: "EditRepresentationView", item: "checkpoint 2a")
                     initWorkArea(orig: rxid)
