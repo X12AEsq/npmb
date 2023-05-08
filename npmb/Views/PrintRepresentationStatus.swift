@@ -23,8 +23,6 @@ struct PrintRepresentationStatus: View {
     @State var header1Printed:Bool = false
     var body: some View {
         VStack {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            
             ScrollView {
                 VStack (alignment: .leading) {
                     HStack {
