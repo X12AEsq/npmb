@@ -69,6 +69,8 @@
 		31DDC18229E748370071EC59 /* ExpandedAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC18129E748370071EC59 /* ExpandedAppearance.swift */; };
 		31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */; };
 		31F36A3029B190750059D122 /* EditCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F36A2F29B190750059D122 /* EditCauseView.swift */; };
+		31F919042A0859DD008C73D8 /* PrintClientStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F919032A0859DD008C73D8 /* PrintClientStatus.swift */; };
+		31F919062A085B4E008C73D8 /* CustomDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F919052A085B4E008C73D8 /* CustomDeleteButton.swift */; };
 		31FA892829E454FA0033AAC7 /* NotesExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FA892729E454FA0033AAC7 /* NotesExtension.swift */; };
 		31FA892A29E47A6E0033AAC7 /* CustomGreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FA892929E47A6E0033AAC7 /* CustomGreenButton.swift */; };
 		31FA892C29E499140033AAC7 /* CauseLineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FA892B29E499140033AAC7 /* CauseLineLabel.swift */; };
@@ -134,6 +136,8 @@
 		31DDC18129E748370071EC59 /* ExpandedAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedAppearance.swift; sourceTree = "<group>"; };
 		31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionReturn.swift; sourceTree = "<group>"; };
 		31F36A2F29B190750059D122 /* EditCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCauseView.swift; sourceTree = "<group>"; };
+		31F919032A0859DD008C73D8 /* PrintClientStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintClientStatus.swift; sourceTree = "<group>"; };
+		31F919052A085B4E008C73D8 /* CustomDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDeleteButton.swift; sourceTree = "<group>"; };
 		31FA892729E454FA0033AAC7 /* NotesExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExtension.swift; sourceTree = "<group>"; };
 		31FA892929E47A6E0033AAC7 /* CustomGreenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGreenButton.swift; sourceTree = "<group>"; };
 		31FA892B29E499140033AAC7 /* CauseLineLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseLineLabel.swift; sourceTree = "<group>"; };
@@ -268,6 +272,7 @@
 				3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */,
 				310E80B42A00316200A18F67 /* DocumentAllCases.swift */,
 				31BC47832A014F6E00FE8F45 /* PrintRepresentationStatus.swift */,
+				31F919032A0859DD008C73D8 /* PrintClientStatus.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,6 +311,7 @@
 				31FA892929E47A6E0033AAC7 /* CustomGreenButton.swift */,
 				31DDC17D29E708C40071EC59 /* CustomDismissButton.swift */,
 				31DDC17F29E70AC60071EC59 /* CustomNarrowButton.swift */,
+				31F919052A085B4E008C73D8 /* CustomDeleteButton.swift */,
 			);
 			path = ButtonStyles;
 			sourceTree = "<group>";
@@ -399,6 +405,7 @@
 				3128E52029F3222D008D4C7E /* DocumentOpenCase.swift in Sources */,
 				3137596029B9597C000482F2 /* RepresentationModel.swift in Sources */,
 				31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */,
+				31F919062A085B4E008C73D8 /* CustomDeleteButton.swift in Sources */,
 				310E80B52A00316200A18F67 /* DocumentAllCases.swift in Sources */,
 				318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */,
 				31F36A3029B190750059D122 /* EditCauseView.swift in Sources */,
@@ -408,6 +415,7 @@
 				318BD07229AA9D280063BAA1 /* FormattingService.swift in Sources */,
 				31FA892A29E47A6E0033AAC7 /* CustomGreenButton.swift in Sources */,
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
+				31F919042A0859DD008C73D8 /* PrintClientStatus.swift in Sources */,
 				318BD05E29AA800C0063BAA1 /* RegistrationView.swift in Sources */,
 				31322A7029DDF755009FDB30 /* EditRepSelectCause.swift in Sources */,
 				3191681229DF4AEA00C96B92 /* EditRepInputAppearance.swift in Sources */,

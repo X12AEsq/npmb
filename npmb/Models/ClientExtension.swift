@@ -27,6 +27,18 @@ extension ClientModel {
         return part1 + part2 + part3 + part4
     }
     
+    public var formattedAddr:String {
+        var addr:String = ""
+        var street:String = self.street.trimmingCharacters(in: .whitespacesAndNewlines)
+        var city:String = self.city.trimmingCharacters(in: .whitespacesAndNewlines)
+        if city != "" { city += ", " }
+        city += self.state + " " + self.zip
+        addr = street
+        if addr != "" { addr += ", " }
+        addr += city
+        return addr
+    }
+    
     public var sortFormat2:String {
         let part1:String = String(self.internalID)
         let part2:String = FormattingService.rjf(base: part1, len: 4, zeroFill: true)

@@ -29,6 +29,8 @@ struct EditClientView: View {
     @State var representation:[Int] = []
     @State var saveMessage:String = ""
     @State var callResult:FunctionReturn = FunctionReturn()
+    @State var clx:ClientModel = ClientModel()
+    @State private var showingPrintStatus = false
 
     var so:StateOptions = StateOptions()
     var yno:YesNoOptions = YesNoOptions()
@@ -58,15 +60,27 @@ struct EditClientView: View {
                             Text(saveMessage)
                         }
                         .buttonStyle(CustomNarrowButton())
+                        
+                        if clx.internalID > 0 {
+                            Button {
+                                showingPrintStatus.toggle()
+                            } label: {
+                                Text("Print")
+                            }
+                            .buttonStyle(CustomGreenButton())
+                            .sheet(isPresented: $showingPrintStatus, onDismiss: {
+                                print("Print Status List Dismissed")
+                            })
+                            { PrintClientStatus(xcl: clx) }
+                        }
+                        
                         if saveMessage == "Update" {
                             Button {
                                 CVModel.logItem(viewModel: "EditClientView", item: "Delete button)")
                             } label: {
                                 Text("Delete Client")
                             }
-                            .font(.headline.bold())
-                            .frame(maxWidth: .infinity, maxHeight: 55)
-                            .background(.gray.opacity(0.3), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                            .buttonStyle(CustomDeleteButton())
                         }
                         Spacer()
                     }
@@ -113,6 +127,7 @@ struct EditClientView: View {
          }
         .onAppear {
             if let client = client {
+                clx = client
                 clientID = client.id!
                 internalID = client.internalID
                 lastName = client.lastName
@@ -131,6 +146,7 @@ struct EditClientView: View {
                 representation = client.representation
                 saveMessage = "Update"
             } else {
+                clx = ClientModel()
                 internalID = 0
                 lastName = ""
                 firstName = ""
