@@ -142,11 +142,13 @@ struct PrintRepresentationStatus: View {
     }
 
     func createTextFile() {
-        report = "Morris E. Albers II, PLLC\nClient Status for " + xr.xpcause.client.formattedName
+        report = "Morris E. Albers II, PLLC\nRepresentation Status for " + xr.xpcause.client.formattedName
         report += "on " + reportDay + " " + reportMonthName + ", " + reportYear + "\n\n"
         report += xr.printLine + "\n"
-        report += "Assigned:" + xr.representation.assignedDate + "; "
-        report += "Closed:" + xr.representation.dispositionDate
+        report += "Assigned:" + xr.representation.assignedDate
+        if !xr.representation.active {
+            report += "; " + "Closed:" + xr.representation.dispositionDate
+        }
         report += "\n\nAppearances:\n"
         for appearance in xr.appearances {
             report += appearance.stringLabel + "\n"
