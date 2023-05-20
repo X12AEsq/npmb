@@ -159,8 +159,9 @@ class CommonViewModel: ObservableObject {
                     let number = data["TelNumber"] as? String ?? ""
                     let note = data["Note"] as? String ?? ""
                     let jail = data["Jail"] as? String ?? ""
+                    let miscdocketdate = data[("MiscDocketDate")] as? String ?? ""
                     let representation = data["Representation"] as? [Int] ?? []
-                    let cl:ClientModel = ClientModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, lastname:lastname, firstname: firstName, middlename: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, phone: FormattingService.fmtphone(area: area, exchange: exchange, number: number), note: note, jail: jail, representation: representation)
+                    let cl:ClientModel = ClientModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, lastname:lastname, firstname: firstName, middlename: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, phone: FormattingService.fmtphone(area: area, exchange: exchange, number: number), note: note, jail: jail, miscDocketDate: miscdocketdate, representation: representation)
                     self.clients.append(cl)
                     return
                 }
@@ -268,7 +269,22 @@ class CommonViewModel: ObservableObject {
             }
         }
     }
-    
+
+    @MainActor
+    func updateClientMiscDate(clientID:String, miscDocketDate:String) async {
+        let clientData:[String:Any] = ["MiscDocketDate": miscDocketDate]
+        
+        taskCompleted = false
+        
+        do {
+            try await db.collection("clients").document(clientID).updateData(clientData)
+        } catch {
+            if inTesting {
+                logItem(viewModel: "updateClientMiscDate", item: "failed \(error.localizedDescription)")
+            }
+        }
+    }
+
     // MARK: Cause Functions
     
     func causeSubscribe() {

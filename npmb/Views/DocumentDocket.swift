@@ -11,13 +11,24 @@ struct DocumentDocket: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var CVModel:CommonViewModel
     @State var docketed:[ExpandedAppearance] = []
+    @State var extras:[ClientModel] = []
     @State var docket:String = ""
+    @State var todaysDate:String = ""
     var docketDate:String
     var body: some View {
         VStack {
             VStack (alignment: .leading) {
                 ForEach(docketed, id: \.appearance.id) { docketEntry in
                     Text(docketEntry.printLine).font(.system(.body, design: .monospaced))
+                }
+                if extras.count > 0 {
+                    VStack (alignment: .leading) {
+                        Text("Extras:")
+                        ForEach(extras, id:\.self) {cl in
+                            Text(cl.formattedName)
+                        }
+                    }
+                    .padding(.top, 10.0)
                 }
                 HStack {
                     Spacer()
@@ -46,6 +57,7 @@ struct DocumentDocket: View {
     func initWorkArea() {
         docketed = []
         docket = ""
+        todaysDate = DateService.dateDate2String(inDate: Date())
         for appr in CVModel.appearances {
             if appr.appearDate == docketDate {
                 let xa = ExpandedAppearance()
@@ -57,6 +69,18 @@ struct DocumentDocket: View {
             }
         }
         docketed = docketed.sorted(by: { $0.sortSequence < $1.sortSequence} )
+        
+        for cl in CVModel.clients {
+            if cl.miscDocketDate != "" {
+                if cl.miscDocketDate < todaysDate {
+                    updateClient(clientID: cl.id ?? "", miscDocketDate: "")
+                }
+                if cl.miscDocketDate == docketDate {
+                    extras.append(cl)
+                }
+            }
+        }
+        extras = extras.sorted(by: { $0.formattedName < $1.formattedName} )
     }
     
     func createTextFile() {
@@ -64,7 +88,21 @@ struct DocumentDocket: View {
         for xa in docketed {
             docket += xa.printLine + "\n"
         }
+        
+        if extras.count > 0 {
+            docket += "\n\nExtras:\n\n"
+            for cl in extras {
+                docket += cl.formattedName + "\n"
+            }
+        }
     }
+    
+    func updateClient(clientID:String, miscDocketDate:String) {
+        Task {
+            await CVModel.updateClientMiscDate(clientID: clientID, miscDocketDate: miscDocketDate )
+        }
+    }
+
 }
 
 //struct DocumentDocket_Previews: PreviewProvider {

@@ -29,6 +29,7 @@ class ClientModel: Identifiable, Hashable, Codable, ObservableObject {
     var phone: String
     var note: String
     var jail: String
+    var miscDocketDate: String
     var representation: [Int]      // Firebase Integer
 
     init() {
@@ -45,11 +46,11 @@ class ClientModel: Identifiable, Hashable, Codable, ObservableObject {
         self.phone = ""
         self.note = ""
         self.jail = "N"
+        self.miscDocketDate = ""
         self.representation = []
     }
     
-    init (fsid:String, intid:Int, lastname:String, firstname: String, middlename: String, suffix: String, street: String, city: String, state: String, zip: String, phone: String, note: String, jail: String, representation: [Int]) {
-//        self.id = inid
+    init (fsid:String, intid:Int, lastname:String, firstname: String, middlename: String, suffix: String, street: String, city: String, state: String, zip: String, phone: String, note: String, jail: String, miscDocketDate:String, representation: [Int]) {
         self.id = fsid
         self.internalID = intid
         self.lastName = lastname
@@ -63,6 +64,7 @@ class ClientModel: Identifiable, Hashable, Codable, ObservableObject {
         self.phone = phone
         self.note = note
         self.jail = jail
+        self.miscDocketDate = miscDocketDate
         self.representation = representation
     }
     
@@ -80,6 +82,7 @@ class ClientModel: Identifiable, Hashable, Codable, ObservableObject {
         self.phone = "123-456-789" + String(Test)
         self.note = ""
         self.jail = "N"
+        self.miscDocketDate = ""
         self.representation = []
     }
 
