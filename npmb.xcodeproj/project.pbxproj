@@ -14,6 +14,7 @@
 		3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */; };
 		3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105500129BADFA3004002DD /* DispositionActionOptions.swift */; };
 		310E80B52A00316200A18F67 /* DocumentAllCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310E80B42A00316200A18F67 /* DocumentAllCases.swift */; };
+		312683CE2A13E5A80052375F /* TextFieldWithFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312683CD2A13E5A80052375F /* TextFieldWithFocus.swift */; };
 		3128E52029F3222D008D4C7E /* DocumentOpenCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */; };
 		312EA24829BD2B6000B61D0A /* DeviceRotationViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */; };
 		312EA8BD29F2ECB400991E55 /* CauseTypeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312EA8BC29F2ECB400991E55 /* CauseTypeOptions.swift */; };
@@ -84,6 +85,7 @@
 		31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionTypeOptions.swift; sourceTree = "<group>"; };
 		3105500129BADFA3004002DD /* DispositionActionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionActionOptions.swift; sourceTree = "<group>"; };
 		310E80B42A00316200A18F67 /* DocumentAllCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentAllCases.swift; sourceTree = "<group>"; };
+		312683CD2A13E5A80052375F /* TextFieldWithFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithFocus.swift; sourceTree = "<group>"; };
 		3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentOpenCase.swift; sourceTree = "<group>"; };
 		312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRotationViewModifier.swift; sourceTree = "<group>"; };
 		312EA8BC29F2ECB400991E55 /* CauseTypeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseTypeOptions.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				31B6748429B6F2100007D08B /* ActionEdit.swift */,
 				31B6748629B6F4620007D08B /* ActionSelect.swift */,
 				312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */,
+				312683CD2A13E5A80052375F /* TextFieldWithFocus.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */,
 				3137595E29B93092000482F2 /* NotesModel.swift in Sources */,
 				318D7B5629E36D3D00256FDC /* EditRepInpNote.swift in Sources */,
+				312683CE2A13E5A80052375F /* TextFieldWithFocus.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
 				31DDC17B29E708130071EC59 /* DocumentDocket.swift in Sources */,
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
