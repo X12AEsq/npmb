@@ -256,32 +256,51 @@ class CommonViewModel: ObservableObject {
     }
 */
     @MainActor
-    func updateClient(clientID:String, internalID:Int, lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String, representation:[Int]) async {
+    func updateClient(clientID:String, internalID:Int, lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String, representation:[Int]) async -> FunctionReturn {
+        
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         let clientData:[String:Any] = CommonViewModel.clientAny(internalID:internalID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation:representation)
         
         taskCompleted = false
         
         do {
             try await db.collection("clients").document(clientID).updateData(clientData)
+            taskCompleted = true
+            rtn.status = .successful
+            rtn.message = ""
+            return rtn
         } catch {
             if inTesting {
                 logItem(viewModel: "updateClient", item: "failed \(error.localizedDescription)")
             }
+            rtn.status = .IOError
+            rtn.message = "Add Client failed: " + error.localizedDescription
+            return rtn
         }
     }
 
     @MainActor
-    func updateClientMiscDate(clientID:String, miscDocketDate:String) async {
+    func updateClientMiscDate(clientID:String, miscDocketDate:String) async -> FunctionReturn {
         let clientData:[String:Any] = ["MiscDocketDate": miscDocketDate]
         
+        var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
         taskCompleted = false
         
         do {
             try await db.collection("clients").document(clientID).updateData(clientData)
+            taskCompleted = true
+            rtn.status = .successful
+            rtn.message = ""
+            return rtn
         } catch {
             if inTesting {
                 logItem(viewModel: "updateClientMiscDate", item: "failed \(error.localizedDescription)")
             }
+            rtn.status = .IOError
+            rtn.message = "Add Client failed: " + error.localizedDescription
+            return rtn
         }
     }
 

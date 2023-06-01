@@ -157,7 +157,7 @@ struct EditCauseView: View {
                     $0.formattedName < $1.formattedName
                 }
                 if let cause = cause {
-                     causeID = cause.id!
+                    causeID = cause.id!
                     internalID = cause.internalID
                     causeNo = cause.causeNo
                     causeType = cause.causeType

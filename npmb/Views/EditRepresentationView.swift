@@ -134,7 +134,7 @@ struct EditRepresentationView: View {
                 VStack (alignment: .leading) {
                     if !currActive {
                         HStack {
-                            Text("Competed:").font(.system(.body, design: .monospaced))
+                            Text("Completed:").font(.system(.body, design: .monospaced))
                             Text(currDispDate).font(.system(.body, design: .monospaced))
                             Text(" ").font(.system(.body, design: .monospaced))
                             Text(currDispType).font(.system(.body, design: .monospaced))

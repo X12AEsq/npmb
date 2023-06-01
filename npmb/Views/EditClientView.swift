@@ -27,6 +27,9 @@ struct EditClientView: View {
     @State var note:String = ""
     @State var jail:String = "N"
     @State var representation:[Int] = []
+    @State var miscDocketDate:String = "2020-01-01"
+    @State var dateMisc:Date? = Date()
+    @State var dateMiscCertain:Date = Date()
     @State var saveMessage:String = ""
     @State var callResult:FunctionReturn = FunctionReturn()
     @State var clx:ClientModel = ClientModel()
@@ -38,7 +41,7 @@ struct EditClientView: View {
     var client:ClientModel?
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if statusMessage != "" {
                 Text(statusMessage)
                     .font(.body)
@@ -115,10 +118,22 @@ struct EditClientView: View {
                 Section(header: Text("Notes").background(Color.blue).foregroundColor(.white)) {
                     VStack {
                         TextField("Note", text: $note)
-                       Picker("Jail", selection: $jail) {
+                        Picker("Jail", selection: $jail) {
                              ForEach(yno.YesNoOptions, id: \.self) {
                                 Text($0)
                             }
+                        }
+                        HStack {
+                            if miscDocketDate == "" {
+                                Text("Enter Miscellaneous Docket Date?")
+                            } else {
+                                Text("Change Miscellaneous Docket Date?:")
+                            }
+                            DatePicker("", selection: $dateMiscCertain, displayedComponents: [.date]).padding()
+                                .onChange(of: dateMiscCertain, perform: { value in
+                                    miscDocketDate = DateService.dateDate2String(inDate: value)
+                                }
+                            )
                         }
                     }
                 }
@@ -144,6 +159,14 @@ struct EditClientView: View {
                 note = client.note
                 jail = client.jail
                 representation = client.representation
+                miscDocketDate = client.miscDocketDate
+                if miscDocketDate != "" {
+                    dateMisc = DateService.dateString2Date(inDate:miscDocketDate, inTime:"0000")
+                    dateMiscCertain = dateMisc!
+                } else {
+                    dateMisc = nil
+                    dateMiscCertain = Date()
+                }
                 saveMessage = "Update"
             } else {
                 clx = ClientModel()
@@ -162,6 +185,8 @@ struct EditClientView: View {
                 note = ""
                 jail = "N"
                 representation = []
+                miscDocketDate = "2020-01-01"
+                dateMisc = DateService.dateString2Date(inDate:miscDocketDate, inTime:"0000")
                 saveMessage = "Add"
             }
         }
@@ -172,19 +197,49 @@ struct EditClientView: View {
             await callResult = CVModel.addClient(lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail)
             if callResult.status == .successful {
                 statusMessage = ""
-                dismiss()
-            } else {
+             } else {
                 statusMessage = callResult.message
                 CVModel.logItem(viewModel: "EditClientView", item: "add failed " + statusMessage)
+            }
+            if callResult.status == .successful {
+                if miscDocketDate != "" {
+                    await callResult = CVModel.updateClientMiscDate(clientID: clientID, miscDocketDate:miscDocketDate)
+                    if callResult.status == .successful {
+                        statusMessage = ""
+                        dismiss()
+                    } else {
+                        statusMessage = callResult.message
+                        CVModel.logItem(viewModel: "EditClientView", item: "update docket date failed " + statusMessage)
+                    }
+                } else {
+                    dismiss()
+                }
             }
         }
     }
     
     func updateClient() {
         Task {
-            await CVModel.updateClient(clientID: clientID, internalID: internalID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: representation)
-            if CVModel.taskCompleted {
-                dismiss()
+            await callResult = CVModel.updateClient(clientID: clientID, internalID: internalID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: representation)
+            if callResult.status == .successful {
+                statusMessage = ""
+            } else {
+                statusMessage = callResult.message
+                CVModel.logItem(viewModel: "EditClientView", item: "update failed " + statusMessage)
+            }
+            if callResult.status == .successful {
+                if miscDocketDate != "" {
+                    await callResult = CVModel.updateClientMiscDate(clientID: clientID, miscDocketDate:miscDocketDate)
+                    if callResult.status == .successful {
+                        statusMessage = ""
+                        dismiss()
+                    } else {
+                        statusMessage = callResult.message
+                        CVModel.logItem(viewModel: "EditClientView", item: "update docket date failed " + statusMessage)
+                    }
+                } else {
+                    dismiss()
+                }
             }
         }
     }
