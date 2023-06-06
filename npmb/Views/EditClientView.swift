@@ -201,6 +201,7 @@ struct EditClientView: View {
                 statusMessage = callResult.message
                 CVModel.logItem(viewModel: "EditClientView", item: "add failed " + statusMessage)
             }
+/*
             if callResult.status == .successful {
                 if miscDocketDate != "" {
                     await callResult = CVModel.updateClientMiscDate(clientID: clientID, miscDocketDate:miscDocketDate)
@@ -215,6 +216,7 @@ struct EditClientView: View {
                     dismiss()
                 }
             }
+ */
         }
     }
     
