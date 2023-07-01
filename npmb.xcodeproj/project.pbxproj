@@ -13,11 +13,13 @@
 		31054FFE29BAB53B004002DD /* PrimaryCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFD29BAB53B004002DD /* PrimaryCategory.swift */; };
 		3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */; };
 		3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105500129BADFA3004002DD /* DispositionActionOptions.swift */; };
+		310A35022A3BED4800639766 /* BackupCause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310A35012A3BED4800639766 /* BackupCause.swift */; };
 		310E80B52A00316200A18F67 /* DocumentAllCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310E80B42A00316200A18F67 /* DocumentAllCases.swift */; };
 		312683CE2A13E5A80052375F /* TextFieldWithFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312683CD2A13E5A80052375F /* TextFieldWithFocus.swift */; };
 		3128E52029F3222D008D4C7E /* DocumentOpenCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */; };
 		312EA24829BD2B6000B61D0A /* DeviceRotationViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */; };
 		312EA8BD29F2ECB400991E55 /* CauseTypeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312EA8BC29F2ECB400991E55 /* CauseTypeOptions.swift */; };
+		312EEBDE2A3A5577003BFBBB /* BackupClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312EEBDD2A3A5577003BFBBB /* BackupClient.swift */; };
 		312F6DC929D91D8E00267C48 /* RepresentationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312F6DC829D91D8E00267C48 /* RepresentationExtension.swift */; };
 		31322A7029DDF755009FDB30 /* EditRepSelectCause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31322A6F29DDF755009FDB30 /* EditRepSelectCause.swift */; };
 		31322A7229DE0C9B009FDB30 /* EditRepInputMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31322A7129DE0C9B009FDB30 /* EditRepInputMain.swift */; };
@@ -68,10 +70,12 @@
 		31DDC17E29E708C40071EC59 /* CustomDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC17D29E708C40071EC59 /* CustomDismissButton.swift */; };
 		31DDC18029E70AC60071EC59 /* CustomNarrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC17F29E70AC60071EC59 /* CustomNarrowButton.swift */; };
 		31DDC18229E748370071EC59 /* ExpandedAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC18129E748370071EC59 /* ExpandedAppearance.swift */; };
+		31E0F5B02A3D1430008E589C /* BackupRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E0F5AF2A3D1430008E589C /* BackupRepresentation.swift */; };
 		31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */; };
 		31F36A3029B190750059D122 /* EditCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F36A2F29B190750059D122 /* EditCauseView.swift */; };
 		31F919042A0859DD008C73D8 /* PrintClientStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F919032A0859DD008C73D8 /* PrintClientStatus.swift */; };
 		31F919062A085B4E008C73D8 /* CustomDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F919052A085B4E008C73D8 /* CustomDeleteButton.swift */; };
+		31F94D6C2A39FA2800C62FF2 /* BackupMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F94D6B2A39FA2800C62FF2 /* BackupMenuView.swift */; };
 		31FA892829E454FA0033AAC7 /* NotesExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FA892729E454FA0033AAC7 /* NotesExtension.swift */; };
 		31FA892A29E47A6E0033AAC7 /* CustomGreenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FA892929E47A6E0033AAC7 /* CustomGreenButton.swift */; };
 		31FA892C29E499140033AAC7 /* CauseLineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FA892B29E499140033AAC7 /* CauseLineLabel.swift */; };
@@ -84,11 +88,13 @@
 		31054FFD29BAB53B004002DD /* PrimaryCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryCategory.swift; sourceTree = "<group>"; };
 		31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionTypeOptions.swift; sourceTree = "<group>"; };
 		3105500129BADFA3004002DD /* DispositionActionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionActionOptions.swift; sourceTree = "<group>"; };
+		310A35012A3BED4800639766 /* BackupCause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupCause.swift; sourceTree = "<group>"; };
 		310E80B42A00316200A18F67 /* DocumentAllCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentAllCases.swift; sourceTree = "<group>"; };
 		312683CD2A13E5A80052375F /* TextFieldWithFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithFocus.swift; sourceTree = "<group>"; };
 		3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentOpenCase.swift; sourceTree = "<group>"; };
 		312EA24729BD2B6000B61D0A /* DeviceRotationViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRotationViewModifier.swift; sourceTree = "<group>"; };
 		312EA8BC29F2ECB400991E55 /* CauseTypeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseTypeOptions.swift; sourceTree = "<group>"; };
+		312EEBDD2A3A5577003BFBBB /* BackupClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupClient.swift; sourceTree = "<group>"; };
 		312F6DC829D91D8E00267C48 /* RepresentationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentationExtension.swift; sourceTree = "<group>"; };
 		31322A6F29DDF755009FDB30 /* EditRepSelectCause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepSelectCause.swift; sourceTree = "<group>"; };
 		31322A7129DE0C9B009FDB30 /* EditRepInputMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepInputMain.swift; sourceTree = "<group>"; };
@@ -136,10 +142,12 @@
 		31DDC17D29E708C40071EC59 /* CustomDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDismissButton.swift; sourceTree = "<group>"; };
 		31DDC17F29E70AC60071EC59 /* CustomNarrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNarrowButton.swift; sourceTree = "<group>"; };
 		31DDC18129E748370071EC59 /* ExpandedAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedAppearance.swift; sourceTree = "<group>"; };
+		31E0F5AF2A3D1430008E589C /* BackupRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRepresentation.swift; sourceTree = "<group>"; };
 		31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionReturn.swift; sourceTree = "<group>"; };
 		31F36A2F29B190750059D122 /* EditCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCauseView.swift; sourceTree = "<group>"; };
 		31F919032A0859DD008C73D8 /* PrintClientStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintClientStatus.swift; sourceTree = "<group>"; };
 		31F919052A085B4E008C73D8 /* CustomDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDeleteButton.swift; sourceTree = "<group>"; };
+		31F94D6B2A39FA2800C62FF2 /* BackupMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMenuView.swift; sourceTree = "<group>"; };
 		31FA892729E454FA0033AAC7 /* NotesExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExtension.swift; sourceTree = "<group>"; };
 		31FA892929E47A6E0033AAC7 /* CustomGreenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGreenButton.swift; sourceTree = "<group>"; };
 		31FA892B29E499140033AAC7 /* CauseLineLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseLineLabel.swift; sourceTree = "<group>"; };
@@ -275,6 +283,10 @@
 				310E80B42A00316200A18F67 /* DocumentAllCases.swift */,
 				31BC47832A014F6E00FE8F45 /* PrintRepresentationStatus.swift */,
 				31F919032A0859DD008C73D8 /* PrintClientStatus.swift */,
+				31F94D6B2A39FA2800C62FF2 /* BackupMenuView.swift */,
+				312EEBDD2A3A5577003BFBBB /* BackupClient.swift */,
+				310A35012A3BED4800639766 /* BackupCause.swift */,
+				31E0F5AF2A3D1430008E589C /* BackupRepresentation.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -408,10 +420,12 @@
 				3128E52029F3222D008D4C7E /* DocumentOpenCase.swift in Sources */,
 				3137596029B9597C000482F2 /* RepresentationModel.swift in Sources */,
 				31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */,
+				312EEBDE2A3A5577003BFBBB /* BackupClient.swift in Sources */,
 				31F919062A085B4E008C73D8 /* CustomDeleteButton.swift in Sources */,
 				310E80B52A00316200A18F67 /* DocumentAllCases.swift in Sources */,
 				318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */,
 				31F36A3029B190750059D122 /* EditCauseView.swift in Sources */,
+				31F94D6C2A39FA2800C62FF2 /* BackupMenuView.swift in Sources */,
 				31BC47842A014F6E00FE8F45 /* PrintRepresentationStatus.swift in Sources */,
 				31DDC17929E705E20071EC59 /* DocumentMenuView.swift in Sources */,
 				31FA892829E454FA0033AAC7 /* NotesExtension.swift in Sources */,
@@ -434,6 +448,7 @@
 				312683CE2A13E5A80052375F /* TextFieldWithFocus.swift in Sources */,
 				318BD05D29AA800C0063BAA1 /* MainInterfaceView.swift in Sources */,
 				31DDC17B29E708130071EC59 /* DocumentDocket.swift in Sources */,
+				31E0F5B02A3D1430008E589C /* BackupRepresentation.swift in Sources */,
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
 				312EA8BD29F2ECB400991E55 /* CauseTypeOptions.swift in Sources */,
@@ -448,6 +463,7 @@
 				318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */,
 				313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */,
 				31DDC18029E70AC60071EC59 /* CustomNarrowButton.swift in Sources */,
+				310A35022A3BED4800639766 /* BackupCause.swift in Sources */,
 				318D7B5829E370C100256FDC /* NoteCats.swift in Sources */,
 				316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */,
 				318BD07529AA9FD60063BAA1 /* EditClientView.swift in Sources */,

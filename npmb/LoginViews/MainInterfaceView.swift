@@ -62,6 +62,11 @@ struct MainInterfaceView: View {
                             DocumentMenuView()
                         }
                         .font(.title)
+                        .padding(.bottom, 10.0)
+                        NavigationLink("Backup") {
+                            BackupMenuView()
+                        }
+                        .font(.title)
                         Spacer()
                     }
                     .padding(.bottom, 10.0)
