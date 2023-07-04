@@ -89,6 +89,11 @@ struct EditCauseView: View {
                             Text($0)
                         }
                     }
+                    Picker("Engagement type", selection: $causeType) {
+                        ForEach(cto.causeTypeOptions, id: \.self) {
+                            Text($0)
+                        }
+                    }
                     HStack {
                         Text("Charge: ")
                         TextField("Original Charge", text: $causeOriginalCharge)
