@@ -217,6 +217,7 @@ struct EditClientView: View {
                 }
             }
  */
+            dismiss()
         }
     }
     

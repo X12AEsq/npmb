@@ -27,7 +27,7 @@ class CommonViewModel: ObservableObject {
     
     let auth = Auth.auth()
     
-    @Published var taskCompleted = false
+//    @Published var taskCompleted = false
     
     @Published var userSession: FirebaseAuth.User?
     
@@ -58,9 +58,9 @@ class CommonViewModel: ObservableObject {
 
     init() {
         userSession = auth.currentUser
-        appStatus = "npmb v1.08\n"
-        appStatus += "EditRepresentationView note UI\n"
-        appStatus += "Watch note array in representation record, may be malfunctioning\n"
+        appStatus = "npmb v1.09\n"
+//        appStatus += "EditRepresentationView note UI\n"
+//        appStatus += "Watch note array in representation record, may be malfunctioning\n"
         appStatus += "Problem adding appearance to newly added representation"
     }
     
@@ -214,17 +214,26 @@ class CommonViewModel: ObservableObject {
     func addClient(lastName:String, firstName:String, middleName:String, suffix:String, street:String, city:String, state:String, zip:String, areacode:String, exchange:String, telnumber:String, note:String, jail:String) async -> FunctionReturn {
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
+
+        let filtered = self.clients.filter { $0.lastName == lastName &&
+            $0.firstName == firstName && $0.middleName == middleName
+        }
+        if filtered.count > 0 {
+            rtn.status = .IOError
+            rtn.message = lastName + ", " + firstName + " " + middleName + " already exists"
+            return rtn
+        }
         
         let intID = nextClientID()
         let uc:[String:Any] = CommonViewModel.clientAny(internalID: intID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation: [])
 
-        let reprRef = db.collection("clients")
+        let clientRef = db.collection("clients")
         
-        taskCompleted = false
+//        taskCompleted = false
         
         do {
-            try await reprRef.document().setData(uc)
-            taskCompleted = true
+            try await clientRef.document().setData(uc)
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             return rtn
@@ -262,11 +271,11 @@ class CommonViewModel: ObservableObject {
 
         let clientData:[String:Any] = CommonViewModel.clientAny(internalID:internalID, lastName: lastName, firstName: firstName, middleName: middleName, suffix: suffix, street: street, city: city, state: state, zip: zip, areacode: areacode, exchange: exchange, telnumber: telnumber, note: note, jail: jail, representation:representation)
         
-        taskCompleted = false
+//        taskCompleted = false
         
         do {
             try await db.collection("clients").document(clientID).updateData(clientData)
-            taskCompleted = true
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             return rtn
@@ -275,7 +284,7 @@ class CommonViewModel: ObservableObject {
                 logItem(viewModel: "updateClient", item: "failed \(error.localizedDescription)")
             }
             rtn.status = .IOError
-            rtn.message = "Add Client failed: " + error.localizedDescription
+            rtn.message = "Update Client failed: " + error.localizedDescription
             return rtn
         }
     }
@@ -286,11 +295,11 @@ class CommonViewModel: ObservableObject {
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
-        taskCompleted = false
+//        taskCompleted = false
         
         do {
             try await db.collection("clients").document(clientID).updateData(clientData)
-            taskCompleted = true
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             return rtn
@@ -299,7 +308,7 @@ class CommonViewModel: ObservableObject {
                 logItem(viewModel: "updateClientMiscDate", item: "failed \(error.localizedDescription)")
             }
             rtn.status = .IOError
-            rtn.message = "Add Client failed: " + error.localizedDescription
+            rtn.message = "Update Client failed: " + error.localizedDescription
             return rtn
         }
     }
@@ -375,16 +384,23 @@ class CommonViewModel: ObservableObject {
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
+        let filtered = self.causes.filter { $0.causeNo == causeno }
+        if filtered.count > 0 {
+            rtn.status = .IOError
+            rtn.message = causeno + " already exists"
+            return rtn
+        }
+
         let intID = nextCauseID()
         let uc:[String:Any] = CommonViewModel.causeAny(client:client, causeno:causeno, representations:representations, level:level, court:court, originalcharge:originalcharge, causetype:causetype, intid:intID)
-        //   let db = Firestore.firestore()
-        let reprRef = db.collection("causes")
+
+        let causeRef = db.collection("causes")
         
-        taskCompleted = false
+//        taskCompleted = false
         
         do {
-            try await reprRef.document().setData(uc)
-            taskCompleted = true
+            try await causeRef.document().setData(uc)
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             return rtn
@@ -402,11 +418,11 @@ class CommonViewModel: ObservableObject {
         
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
-        taskCompleted = false
+//        taskCompleted = false
         
         do {
             try await db.collection("causes").document(causeID).updateData(causeData)
-            taskCompleted = true
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             return rtn
@@ -421,11 +437,11 @@ class CommonViewModel: ObservableObject {
     func updateCause(causeID:String, updates:[String:Any]) async -> FunctionReturn {
         var rtn:FunctionReturn = FunctionReturn(status: .empty, message: "", additional: 0)
 
-        taskCompleted = false
+//        taskCompleted = false
         
         do {
             try await db.collection("causes").document(causeID).updateData(updates)
-            taskCompleted = true
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             return rtn
@@ -632,11 +648,11 @@ class CommonViewModel: ObservableObject {
         //   let db = Firestore.firestore()
         let reprRef = db.collection("representations")
         
-        taskCompleted = false
+//        taskCompleted = false
         
         do {
             try await reprRef.document().setData(ud)
-            taskCompleted = true
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             rtn.additional = intID
@@ -656,7 +672,7 @@ class CommonViewModel: ObservableObject {
 
         let ud:[String:Any] = RepresentationAny(internalID: intid, involvedClient: involvedClient, involvedCause: involvedCause, active: active, assignedDate: assignedDate, dispositionDate: dispositionDate, dispositionType: dispositionType, dispositionAction: dispositionAction, primaryCategory: primaryCategory)
 
-        taskCompleted = false
+//        taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
         
         do {
@@ -720,12 +736,12 @@ class CommonViewModel: ObservableObject {
 
         let ud:[String:Any] = RepresentationAny(involvedCause: involvedCause, involvedClient: involvedClient)
 
-        taskCompleted = false
+//        taskCompleted = false
         let reprRef = db.collection("representations").document(representationID)
         
         do {
             try await reprRef.setData(ud, merge: true)
-            taskCompleted = true
+//            taskCompleted = true
             rtn.status = .successful
             rtn.message = ""
             return rtn
