@@ -91,14 +91,26 @@ struct DocumentAllCases: View {
         report = "Morris E. Albers II, PLLC All Cases Report for " + reportMonthName + ", " + reportYear + "\n"
         report += "Total active:" + String(reportNrOpen) + "\n\n"
 
-        for xr in opencase {
+        var xa:[ExpandedRepresentation] = []
+        var xb:[ExpandedRepresentation] = []
+        xa = opencase.filter( { $0.representation.active } ).sorted {
+            $0.representation.assignedDate < $1.representation.assignedDate }
+        xb = opencase.filter( { !$0.representation.active } ).sorted {
+            $0.representation.dispositionDate < $1.representation.dispositionDate }
+        let xc = xa + xb
+        for xr in xc {
             if !header1Printed {
                 report += "\n"
                 report += "Open Items\n"
                 report += xr.headerLine
                 header1Printed = true
             }
-            report += xr.printLine + "\n"
+            report += xr.printLine + " "
+            if xr.representation.active {
+                report += "Open\n"
+            } else {
+                report += xr.representation.dispositionDate + "\n"
+            }
         }
     }
 }

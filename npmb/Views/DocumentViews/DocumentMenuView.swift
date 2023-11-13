@@ -14,6 +14,7 @@ struct DocumentMenuView: View {
     @State private var showingReport = false
     @State private var showingCaseList = false
     @State private var showingOpenList = false
+    @State private var showingToDoList = false
     @State var actionIntDate:Date = Date()
     @State var actionExtDate:String = DateService.dateDate2String(inDate: Date())
 
@@ -72,6 +73,17 @@ struct DocumentMenuView: View {
                 print("Document Case List Dismissed")
             })
             { DocumentAllCases(docketDate: actionExtDate) }
+            
+            Button {
+                showingToDoList.toggle()
+            } label: {
+                Text("To Do List").font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingToDoList, onDismiss: {
+                print("ToDo List Dismissed")
+            })
+            { ToDoListView() }
 
             Spacer()
         }

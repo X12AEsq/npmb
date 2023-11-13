@@ -29,7 +29,7 @@ extension ClientModel {
     
     public var formattedAddr:String {
         var addr:String = ""
-        var street:String = self.street.trimmingCharacters(in: .whitespacesAndNewlines)
+        let street:String = self.street.trimmingCharacters(in: .whitespacesAndNewlines)
         var city:String = self.city.trimmingCharacters(in: .whitespacesAndNewlines)
         if city != "" { city += ", " }
         city += self.state + " " + self.zip

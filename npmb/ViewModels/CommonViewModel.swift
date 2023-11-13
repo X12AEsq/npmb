@@ -58,9 +58,9 @@ class CommonViewModel: ObservableObject {
 
     init() {
         userSession = auth.currentUser
-        appStatus = "npmb v1.09\n"
+        appStatus = "npmb v1.10\n"
 //        appStatus += "EditRepresentationView note UI\n"
-//        appStatus += "Watch note array in representation record, may be malfunctioning\n"
+        appStatus += "Watch note array in representation record, update be malfunctioning\n"
         appStatus += "Problem adding appearance to newly added representation"
     }
     
@@ -135,6 +135,7 @@ class CommonViewModel: ObservableObject {
     // MARK: Client Functions
     
     func clientSubscribe() {
+        print("CommonViewModel.clientSuscribe entered")
         if clientListener == nil {
             clientListener = db.collection("clients").addSnapshotListener
             { (querySnapshot, error) in

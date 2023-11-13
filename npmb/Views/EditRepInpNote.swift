@@ -54,6 +54,7 @@ struct EditRepInputNote: View {
                     ForEach(nc.NoteCats, id: \.self) {
                         Text($0).onChange(of: xnoteCategory, perform: { value in
                             xnoteCategory = value
+                            noteCategory = xnoteCategory
                         })
                     }
                 }
@@ -71,7 +72,7 @@ struct EditRepInputNote: View {
                                 await callResult = CVModel.addNote(client: xr.xpcause.client.internalID, cause: xr.xpcause.cause.internalID, representation: xr.representation.internalID, notedate: noteDate, notetime: noteTime, notenote: noteNote, notecategory: noteCategory)
                                 if callResult.status == .successful {
                                     statusMessage = ""
-                                    noteChanged = true
+                                    resetNoteWorkArea()
                                     dismiss()
                                 } else {
                                     statusMessage = callResult.message
@@ -82,6 +83,7 @@ struct EditRepInputNote: View {
                                 if callResult.status == .successful {
                                     statusMessage = ""
                                     noteChanged = true
+//                                    resetNoteWorkArea()
                                     dismiss()
                                 } else {
                                     statusMessage = callResult.message
@@ -116,12 +118,7 @@ struct EditRepInputNote: View {
         }
         .padding(.leading, 10.0)
         .onAppear {
-            xdateNote = dateNote
-            xnoteDate = noteDate
-            xnoteTime = noteTime
-            xnoteNote = noteNote
-            xnoteCategory = noteCategory
-            xnoteChanged = false
+            resetNoteWorkArea()
         }
     }
     
@@ -131,6 +128,15 @@ struct EditRepInputNote: View {
         if xnoteNote != noteNote { return true }
         if xnoteCategory != noteCategory { return true }
         return false
+    }
+    
+    func resetNoteWorkArea() {
+        xdateNote = dateNote
+        xnoteDate = noteDate
+        xnoteTime = noteTime
+        xnoteNote = noteNote
+        xnoteCategory = noteCategory
+        xnoteChanged = false
     }
 }
 

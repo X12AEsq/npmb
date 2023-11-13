@@ -358,7 +358,7 @@ struct EditRepresentationView: View {
             currDispDate = origRepresentation.dispositionDate
             currDateDisp = origRepresentation.DateDisposed
         } else {
-            currDateAssigned = Date()
+//            currDateAssigned = Date()
             currDateAssigned = Date()
             currDateDisp = currDateAssigned
             currAssignedDate = DateService.dateDate2String(inDate: currDateAssigned)
