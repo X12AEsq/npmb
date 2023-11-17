@@ -50,12 +50,13 @@ struct EditRepInputNote: View {
             }
             HStack {
                 Text("Note Category")
-                Picker("Category", selection: $xnoteCategory) {
+                Picker("Category", selection: $noteCategory) {
                     ForEach(nc.NoteCats, id: \.self) {
-                        Text($0).onChange(of: xnoteCategory, perform: { value in
-                            xnoteCategory = value
-                            noteCategory = xnoteCategory
-                        })
+                        Text($0)
+//                            .onChange(of: xnoteCategory, perform: { value in
+//                            xnoteCategory = value
+//                            noteCategory = xnoteCategory
+//                        })
                     }
                 }
                 Spacer()

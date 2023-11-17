@@ -14,6 +14,8 @@
 		3105500029BAD183004002DD /* DispositionTypeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */; };
 		3105500229BADFA3004002DD /* DispositionActionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105500129BADFA3004002DD /* DispositionActionOptions.swift */; };
 		310A35022A3BED4800639766 /* BackupCause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310A35012A3BED4800639766 /* BackupCause.swift */; };
+		310C6E8B2B0545C300E2E944 /* PDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310C6E8A2B0545C300E2E944 /* PDFViewer.swift */; };
+		310C6E8D2B05550500E2E944 /* PDFKitRepresentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310C6E8C2B05550500E2E944 /* PDFKitRepresentedView.swift */; };
 		310E80B52A00316200A18F67 /* DocumentAllCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310E80B42A00316200A18F67 /* DocumentAllCases.swift */; };
 		312683CE2A13E5A80052375F /* TextFieldWithFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312683CD2A13E5A80052375F /* TextFieldWithFocus.swift */; };
 		3128E52029F3222D008D4C7E /* DocumentOpenCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */; };
@@ -35,6 +37,8 @@
 		31677FFA2B029E49004D0783 /* ToDoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31677FF92B029E49004D0783 /* ToDoListView.swift */; };
 		317D987A29B1825400709C32 /* CauseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987929B1825400709C32 /* CauseExtension.swift */; };
 		317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987B29B1844700709C32 /* SelectCauseView.swift */; };
+		318B268B2B0676240033874C /* PDFShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318B268A2B0676240033874C /* PDFShareView.swift */; };
+		318B268D2B069E840033874C /* PDFCreatorAddBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318B268C2B069E840033874C /* PDFCreatorAddBody.swift */; };
 		318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD04629AA7DBC0063BAA1 /* npmbApp.swift */; };
 		318BD04929AA7DBC0063BAA1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD04829AA7DBC0063BAA1 /* ContentView.swift */; };
 		318BD04B29AA7DBD0063BAA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 318BD04A29AA7DBD0063BAA1 /* Assets.xcassets */; };
@@ -62,6 +66,7 @@
 		318D7B5829E370C100256FDC /* NoteCats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318D7B5729E370C100256FDC /* NoteCats.swift */; };
 		3191681029DF424800C96B92 /* AppearanceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3191680F29DF424800C96B92 /* AppearanceExtension.swift */; };
 		3191681229DF4AEA00C96B92 /* EditRepInputAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */; };
+		3197B7D72B0421B700817D9B /* PDFCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3197B7D62B0421B700817D9B /* PDFCreator.swift */; };
 		31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748429B6F2100007D08B /* ActionEdit.swift */; };
 		31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748629B6F4620007D08B /* ActionSelect.swift */; };
 		31BC47842A014F6E00FE8F45 /* PrintRepresentationStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31BC47832A014F6E00FE8F45 /* PrintRepresentationStatus.swift */; };
@@ -90,6 +95,8 @@
 		31054FFF29BAD183004002DD /* DispositionTypeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionTypeOptions.swift; sourceTree = "<group>"; };
 		3105500129BADFA3004002DD /* DispositionActionOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispositionActionOptions.swift; sourceTree = "<group>"; };
 		310A35012A3BED4800639766 /* BackupCause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupCause.swift; sourceTree = "<group>"; };
+		310C6E8A2B0545C300E2E944 /* PDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewer.swift; sourceTree = "<group>"; };
+		310C6E8C2B05550500E2E944 /* PDFKitRepresentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitRepresentedView.swift; sourceTree = "<group>"; };
 		310E80B42A00316200A18F67 /* DocumentAllCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentAllCases.swift; sourceTree = "<group>"; };
 		312683CD2A13E5A80052375F /* TextFieldWithFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithFocus.swift; sourceTree = "<group>"; };
 		3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentOpenCase.swift; sourceTree = "<group>"; };
@@ -111,6 +118,8 @@
 		31677FF92B029E49004D0783 /* ToDoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListView.swift; sourceTree = "<group>"; };
 		317D987929B1825400709C32 /* CauseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseExtension.swift; sourceTree = "<group>"; };
 		317D987B29B1844700709C32 /* SelectCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCauseView.swift; sourceTree = "<group>"; };
+		318B268A2B0676240033874C /* PDFShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFShareView.swift; sourceTree = "<group>"; };
+		318B268C2B069E840033874C /* PDFCreatorAddBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreatorAddBody.swift; sourceTree = "<group>"; };
 		318BD04329AA7DBC0063BAA1 /* npmb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = npmb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		318BD04629AA7DBC0063BAA1 /* npmbApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = npmbApp.swift; sourceTree = "<group>"; };
 		318BD04829AA7DBC0063BAA1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -135,6 +144,7 @@
 		318D7B5729E370C100256FDC /* NoteCats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCats.swift; sourceTree = "<group>"; };
 		3191680F29DF424800C96B92 /* AppearanceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceExtension.swift; sourceTree = "<group>"; };
 		3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepInputAppearance.swift; sourceTree = "<group>"; };
+		3197B7D62B0421B700817D9B /* PDFCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreator.swift; sourceTree = "<group>"; };
 		31B6748429B6F2100007D08B /* ActionEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEdit.swift; sourceTree = "<group>"; };
 		31B6748629B6F4620007D08B /* ActionSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSelect.swift; sourceTree = "<group>"; };
 		31BC47832A014F6E00FE8F45 /* PrintRepresentationStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintRepresentationStatus.swift; sourceTree = "<group>"; };
@@ -179,6 +189,11 @@
 				3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */,
 				310E80B42A00316200A18F67 /* DocumentAllCases.swift */,
 				31677FF92B029E49004D0783 /* ToDoListView.swift */,
+				3197B7D62B0421B700817D9B /* PDFCreator.swift */,
+				318B268C2B069E840033874C /* PDFCreatorAddBody.swift */,
+				310C6E8A2B0545C300E2E944 /* PDFViewer.swift */,
+				310C6E8C2B05550500E2E944 /* PDFKitRepresentedView.swift */,
+				318B268A2B0676240033874C /* PDFShareView.swift */,
 			);
 			path = DocumentViews;
 			sourceTree = "<group>";
@@ -441,6 +456,7 @@
 				31DDC17929E705E20071EC59 /* DocumentMenuView.swift in Sources */,
 				31FA892829E454FA0033AAC7 /* NotesExtension.swift in Sources */,
 				31677FFA2B029E49004D0783 /* ToDoListView.swift in Sources */,
+				318B268B2B0676240033874C /* PDFShareView.swift in Sources */,
 				318BD07229AA9D280063BAA1 /* FormattingService.swift in Sources */,
 				31FA892A29E47A6E0033AAC7 /* CustomGreenButton.swift in Sources */,
 				318BD05B29AA800C0063BAA1 /* LoginView.swift in Sources */,
@@ -455,6 +471,7 @@
 				31035C7029BA488800D95B49 /* SelectRepresentationView.swift in Sources */,
 				313A657229BB8F8C009B484D /* SelectCauseUtil.swift in Sources */,
 				31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */,
+				3197B7D72B0421B700817D9B /* PDFCreator.swift in Sources */,
 				3137595E29B93092000482F2 /* NotesModel.swift in Sources */,
 				318D7B5629E36D3D00256FDC /* EditRepInpNote.swift in Sources */,
 				312683CE2A13E5A80052375F /* TextFieldWithFocus.swift in Sources */,
@@ -464,13 +481,16 @@
 				317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */,
 				318BD07D29AAA87D0063BAA1 /* YesNoModel.swift in Sources */,
 				312EA8BD29F2ECB400991E55 /* CauseTypeOptions.swift in Sources */,
+				310C6E8D2B05550500E2E944 /* PDFKitRepresentedView.swift in Sources */,
 				31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */,
 				31054FFE29BAB53B004002DD /* PrimaryCategory.swift in Sources */,
 				312EA24829BD2B6000B61D0A /* DeviceRotationViewModifier.swift in Sources */,
 				318BD06A29AA820E0063BAA1 /* CommonViewModel.swift in Sources */,
 				3147C82E29DCF87A005B56F7 /* ExpandedCause.swift in Sources */,
 				318BD05A29AA800C0063BAA1 /* CustomTextField.swift in Sources */,
+				318B268D2B069E840033874C /* PDFCreatorAddBody.swift in Sources */,
 				31035C7629BA58EB00D95B49 /* EditRepresentationView.swift in Sources */,
+				310C6E8B2B0545C300E2E944 /* PDFViewer.swift in Sources */,
 				318BD06F29AA9BC00063BAA1 /* ClientModel.swift in Sources */,
 				318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */,
 				313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */,
