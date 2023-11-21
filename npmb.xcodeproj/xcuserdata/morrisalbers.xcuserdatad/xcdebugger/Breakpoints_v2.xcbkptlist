@@ -34,5 +34,257 @@
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CCF01BA4-22CC-45BB-A2A7-494300B3588D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "addBodyText(context:pageRect:titleBottom:bodylines:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CCF01BA4-22CC-45BB-A2A7-494300B3588D - baf460d0c67de747"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "3336">
+               </Location>
+               <Location
+                  uuid = "CCF01BA4-22CC-45BB-A2A7-494300B3588D - baf460d0c67dea4e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "104"
+                  endingLineNumber = "104"
+                  offsetFromSymbolStart = "3384">
+               </Location>
+               <Location
+                  uuid = "CCF01BA4-22CC-45BB-A2A7-494300B3588D - 23d3e839f750d32a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "4452">
+               </Location>
+               <Location
+                  uuid = "CCF01BA4-22CC-45BB-A2A7-494300B3588D - 23d3e839f750d364"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "4780">
+               </Location>
+               <Location
+                  uuid = "CCF01BA4-22CC-45BB-A2A7-494300B3588D - 23d3e839f750d364"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "4752">
+               </Location>
+               <Location
+                  uuid = "CCF01BA4-22CC-45BB-A2A7-494300B3588D - 23d3e839f750d364"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "4700">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A8275E0E-1F16-4D50-9DA4-B7069CC90FFD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "addBodyText(context:pageRect:titleBottom:bodylines:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A8275E0E-1F16-4D50-9DA4-B7069CC90FFD - 23d3e839f750de3d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
+                  offsetFromSymbolStart = "3492">
+               </Location>
+               <Location
+                  uuid = "A8275E0E-1F16-4D50-9DA4-B7069CC90FFD - 23d3e839f750de3d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
+                  offsetFromSymbolStart = "3488">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "80E8971C-F800-4065-AA95-D373A55B4EBC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "addBodyText(context:pageRect:titleBottom:bodylines:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "80E8971C-F800-4065-AA95-D373A55B4EBC - 23d3e839f750d30b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "4580">
+               </Location>
+               <Location
+                  uuid = "80E8971C-F800-4065-AA95-D373A55B4EBC - 23d3e839f750d30b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "127"
+                  endingLineNumber = "127"
+                  offsetFromSymbolStart = "4528">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "27A0AA99-9212-4D82-BE18-850D1C866F53"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "addBodyText(context:pageRect:titleBottom:bodylines:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "27A0AA99-9212-4D82-BE18-850D1C866F53 - 23d3e839f750d0c9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "125"
+                  endingLineNumber = "125"
+                  offsetFromSymbolStart = "4396">
+               </Location>
+               <Location
+                  uuid = "27A0AA99-9212-4D82-BE18-850D1C866F53 - 23d3e839f750d0c9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "npmb.PDFCreator.addBodyText(context: __C.UIGraphicsPDFRendererContext, pageRect: __C.CGRect, titleBottom: CoreGraphics.CGFloat, bodylines: Swift.Array&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "npmb"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/morrisalbers/Library/Mobile%20Documents/com~apple~CloudDocs/npmb/npmb/Views/PDFViews/PDFCreatorAddBody.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "125"
+                  endingLineNumber = "125"
+                  offsetFromSymbolStart = "4344">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -10,7 +10,7 @@ import PDFKit
 
 struct PDFViewer: View {
 //    @Environment(\.dismiss) var dismiss
-    @Binding var presentedAsModal: Bool
+//    @Binding var presentedAsModal: Bool
     var pdfData:Data
     var body: some View {
         VStack {

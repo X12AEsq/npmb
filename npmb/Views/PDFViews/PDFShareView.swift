@@ -14,7 +14,7 @@ struct PDFShareView: UIViewControllerRepresentable {
     let applicationActivities: [UIActivity]? = nil
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<PDFShareView>) -> UIActivityViewController {
-        return UIActivityViewController(activityItems: activityItems,applicationActivities: applicationActivities)
+        return UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
     }
     
     func updateUIViewController(_ uiViewController: UIActivityViewController,

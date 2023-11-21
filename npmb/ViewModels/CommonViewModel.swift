@@ -49,6 +49,9 @@ class CommonViewModel: ObservableObject {
     
     @Published var inTesting:Bool = false
     public var testLog:String = ""
+    
+    var pdfCreator = PDFCreator()
+    var commonReport:npmReport = npmReport(npmTitle: "", npmNrPages: 0, npmWaterMark: UIImage(), npmTitleHeight: 0.0, npmTitleBottom: 0.0, npmRawLines: [], npmPrettyLines: [], npmPrettyBlocks: [], npmPages: [])
 
     var clientListener: ListenerRegistration?
     var causeListener: ListenerRegistration?
