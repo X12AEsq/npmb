@@ -33,6 +33,7 @@
 		313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313BC3AA29AF025900D99BB8 /* CauseModel.swift */; };
 		3147C82E29DCF87A005B56F7 /* ExpandedCause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3147C82D29DCF87A005B56F7 /* ExpandedCause.swift */; };
 		3147C83029DCFB38005B56F7 /* ExpandedRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3147C82F29DCFB38005B56F7 /* ExpandedRepresentation.swift */; };
+		315EC8F12B0C5E9A00D1CADD /* DocketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8F02B0C5E9A00D1CADD /* DocketView.swift */; };
 		316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316035E429B443A3002D82F3 /* OffenseLevel.swift */; };
 		31677FFA2B029E49004D0783 /* ToDoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31677FF92B029E49004D0783 /* ToDoListView.swift */; };
 		316F6FB92B0BB334007CCC03 /* PDFCreatorAddTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316F6FB82B0BB334007CCC03 /* PDFCreatorAddTitle.swift */; };
@@ -117,6 +118,7 @@
 		313BC3AA29AF025900D99BB8 /* CauseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseModel.swift; sourceTree = "<group>"; };
 		3147C82D29DCF87A005B56F7 /* ExpandedCause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCause.swift; sourceTree = "<group>"; };
 		3147C82F29DCFB38005B56F7 /* ExpandedRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedRepresentation.swift; sourceTree = "<group>"; };
+		315EC8F02B0C5E9A00D1CADD /* DocketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocketView.swift; sourceTree = "<group>"; };
 		316035E429B443A3002D82F3 /* OffenseLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffenseLevel.swift; sourceTree = "<group>"; };
 		31677FF92B029E49004D0783 /* ToDoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListView.swift; sourceTree = "<group>"; };
 		316F6FB82B0BB334007CCC03 /* PDFCreatorAddTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreatorAddTitle.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				3128E51F29F3222D008D4C7E /* DocumentOpenCase.swift */,
 				310E80B42A00316200A18F67 /* DocumentAllCases.swift */,
 				31677FF92B029E49004D0783 /* ToDoListView.swift */,
+				315EC8F02B0C5E9A00D1CADD /* DocketView.swift */,
 			);
 			path = DocumentViews;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				3137596029B9597C000482F2 /* RepresentationModel.swift in Sources */,
 				316F6FB92B0BB334007CCC03 /* PDFCreatorAddTitle.swift in Sources */,
 				31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */,
+				315EC8F12B0C5E9A00D1CADD /* DocketView.swift in Sources */,
 				312EEBDE2A3A5577003BFBBB /* BackupClient.swift in Sources */,
 				31F919062A085B4E008C73D8 /* CustomDeleteButton.swift in Sources */,
 				310E80B52A00316200A18F67 /* DocumentAllCases.swift in Sources */,

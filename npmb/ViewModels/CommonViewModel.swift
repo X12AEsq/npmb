@@ -61,7 +61,7 @@ class CommonViewModel: ObservableObject {
 
     init() {
         userSession = auth.currentUser
-        appStatus = "npmb v1.10\n"
+        appStatus = "npmb v1.11 " + Date().formatted(date: .long, time: .shortened) + " \n"
 //        appStatus += "EditRepresentationView note UI\n"
         appStatus += "Watch note array in representation record, update be malfunctioning\n"
         appStatus += "Problem adding appearance to newly added representation"

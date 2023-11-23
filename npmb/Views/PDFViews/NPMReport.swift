@@ -14,6 +14,7 @@ struct npmReport {
         case newpage
         case newblock
         case newline
+        case subheader
         case undefined
     }
     

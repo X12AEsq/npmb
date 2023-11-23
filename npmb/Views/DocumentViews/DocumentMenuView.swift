@@ -39,7 +39,7 @@ struct DocumentMenuView: View {
             .sheet(isPresented: $showingDocket, onDismiss: {
                 print("Dismissed")
             })
-            { DocumentDocket(docketDate: actionExtDate) }
+            { DocketView(docketDate: actionExtDate) }
             
             Button {
                 showingReport.toggle()

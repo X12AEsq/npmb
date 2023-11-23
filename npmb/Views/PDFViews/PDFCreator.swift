@@ -33,6 +33,11 @@ class PDFCreator: NSObject {
                 npmLines.npmPrettyLines.append(newLine)
                 continue
             }
+            if line.first == "*" {
+                newLine.npmLineCC = npmReport.CarriageControl.subheader
+                npmLines.npmPrettyLines.append(newLine)
+                continue
+            }
             npmLines.npmPrettyLines.append(newLine)
         }
         
@@ -71,15 +76,31 @@ class PDFCreator: NSObject {
         var newBlock:npmReport.npmBlock = npmReport.npmBlock(blockLength: 0.0, npmLines: [])
 
         while npmLines.npmPrettyLines.count > 0 {
-            if npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newblock {
+            if npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newblock 
+            || npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.subheader {
                 if newBlock.npmLines.count > 0 {
                     npmLines.npmPrettyBlocks.append(newBlock)
                 }
-                newBlock.npmLines = []
-                newBlock.npmLines.append(npmLines.npmPrettyLines[0])
-                newBlock.blockLength = lineStringSize.height
-                npmLines.npmPrettyLines.remove(at: 0)
-                continue
+                if npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newblock {
+                    newBlock.npmLines = []
+                    newBlock.npmLines.append(npmLines.npmPrettyLines[0])
+                    newBlock.blockLength = lineStringSize.height
+                    npmLines.npmPrettyLines.remove(at: 0)
+                    continue
+                } else {
+                    newBlock.npmLines = []
+                    let newbl:npmReport.npmLine = npmReport.npmLine(npmLineCC: npmReport.CarriageControl.newline, npmLineText: " ", npmLinePosition: 0.0)
+                    var newl:npmReport.npmLine = npmLines.npmPrettyLines[0]
+                    newl.npmLineCC = npmReport.CarriageControl.newline
+                    newBlock.npmLines.append(newbl)
+                    newBlock.npmLines.append(newl)
+                    newBlock.npmLines.append(newbl)
+                    newBlock.blockLength = newBlock.blockLength + lineStringSize.height * 3.0
+                    npmLines.npmPrettyBlocks.append(newBlock)
+                    newBlock.npmLines = []
+                    npmLines.npmPrettyLines.remove(at: 0)
+                    continue
+                }
             }
             if npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newline {
                 newBlock.blockLength = newBlock.blockLength + lineStringSize.height
