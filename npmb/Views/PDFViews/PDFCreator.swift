@@ -20,25 +20,10 @@ class PDFCreator: NSObject {
     func setNPMLines(reportLines: npmReport) {
         npmLines = reportLines
         for line in reportLines.npmRawLines {
-            var newLine:npmReport.npmLine = npmReport.npmLine(npmLineCC: npmReport.CarriageControl.undefined, npmLineText: "", npmLinePosition: 0.0)
-            newLine.npmLineText = line
-            newLine.npmLineText.remove(at: newLine.npmLineText.startIndex)
-            if line.first == "-" {
-                newLine.npmLineCC = npmReport.CarriageControl.newblock
+            let newLines:[npmReport.npmDecoratedLine] = PDFUtility.xlateCC(rawLine: line)
+            for newLine in newLines {
                 npmLines.npmPrettyLines.append(newLine)
-                continue
             }
-            if line.first == "+" {
-                newLine.npmLineCC = npmReport.CarriageControl.newline
-                npmLines.npmPrettyLines.append(newLine)
-                continue
-            }
-            if line.first == "*" {
-                newLine.npmLineCC = npmReport.CarriageControl.subheader
-                npmLines.npmPrettyLines.append(newLine)
-                continue
-            }
-            npmLines.npmPrettyLines.append(newLine)
         }
         
         print("done")
@@ -72,67 +57,8 @@ class PDFCreator: NSObject {
         
         npmLines.pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
         npmLines = addTitle(npmLines: npmLines, sizeOnly: true)
-        
-        var newBlock:npmReport.npmBlock = npmReport.npmBlock(blockLength: 0.0, npmLines: [])
-
-        while npmLines.npmPrettyLines.count > 0 {
-            if npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newblock 
-            || npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.subheader {
-                if newBlock.npmLines.count > 0 {
-                    npmLines.npmPrettyBlocks.append(newBlock)
-                }
-                if npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newblock {
-                    newBlock.npmLines = []
-                    newBlock.npmLines.append(npmLines.npmPrettyLines[0])
-                    newBlock.blockLength = lineStringSize.height
-                    npmLines.npmPrettyLines.remove(at: 0)
-                    continue
-                } else {
-                    newBlock.npmLines = []
-                    let newbl:npmReport.npmLine = npmReport.npmLine(npmLineCC: npmReport.CarriageControl.newline, npmLineText: " ", npmLinePosition: 0.0)
-                    var newl:npmReport.npmLine = npmLines.npmPrettyLines[0]
-                    newl.npmLineCC = npmReport.CarriageControl.newline
-                    newBlock.npmLines.append(newbl)
-                    newBlock.npmLines.append(newl)
-                    newBlock.npmLines.append(newbl)
-                    newBlock.blockLength = newBlock.blockLength + lineStringSize.height * 3.0
-                    npmLines.npmPrettyBlocks.append(newBlock)
-                    newBlock.npmLines = []
-                    npmLines.npmPrettyLines.remove(at: 0)
-                    continue
-                }
-            }
-            if npmLines.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newline {
-                newBlock.blockLength = newBlock.blockLength + lineStringSize.height
-                newBlock.npmLines.append(npmLines.npmPrettyLines[0])
-                npmLines.npmPrettyLines.remove(at: 0)
-                continue
-            }
-        }
-        if newBlock.npmLines.count > 0 {
-            npmLines.npmPrettyBlocks.append(newBlock)
-        }
-        
-        npmLines.npmPages = []
-        var newPage:npmReport.npmPage = npmReport.npmPage(pageLength: npmLines.npmTitleBottom, npmBlocks: [])
-
-        while npmLines.npmPrettyBlocks.count > 0 {
-            if newPage.pageLength + npmLines.npmPrettyBlocks[0].blockLength > pageHeight {
-                npmLines.npmPages.append(newPage)
-                newPage.pageLength = npmLines.npmTitleBottom
-                newPage.npmBlocks = []
-                newPage.npmBlocks.append(npmLines.npmPrettyBlocks[0])
-                npmLines.npmPrettyBlocks.remove(at: 0)
-                continue
-            }
-            newPage.pageLength = newPage.pageLength + npmLines.npmPrettyBlocks[0].blockLength
-            newPage.npmBlocks.append(npmLines.npmPrettyBlocks[0])
-            npmLines.npmPrettyBlocks.remove(at: 0)
-        }
-        
-        if newPage.npmBlocks.count > 0 {
-            npmLines.npmPages.append(newPage)
-        }
+        npmLines.npmPrettyBlocks = PDFUtility.buildPrettyBlocks(inReport: npmLines, lineHeight: lineStringSize.height)
+        npmLines.npmPages = PDFUtility.buildPrettyPages(npmBlocks: npmLines.npmPrettyBlocks, pageStart: npmLines.npmTitleBottom, pageHeight: pageHeight)
         
         let renderer = UIGraphicsPDFRenderer(bounds: npmLines.pageRect, format: format)
         let data = renderer.pdfData { (context) in

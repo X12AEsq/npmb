@@ -18,12 +18,6 @@ struct PDFViewer: View {
             Spacer()
             HStack {
                 Spacer()
-//                Button("Press to dismiss") {
-//                    self.presentedAsModal = false
-//                }
-//                .buttonStyle(CustomDismissButton())
-//                .padding()
-//                Spacer()
                 PDFShareView(activityItems: [pdfData])
                 Spacer()
             }

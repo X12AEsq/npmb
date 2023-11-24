@@ -50,7 +50,7 @@ struct DocumentMenuView: View {
             .sheet(isPresented: $showingReport, onDismiss: {
                 print("Document Statement Dismissed")
             })
-            { DocumentStatement(docketDate: actionExtDate) }
+            { MonthlyReportView(docketDate: actionExtDate) }
             
             Button {
                 showingOpenList.toggle()

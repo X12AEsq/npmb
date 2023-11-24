@@ -26,9 +26,12 @@ struct npmReport {
     var npmTitleBottom:CGFloat
     
     var npmRawLines:[String]
-    var npmPrettyLines:[npmLine]
+    var npmPrettyLines:[npmDecoratedLine]
     var npmPrettyBlocks:[npmBlock]
     var npmPages:[npmPage]
+    
+    var npmLinearEquivalent:String = ""
+    var npmLinearTitle:String = ""
     
     var pageRect:CGRect = CGRect()
     
@@ -44,15 +47,15 @@ struct npmReport {
     
     struct npmBlock {
         var blockLength:CGFloat
-        var npmLines:[npmLine]
+        var npmLines:[npmDecoratedLine]
         
-        init(blockLength:CGFloat, npmLines: [npmLine]) {
+        init(blockLength:CGFloat, npmLines: [npmDecoratedLine]) {
             self.blockLength = blockLength
             self.npmLines = npmLines
         }
     }
     
-    struct npmLine {
+    struct npmDecoratedLine {
         var npmLineCC:CarriageControl
         var npmLineText:String
         var npmLinePosition:CGFloat
@@ -64,7 +67,7 @@ struct npmReport {
         }
     }
     
-    init(npmTitle: String, npmNrPages: Int, npmWaterMark: UIImage, npmTitleHeight: CGFloat, npmTitleBottom:CGFloat, npmRawLines: [String], npmPrettyLines: [npmLine], npmPrettyBlocks: [npmBlock], npmPages: [npmPage]) {
+    init(npmTitle: String, npmNrPages: Int, npmWaterMark: UIImage, npmTitleHeight: CGFloat, npmTitleBottom:CGFloat, npmRawLines: [String], npmPrettyLines: [npmDecoratedLine], npmPrettyBlocks: [npmBlock], npmPages: [npmPage]) {
         self.npmTitle = npmTitle
         self.npmNrPages = npmNrPages
         self.npmWaterMark = npmWaterMark
@@ -75,4 +78,5 @@ struct npmReport {
         self.npmPrettyBlocks = npmPrettyBlocks
         self.npmPages = npmPages
     }
+    
 }

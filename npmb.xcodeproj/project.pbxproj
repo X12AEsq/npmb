@@ -36,11 +36,12 @@
 		315EC8F12B0C5E9A00D1CADD /* DocketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8F02B0C5E9A00D1CADD /* DocketView.swift */; };
 		316035E529B443A3002D82F3 /* OffenseLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316035E429B443A3002D82F3 /* OffenseLevel.swift */; };
 		31677FFA2B029E49004D0783 /* ToDoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31677FF92B029E49004D0783 /* ToDoListView.swift */; };
-		316F6FB92B0BB334007CCC03 /* PDFCreatorAddTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316F6FB82B0BB334007CCC03 /* PDFCreatorAddTitle.swift */; };
+		31683A8C2B0FBFDE001D104A /* PDFUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31683A8B2B0FBFDE001D104A /* PDFUtility.swift */; };
+		31683A8E2B0FD6E1001D104A /* MonthlyReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31683A8D2B0FD6E1001D104A /* MonthlyReportView.swift */; };
+		31683A902B0FD7BC001D104A /* TXTViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31683A8F2B0FD7BC001D104A /* TXTViewer.swift */; };
 		317D987A29B1825400709C32 /* CauseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987929B1825400709C32 /* CauseExtension.swift */; };
 		317D987C29B1844700709C32 /* SelectCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317D987B29B1844700709C32 /* SelectCauseView.swift */; };
 		318B268B2B0676240033874C /* PDFShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318B268A2B0676240033874C /* PDFShareView.swift */; };
-		318B268D2B069E840033874C /* PDFCreatorAddBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318B268C2B069E840033874C /* PDFCreatorAddBody.swift */; };
 		318BD04729AA7DBC0063BAA1 /* npmbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD04629AA7DBC0063BAA1 /* npmbApp.swift */; };
 		318BD04929AA7DBC0063BAA1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318BD04829AA7DBC0063BAA1 /* ContentView.swift */; };
 		318BD04B29AA7DBD0063BAA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 318BD04A29AA7DBD0063BAA1 /* Assets.xcassets */; };
@@ -69,7 +70,6 @@
 		3191681029DF424800C96B92 /* AppearanceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3191680F29DF424800C96B92 /* AppearanceExtension.swift */; };
 		3191681229DF4AEA00C96B92 /* EditRepInputAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */; };
 		3197B7D72B0421B700817D9B /* PDFCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3197B7D62B0421B700817D9B /* PDFCreator.swift */; };
-		31AD81C62B09B67800006FE7 /* PDFCreatorAddImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AD81C52B09B67800006FE7 /* PDFCreatorAddImage.swift */; };
 		31B507DA2B0AD8C200D5B723 /* NPMReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B507D92B0AD8C200D5B723 /* NPMReport.swift */; };
 		31B6748529B6F2100007D08B /* ActionEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748429B6F2100007D08B /* ActionEdit.swift */; };
 		31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B6748629B6F4620007D08B /* ActionSelect.swift */; };
@@ -82,6 +82,7 @@
 		31DDC18229E748370071EC59 /* ExpandedAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DDC18129E748370071EC59 /* ExpandedAppearance.swift */; };
 		31E0F5B02A3D1430008E589C /* BackupRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E0F5AF2A3D1430008E589C /* BackupRepresentation.swift */; };
 		31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */; };
+		31EC9DC22B101F450052F6E9 /* TXTCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EC9DC12B101F450052F6E9 /* TXTCreator.swift */; };
 		31F36A3029B190750059D122 /* EditCauseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F36A2F29B190750059D122 /* EditCauseView.swift */; };
 		31F919042A0859DD008C73D8 /* PrintClientStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F919032A0859DD008C73D8 /* PrintClientStatus.swift */; };
 		31F919062A085B4E008C73D8 /* CustomDeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F919052A085B4E008C73D8 /* CustomDeleteButton.swift */; };
@@ -121,11 +122,12 @@
 		315EC8F02B0C5E9A00D1CADD /* DocketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocketView.swift; sourceTree = "<group>"; };
 		316035E429B443A3002D82F3 /* OffenseLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffenseLevel.swift; sourceTree = "<group>"; };
 		31677FF92B029E49004D0783 /* ToDoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListView.swift; sourceTree = "<group>"; };
-		316F6FB82B0BB334007CCC03 /* PDFCreatorAddTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreatorAddTitle.swift; sourceTree = "<group>"; };
+		31683A8B2B0FBFDE001D104A /* PDFUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFUtility.swift; sourceTree = "<group>"; };
+		31683A8D2B0FD6E1001D104A /* MonthlyReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyReportView.swift; sourceTree = "<group>"; };
+		31683A8F2B0FD7BC001D104A /* TXTViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TXTViewer.swift; sourceTree = "<group>"; };
 		317D987929B1825400709C32 /* CauseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CauseExtension.swift; sourceTree = "<group>"; };
 		317D987B29B1844700709C32 /* SelectCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCauseView.swift; sourceTree = "<group>"; };
 		318B268A2B0676240033874C /* PDFShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFShareView.swift; sourceTree = "<group>"; };
-		318B268C2B069E840033874C /* PDFCreatorAddBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreatorAddBody.swift; sourceTree = "<group>"; };
 		318BD04329AA7DBC0063BAA1 /* npmb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = npmb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		318BD04629AA7DBC0063BAA1 /* npmbApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = npmbApp.swift; sourceTree = "<group>"; };
 		318BD04829AA7DBC0063BAA1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -151,7 +153,6 @@
 		3191680F29DF424800C96B92 /* AppearanceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceExtension.swift; sourceTree = "<group>"; };
 		3191681129DF4AEA00C96B92 /* EditRepInputAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRepInputAppearance.swift; sourceTree = "<group>"; };
 		3197B7D62B0421B700817D9B /* PDFCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreator.swift; sourceTree = "<group>"; };
-		31AD81C52B09B67800006FE7 /* PDFCreatorAddImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreatorAddImage.swift; sourceTree = "<group>"; };
 		31B507D92B0AD8C200D5B723 /* NPMReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NPMReport.swift; sourceTree = "<group>"; };
 		31B6748429B6F2100007D08B /* ActionEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionEdit.swift; sourceTree = "<group>"; };
 		31B6748629B6F4620007D08B /* ActionSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSelect.swift; sourceTree = "<group>"; };
@@ -164,6 +165,7 @@
 		31DDC18129E748370071EC59 /* ExpandedAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedAppearance.swift; sourceTree = "<group>"; };
 		31E0F5AF2A3D1430008E589C /* BackupRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRepresentation.swift; sourceTree = "<group>"; };
 		31E60D9229C3BC8900DC6A97 /* FunctionReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionReturn.swift; sourceTree = "<group>"; };
+		31EC9DC12B101F450052F6E9 /* TXTCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TXTCreator.swift; sourceTree = "<group>"; };
 		31F36A2F29B190750059D122 /* EditCauseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCauseView.swift; sourceTree = "<group>"; };
 		31F919032A0859DD008C73D8 /* PrintClientStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintClientStatus.swift; sourceTree = "<group>"; };
 		31F919052A085B4E008C73D8 /* CustomDeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDeleteButton.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				310E80B42A00316200A18F67 /* DocumentAllCases.swift */,
 				31677FF92B029E49004D0783 /* ToDoListView.swift */,
 				315EC8F02B0C5E9A00D1CADD /* DocketView.swift */,
+				31683A8D2B0FD6E1001D104A /* MonthlyReportView.swift */,
 			);
 			path = DocumentViews;
 			sourceTree = "<group>";
@@ -354,13 +357,13 @@
 			isa = PBXGroup;
 			children = (
 				3197B7D62B0421B700817D9B /* PDFCreator.swift */,
-				316F6FB82B0BB334007CCC03 /* PDFCreatorAddTitle.swift */,
-				318B268C2B069E840033874C /* PDFCreatorAddBody.swift */,
-				31AD81C52B09B67800006FE7 /* PDFCreatorAddImage.swift */,
+				31683A8B2B0FBFDE001D104A /* PDFUtility.swift */,
 				310C6E8A2B0545C300E2E944 /* PDFViewer.swift */,
 				310C6E8C2B05550500E2E944 /* PDFKitRepresentedView.swift */,
 				318B268A2B0676240033874C /* PDFShareView.swift */,
 				31B507D92B0AD8C200D5B723 /* NPMReport.swift */,
+				31683A8F2B0FD7BC001D104A /* TXTViewer.swift */,
+				31EC9DC12B101F450052F6E9 /* TXTCreator.swift */,
 			);
 			path = PDFViews;
 			sourceTree = "<group>";
@@ -460,12 +463,12 @@
 				31BC68FD29E8585A00E60FC9 /* DocumentStatement.swift in Sources */,
 				318BD07829AAA0C30063BAA1 /* StateCodeModel.swift in Sources */,
 				31FA892C29E499140033AAC7 /* CauseLineLabel.swift in Sources */,
+				31EC9DC22B101F450052F6E9 /* TXTCreator.swift in Sources */,
 				318BD04929AA7DBC0063BAA1 /* ContentView.swift in Sources */,
 				318BD07B29AAA12A0063BAA1 /* GrowingButton.swift in Sources */,
 				3137595A29B91A6B000482F2 /* AvailableCourts.swift in Sources */,
 				3128E52029F3222D008D4C7E /* DocumentOpenCase.swift in Sources */,
 				3137596029B9597C000482F2 /* RepresentationModel.swift in Sources */,
-				316F6FB92B0BB334007CCC03 /* PDFCreatorAddTitle.swift in Sources */,
 				31B6748729B6F4620007D08B /* ActionSelect.swift in Sources */,
 				315EC8F12B0C5E9A00D1CADD /* DocketView.swift in Sources */,
 				312EEBDE2A3A5577003BFBBB /* BackupClient.swift in Sources */,
@@ -493,7 +496,9 @@
 				31035C7029BA488800D95B49 /* SelectRepresentationView.swift in Sources */,
 				313A657229BB8F8C009B484D /* SelectCauseUtil.swift in Sources */,
 				31E60D9329C3BC8900DC6A97 /* FunctionReturn.swift in Sources */,
+				31683A902B0FD7BC001D104A /* TXTViewer.swift in Sources */,
 				3197B7D72B0421B700817D9B /* PDFCreator.swift in Sources */,
+				31683A8E2B0FD6E1001D104A /* MonthlyReportView.swift in Sources */,
 				3137595E29B93092000482F2 /* NotesModel.swift in Sources */,
 				318D7B5629E36D3D00256FDC /* EditRepInpNote.swift in Sources */,
 				312683CE2A13E5A80052375F /* TextFieldWithFocus.swift in Sources */,
@@ -510,14 +515,12 @@
 				318BD06A29AA820E0063BAA1 /* CommonViewModel.swift in Sources */,
 				3147C82E29DCF87A005B56F7 /* ExpandedCause.swift in Sources */,
 				318BD05A29AA800C0063BAA1 /* CustomTextField.swift in Sources */,
-				318B268D2B069E840033874C /* PDFCreatorAddBody.swift in Sources */,
 				31035C7629BA58EB00D95B49 /* EditRepresentationView.swift in Sources */,
 				310C6E8B2B0545C300E2E944 /* PDFViewer.swift in Sources */,
 				318BD06F29AA9BC00063BAA1 /* ClientModel.swift in Sources */,
 				318BD08129AAB3320063BAA1 /* ClientExtension.swift in Sources */,
 				31B507DA2B0AD8C200D5B723 /* NPMReport.swift in Sources */,
 				313BC3AB29AF025900D99BB8 /* CauseModel.swift in Sources */,
-				31AD81C62B09B67800006FE7 /* PDFCreatorAddImage.swift in Sources */,
 				31DDC18029E70AC60071EC59 /* CustomNarrowButton.swift in Sources */,
 				310A35022A3BED4800639766 /* BackupCause.swift in Sources */,
 				318D7B5829E370C100256FDC /* NoteCats.swift in Sources */,
@@ -530,6 +533,7 @@
 				3147C83029DCFB38005B56F7 /* ExpandedRepresentation.swift in Sources */,
 				318BD05C29AA800C0063BAA1 /* CustomButton.swift in Sources */,
 				312F6DC929D91D8E00267C48 /* RepresentationExtension.swift in Sources */,
+				31683A8C2B0FBFDE001D104A /* PDFUtility.swift in Sources */,
 				3191681029DF424800C96B92 /* AppearanceExtension.swift in Sources */,
 				318BD07F29AAB2270063BAA1 /* SelectClientView.swift in Sources */,
 			);
