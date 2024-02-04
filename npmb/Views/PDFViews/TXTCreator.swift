@@ -28,6 +28,8 @@ class TXTCreator {
         let pageHeight = 11 * 72.0
         let lineHeight = 12
         
+//        var pageNumber:Int = 0;
+        
         report.npmLinearEquivalent = ""
         
         report = addTitle(inReport: report, lineHeight: CGFloat(lineHeight), sizeOnly: true)
@@ -46,8 +48,7 @@ class TXTCreator {
             
             for block in page.npmBlocks {
                 for line in block.npmLines {
-                    report.npmLinearEquivalent = report.npmLinearEquivalent
-                        + line.npmLineText
+                    report.npmLinearEquivalent = report.npmLinearEquivalent + line.npmLineText + "\n"
                     linePosition = linePosition + CGFloat(lineHeight)
                 }
             }

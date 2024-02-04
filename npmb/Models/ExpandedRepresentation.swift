@@ -30,6 +30,50 @@ class ExpandedRepresentation: Identifiable {
         return aprs[0].appearDate
     }
     
+    var closedPrintLine:String {
+        var line:String = ""
+        line += FormattingService.ljf(base: self.xpcause.cause.causeNo, len: 11)
+        line += FormattingService.ljf(base: self.xpcause.client.formattedName, len: 32)
+        line += FormattingService.ljf(base: self.xpcause.cause.level, len: 4)
+        line += FormattingService.ljf(base: self.xpcause.cause.court, len: 6)
+        line += FormattingService.ljf(base: self.representation.dispositionType, len: 5)
+        line += FormattingService.ljf(base: self.representation.dispositionAction, len: 5)
+        return line
+    }
+    
+    var closedHeaderLine:String {
+        var line:String = ""
+        line += FormattingService.ljf(base: "Cause No", len: 11)
+        line += FormattingService.ljf(base: "Client Name", len: 32)
+        line += FormattingService.ljf(base: "Lev", len: 4)
+        line += FormattingService.ljf(base: "Court", len: 6)
+        line += FormattingService.ljf(base: "Proc", len: 5)
+        line += FormattingService.ljf(base: "Disp", len: 5)
+        line += "\n\n"
+        return line
+    }
+    
+    var openPrintLine:String {
+        var line:String = ""
+        line += FormattingService.ljf(base: self.xpcause.cause.causeNo, len: 11)
+        line += FormattingService.ljf(base: self.xpcause.client.formattedName, len: 32)
+        line += FormattingService.ljf(base: self.xpcause.cause.level, len: 4)
+        line += FormattingService.ljf(base: self.xpcause.cause.court, len: 6)
+        line += FormattingService.ljf(base: self.xpcause.cause.causeType, len: 5)
+        return line
+    }
+    
+    var openHeaderLine:String {
+        var line:String = ""
+        line += FormattingService.ljf(base: "Cause No", len: 11)
+        line += FormattingService.ljf(base: "Client Name", len: 32)
+        line += FormattingService.ljf(base: "Lev", len: 4)
+        line += FormattingService.ljf(base: "Court", len: 6)
+        line += FormattingService.ljf(base: "Type", len: 5)
+        line += "\n\n"
+        return line
+    }
+
     var printLine:String {
         var line:String = ""
         line += FormattingService.ljf(base: self.xpcause.cause.causeNo, len: 11)

@@ -17,6 +17,7 @@ struct MonthlyReportView: View {
         VStack {
             VStack (alignment: .leading) {
                 TXTViewer(textData: createReport().npmLinearEquivalent)
+                    .font(.system(.body, design: .monospaced))
                 HStack {
                     Spacer()
                     Button("Press to dismiss") {
@@ -67,7 +68,29 @@ struct MonthlyReportView: View {
 
         let dateValues = getMonth(inDate: docketDate)
         let statValues = getStats(inMonth: dateValues.monthNumber, inYear: dateValues.yearString, inData: expanded)
-        report.append("*Assigned this month:" + String(statValues.reportNrAssigned) + "; Closed this month:" + String(statValues.reportNrClosed) + "; Total active:" + String(statValues.reportNrOpen) + "\n\n")
+        report.append("*Assigned this month:" + String(statValues.reportNrAssigned) + "; Closed this month:" + String(statValues.reportNrClosed) + "; Total active:" + String(statValues.reportNrOpen))
+        
+        report.append("^Assigned Items")
+        report.append("+" + ExpandedRepresentation().openHeaderLine)
+        for xr in statValues.assigned
+        {
+            report.append("-" + xr.openPrintLine)
+        }
+
+        report.append("^Closed Items")
+        report.append("+" + ExpandedRepresentation().closedHeaderLine)
+        for xr in statValues.closed
+        {
+            report.append("-" + xr.closedPrintLine)
+        }
+
+        report.append("^Open Items")
+        report.append("+" + ExpandedRepresentation().openHeaderLine)
+        for xr in statValues.opencase
+        {
+            report.append("-" + xr.openPrintLine)
+        }
+
         return report
     }
     

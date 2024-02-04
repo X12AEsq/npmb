@@ -7,5 +7,5 @@
 
 import Foundation
 struct PrimaryCategory {
-    var primaryCategories = ["ORIG", "MTA", "MTR", "SHOWC"]
+    var primaryCategories = ["ORIG", "MTA", "MTR", "MTW", "SHOWC", "BONDF"]
 }

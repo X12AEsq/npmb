@@ -33,6 +33,11 @@ class PDFUtility: NSObject {
             rtnArray.append(newLine)
             return rtnArray
         }
+        if rawLine.first == "^" {
+            newLine.npmLineCC = npmReport.CarriageControl.subtitle
+            rtnArray.append(newLine)
+            return rtnArray
+        }
         newLine.npmLineCC = npmReport.CarriageControl.newline
         rtnArray.append(newLine)
         return rtnArray
@@ -45,20 +50,34 @@ class PDFUtility: NSObject {
 
         while newReport.npmPrettyLines.count > 0 {
             if newReport.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newblock
-            || newReport.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.subheader {
+            || newReport.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.subheader
+            || newReport.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.subtitle {
                 if newBlock.npmLines.count > 0 {
                     rtnBlocks.append(newBlock)
                 }
-                if newReport.npmPrettyLines[0].npmLineCC == npmReport.CarriageControl.newblock {
+                switch (newReport.npmPrettyLines[0].npmLineCC) {
+                case npmReport.CarriageControl.newblock:
                     newBlock.npmLines = []
                     newBlock.npmLines.append(newReport.npmPrettyLines[0])
                     newBlock.blockLength = lineHeight
                     newReport.npmPrettyLines.remove(at: 0)
                     continue
-                } else {
+                case npmReport.CarriageControl.subheader:
                     newBlock.npmLines = []
-                    let newbl:npmReport.npmDecoratedLine = npmReport.npmDecoratedLine(npmLineCC: npmReport.CarriageControl.newline, npmLineText: " ", npmLinePosition: 0.0)
-                    var newl:npmReport.npmDecoratedLine = inReport.npmPrettyLines[0]
+                    let newbl:npmReport.npmDecoratedLine = npmReport.npmDecoratedLine(npmLineCC: npmReport.CarriageControl.newline, npmLineText: "    ", npmLinePosition: 0.0)
+                    var newl:npmReport.npmDecoratedLine = newReport.npmPrettyLines[0]
+                    newl.npmLineCC = npmReport.CarriageControl.newline
+                    newBlock.npmLines.append(newbl)
+                    newBlock.npmLines.append(newl)
+                    newBlock.blockLength = newBlock.blockLength + lineHeight * 2.0
+                    rtnBlocks.append(newBlock)
+                    newBlock.npmLines = []
+                    newReport.npmPrettyLines.remove(at: 0)
+                    continue
+                default:
+                    newBlock.npmLines = []
+                    let newbl:npmReport.npmDecoratedLine = npmReport.npmDecoratedLine(npmLineCC: npmReport.CarriageControl.newline, npmLineText: "    ", npmLinePosition: 0.0)
+                    var newl:npmReport.npmDecoratedLine = newReport.npmPrettyLines[0]
                     newl.npmLineCC = npmReport.CarriageControl.newline
                     newBlock.npmLines.append(newbl)
                     newBlock.npmLines.append(newl)

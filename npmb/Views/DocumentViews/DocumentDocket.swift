@@ -19,7 +19,7 @@ struct DocumentDocket: View {
         VStack {
             VStack (alignment: .leading) {
                 ForEach(docketed, id: \.appearance.id) { docketEntry in
-                    Text(docketEntry.printLine).font(.system(.body, design: .monospaced))
+                    Text(docketEntry.printLine).font(.system(.body, design: .monospaced)).foregroundStyle
                 }
                 if extras.count > 0 {
                     VStack (alignment: .leading) {

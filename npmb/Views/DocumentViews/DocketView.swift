@@ -16,6 +16,7 @@ struct DocketView: View {
         var appr:AppearanceModel = AppearanceModel()
         var cause:CauseModel = CauseModel()
         var client:ClientModel = ClientModel()
+        var representation:RepresentationModel = RepresentationModel()
         
         var sortSequence:String {
             var work:String = ""
@@ -27,6 +28,7 @@ struct DocketView: View {
         }
         
         var printLine:[String] {
+//            var workRepr:RepresentationModel = CVModel.findRepresentation(internalID: 1)
             var lines:[String] = []
             var line:String = ""
             line = "-"
@@ -38,11 +40,21 @@ struct DocketView: View {
             line += " "
             line += FormattingService.ljf(base: self.cause.causeNo, len: 9)
             line += " "
+            line += FormattingService.ljf(base: self.representation.primaryCategory, len: 6)
+            line += " "
             line += FormattingService.ljf(base: self.cause.originalCharge, len: 12)
             line += " "
+            line += self.client.jail == "Y" ? "*" : " "
             line += self.client.formattedName
             lines.append(line)
             return lines
+        }
+        
+        init(appr: AppearanceModel, cause: CauseModel, client: ClientModel, representation: RepresentationModel) {
+            self.appr = appr
+            self.cause = cause
+            self.client = client
+            self.representation = representation
         }
     }
     
@@ -63,7 +75,7 @@ struct DocketView: View {
             .padding(.leading, 10.0)
         }
     }
-    
+        
     func createReport() -> Data {
         CVModel.pdfCreator.setNPMLines(reportLines: npmReport(npmTitle: "Docket for " + docketDate,
            npmNrPages: 0,
@@ -84,10 +96,7 @@ struct DocketView: View {
         var docketEntries:[workAppr] = []
         var docketEntryLines:[String] = []
         for appearanceRecord in CVModel.appearances.filter({ $0.appearDate == docketDate } ) {
-            var ar = workAppr()
-                ar.appr = appearanceRecord
-                ar.cause = CVModel.findCause(internalID: appearanceRecord.involvedCause)
-                ar.client = CVModel.findClient(internalID: appearanceRecord.involvedClient)
+            var ar:workAppr = workAppr(appr: appearanceRecord, cause: CVModel.findCause(internalID: appearanceRecord.involvedCause), client: CVModel.findClient(internalID: appearanceRecord.involvedClient), representation: CVModel.findRepresentation(internalID: appearanceRecord.involvedRepresentation))
                 docketEntries.append(ar)
         }
     

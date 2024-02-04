@@ -36,8 +36,11 @@ class ExpandedAppearance {
         line += " "
         line += FormattingService.ljf(base: self.cause.causeNo, len: 9)
         line += " "
+        line += FormattingService.ljf(base: self.representation.primaryCategory, len: 6)
+        line += " "
         line += FormattingService.ljf(base: self.cause.originalCharge, len: 12)
         line += " "
+        line += self.client.jail == "Y" ? "*" : " "
         line += self.client.formattedName
        return line
     }

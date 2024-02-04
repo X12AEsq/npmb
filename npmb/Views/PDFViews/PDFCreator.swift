@@ -46,7 +46,7 @@ class PDFCreator: NSObject {
         paragraphStyle.alignment = .justified
 
         let lineAttributes = [
-            NSAttributedString.Key.font: UIFont.monospacedSystemFont(ofSize: 12, weight: UIFont.Weight.regular),
+            NSAttributedString.Key.font: UIFont.monospacedSystemFont(ofSize: 11, weight: UIFont.Weight.regular),
             NSAttributedString.Key.paragraphStyle: paragraphStyle,
             NSAttributedString.Key.foregroundColor : UIColor.systemBlue
         ]
