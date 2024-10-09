@@ -1,13 +1,16 @@
 //
-//  AppearanceModel.swift
+//  JSAppearance.swift
 //  npmb
 //
-//  Created by Morris Albers on 3/8/23.
+//  Created by Morris Albers on 9/2/24.
 //
 
 import Foundation
-class AppearanceModel: Identifiable, Codable, Hashable, ObservableObject {
-    static func == (lhs: AppearanceModel, rhs: AppearanceModel) -> Bool {
+import SwiftUI
+//import SwiftData
+
+class JSBUAppearance: Identifiable, Codable, Hashable {
+    static func == (lhs: JSBUAppearance, rhs: JSBUAppearance) -> Bool {
         lhs.internalID == rhs.internalID
     }
     
@@ -15,8 +18,7 @@ class AppearanceModel: Identifiable, Codable, Hashable, ObservableObject {
         hasher.combine(internalID)
     }
 
-//    @DocumentID var id: String?
-    var id: String?
+    var id: String
     var internalID: Int
     var involvedClient: Int
     var involvedCause: Int
@@ -45,9 +47,5 @@ class AppearanceModel: Identifiable, Codable, Hashable, ObservableObject {
         self.appearDate = ""
         self.appearTime = ""
         self.appearNote = ""
-    }
-    
-    public var internalDate:Date {
-        return DateService.dateString2Date(inDate:appearDate, inTime:appearTime)
     }
 }

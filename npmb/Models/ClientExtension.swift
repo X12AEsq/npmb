@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import CloudKit
+
 extension ClientModel {
     public var formattedName:String {
         var part1:String = ""
@@ -51,5 +53,27 @@ extension ClientModel {
         let part3:String = FormattingService.rjf(base: part2, len: 4, zeroFill: true)
         let part4:String = part1 + "-" + part3
         return part4.trimmingCharacters(in: .whitespaces)
+    }
+    
+    public var printLine1:String {
+        var pl:String = FormattingService.rjf(base: String(self.internalID), len: 4, zeroFill: true) + " "
+        pl = pl + FormattingService.ljf(base: String(self.formattedName), len: 30)  + " "
+        pl = pl + FormattingService.ljf(base: String(self.formattedAddr), len: 40)  + " "
+        pl = pl + FormattingService.ljf(base: String(self.phone), len: 13)
+        for rep in self.representation {
+            if rep > 0 {
+                pl = pl + FormattingService.rjf(base: String(rep), len: 4, zeroFill: true) + " "
+            }
+        }
+        return pl
+    }
+    
+    public var printHeader1:String {
+        var pl:String = FormattingService.rjf(base: "ID", len: 4, zeroFill: false) + " "
+        pl = pl + FormattingService.ljf(base: "Client name", len: 30)  + " "
+        pl = pl + FormattingService.ljf(base: "Client address", len: 40)  + " "
+        pl = pl + FormattingService.ljf(base: "Telephone", len: 13)
+        pl = pl + "Representations"
+        return pl
     }
 }

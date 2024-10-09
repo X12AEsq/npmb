@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-@available(iOS 15.0, *)
+@available(iOS 17.0, *)
 struct ContentView: View {
     @State private var showingEditVehicleView = false
     
@@ -38,6 +38,7 @@ struct ContentView: View {
     }
 }
 
+@available(iOS 17.0, *)
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

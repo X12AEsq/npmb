@@ -7,5 +7,5 @@
 
 import Foundation
 struct OffenseOptions {
-    var offenseOptions = ["CPS", "GS", "TAX", "M-A", "M-B", "M-C", "M-D", "SJF", "F-1", "F-2", "F-3", "F-*"]
+    var offenseOptions = ["CPS", "GS", "TAX", "M-A", "M-B", "M-C", "M-D", "SJF", "F-1", "F-2", "F-3", "F-*", "EXP"]
 }

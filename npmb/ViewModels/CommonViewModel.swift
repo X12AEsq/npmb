@@ -44,6 +44,14 @@ class CommonViewModel: ObservableObject {
     @Published var appearances = [AppearanceModel]()
     @Published var notes = [NotesModel]()
     
+    @Published var convclients = [ClientModel]()
+    @Published var convcauses = [CauseModel]()
+    @Published var convrepresentations = [RepresentationModel]()
+    @Published var convappearances = [AppearanceModel]()
+    @Published var convnotes = [NotesModel]()
+    
+    @Published var BUPackage:[JSPackage] = [JSPackage]()
+    
     @Published var expandedcauses = [ExpandedCause]()
     @Published var expandedrepresentations = [ExpandedRepresentation]()
     
@@ -567,7 +575,7 @@ class CommonViewModel: ObservableObject {
                     let dispositionAction = data["DispositionAction"] as? String ?? ""
                     let primaryCategory = data["PrimaryCategory"] as? String ?? ""
 
-                    let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory, causemodel: self.findCause(internalID: involvedCause))
+                    let rm:RepresentationModel = RepresentationModel(fsid: queryDocumentSnapshot.documentID, intid:internalID, client:involvedClient, cause:involvedCause, appearances:involvedAppearances, notes: involvedNotes, active:active, assigneddate:assignedDate, dispositiondate:dispositionDate, dispositionaction:dispositionAction, dispositiontype:dispositionType, primarycategory: primaryCategory)
 
                     self.representations.append(rm)
                     return
@@ -924,6 +932,18 @@ class CommonViewModel: ObservableObject {
         let workAppearances:[AppearanceModel] = appearances.filter { $0.involvedRepresentation == repID }
         return workAppearances.sorted { $0.appearDate < $1.appearDate }
     }
+    
+    public func expandAppearance(am: AppearanceModel) -> ExpandedAppearance {
+        var xa = ExpandedAppearance()
+        xa.appearance = am
+        var acs:[CauseModel] = causes.filter( { $0.internalID == am.involvedCause } )
+        xa.cause = acs.count == 1 ? acs[0] : CauseModel()
+        var acl:[ClientModel] = clients.filter( { $0.internalID == am.involvedClient } )
+        xa.client = acl.count == 1 ? acl[0] : ClientModel()
+        var are:[RepresentationModel] = representations.filter( { $0.internalID == am.involvedRepresentation } )
+        xa.representation = are.count == 1 ? are[0] : RepresentationModel()
+        return xa
+    }
 
 // MARK: Note Functions
     
@@ -1072,4 +1092,16 @@ class CommonViewModel: ObservableObject {
         return false
     }
 
+//    func dumpAppearancesToJSON() {
+//        let encoder = JSONEncoder()
+//        encoder.outputFormatting = .prettyPrinted
+//        
+//        do {
+//            let url = URL.documentsDirectory.appending(path: "BackupAppearances.json")
+//            let data = try encoder.encode(self.JSAppearances)
+//            try data.write(to: url, options: [.atomic, .completeFileProtection])
+//        } catch {
+//            print(error.localizedDescription)
+//        }
+//    }
 }

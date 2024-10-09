@@ -8,6 +8,7 @@
 import SwiftUI
 // ShareLink(item: "Check out this new feature on iOS 16")
 
+@available(iOS 17, *)
 struct DocumentMenuView: View {
     @EnvironmentObject var CVModel:CommonViewModel
     @State private var showingDocket = false
@@ -15,6 +16,10 @@ struct DocumentMenuView: View {
     @State private var showingCaseList = false
     @State private var showingOpenList = false
     @State private var showingToDoList = false
+    @State private var showingComingList = false
+    @State private var showingListClients = false
+    @State private var showingListCauses = false
+    @State private var showingListRepresentations = false
     @State var actionIntDate:Date = Date()
     @State var actionExtDate:String = DateService.dateDate2String(inDate: Date())
 
@@ -84,6 +89,50 @@ struct DocumentMenuView: View {
                 print("ToDo List Dismissed")
             })
             { ToDoListView() }
+            
+            Button {
+                showingComingList.toggle()
+            } label: {
+                Text("Coming Attractions").font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingComingList, onDismiss: {
+                print("Coming Attractions Dismissed")
+            })
+            { DocumentComingAttractions() }
+            
+            Button {
+                showingListClients.toggle()
+            } label: {
+                Text("List Clients").font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingListClients, onDismiss: {
+                print("List Clients")
+            })
+            { DocumentListClients() }
+            
+            Button {
+                showingListCauses.toggle()
+            } label: {
+                Text("List Causes").font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingListCauses, onDismiss: {
+                print("List Causes")
+            })
+            { DocumentListCauses() }
+            
+            Button {
+                showingListRepresentations.toggle()
+            } label: {
+                Text("List Representations").font(.system(.body, design: .monospaced))
+            }
+            .buttonStyle(CustomNarrowButton())
+            .sheet(isPresented: $showingListRepresentations, onDismiss: {
+                print("List Representations")
+            })
+            { DocumentListRepresentations() }
 
             Spacer()
         }

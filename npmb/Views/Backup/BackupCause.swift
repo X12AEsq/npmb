@@ -34,10 +34,10 @@ struct BackupCause: View {
         backupDocument = "[\n"
         for ca in CVModel.causes {
             backupDocument = backupDocument + " {\n"
-            backupDocument = backupDocument + "  \"internalID\": " + FormattingService.rjf(base: String(ca.internalID), len: 4, zeroFill: true) + ",\n"
+            backupDocument = backupDocument + "  \"internalID\": " + FormattingService.rjf(base: String(ca.internalID), len: 4, zeroFill: false) + ",\n"
             backupDocument = backupDocument + "  \"causeNo\": " + "\"" + ca.causeNo + "\",\n"
             backupDocument = backupDocument + "  \"causeType\": " + "\"" + ca.causeType + "\",\n"
-            backupDocument = backupDocument + "  \"involvedClient\": " + FormattingService.rjf(base: String(ca.involvedClient), len: 4, zeroFill: true) + ",\n"
+            backupDocument = backupDocument + "  \"involvedClient\": " + FormattingService.rjf(base: String(ca.involvedClient), len: 4, zeroFill: false) + ",\n"
             backupDocument = backupDocument + "  \"involvedRepresentations\": " + "[" + fmtArray(intlist: ca.involvedRepresentations) + "],\n"
             backupDocument = backupDocument + "  \"level\": " + "\"" + ca.level + "\",\n"
             backupDocument = backupDocument + "  \"court\": " + "\"" + ca.court + "\",\n"
@@ -55,9 +55,9 @@ struct BackupCause: View {
         for inr in intlist {
             if inr != 0 {
                 if rtnString == "" {
-                    rtnString = FormattingService.rjf(base: String(inr), len: 4, zeroFill: true)
+                    rtnString = FormattingService.rjf(base: String(inr), len: 4, zeroFill: false)
                 } else {
-                    rtnString = rtnString + "," + FormattingService.rjf(base: String(inr), len: 4, zeroFill: true)
+                    rtnString = rtnString + "," + FormattingService.rjf(base: String(inr), len: 4, zeroFill: false)
                 }
             }
         }

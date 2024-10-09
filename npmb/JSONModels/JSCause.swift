@@ -1,30 +1,29 @@
 //
-//  CauseModel.swift
+//  JSBUCause.swift
 //  npmb
 //
-//  Created by Morris Albers on 2/28/23.
+//  Created by Morris Albers on 9/3/24.
 //
 
 import Foundation
-import FirebaseFirestore
-
-class CauseModel: Identifiable, Hashable, Codable, ObservableObject {
-    static func == (lhs: CauseModel, rhs: CauseModel) -> Bool {
-            lhs.sortFormat1 == rhs.sortFormat1
+import SwiftUI
+//import SwiftData
+class JSBUCause: Identifiable, Codable, Hashable {
+    static func == (lhs: JSBUCause, rhs: JSBUCause) -> Bool {
+            lhs.internalID == rhs.internalID
         }
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(internalID)
     }
-    var id:String?
-    var internalID: Int             // Firebase Integer
+    var id:String
+    var internalID: Int
     var causeNo: String
-    var causeType: String           //  Appointed/Private/Family
+    var causeType: String
     var involvedClient: Int
     var involvedRepresentations: [Int]
     var level: String
     var court: String
     var originalCharge: String
-//    var client:ClientModel
     
     init() {
         self.id = ""
@@ -36,7 +35,6 @@ class CauseModel: Identifiable, Hashable, Codable, ObservableObject {
         self.court = ""
         self.originalCharge = ""
         self.causeType = CauseTypeOptions.defaultCauseTypeOption()
-//        self.client = ClientModel()
     }
 
     init (
@@ -50,7 +48,6 @@ class CauseModel: Identifiable, Hashable, Codable, ObservableObject {
         originalcharge: String,
         causetype: String,
         intid:Int) {
-//        clientmodel:ClientModel) {
             self.id = fsid
             self.internalID = intid
             self.causeNo = causeno
@@ -60,22 +57,5 @@ class CauseModel: Identifiable, Hashable, Codable, ObservableObject {
             self.court = court
             self.originalCharge = originalcharge
             self.causeType = causetype
-//            self.client = clientmodel
     }
-    
-    init(Test:Int) {
-        self.id = ""
-        self.internalID = Test
-        self.causeNo = "CauseNo" + String(Test)
-        self.involvedClient = Test
-        self.involvedRepresentations = []
-        self.level = "Level" + String(Test)
-        self.court = "Court"  + String(Test)
-        self.originalCharge = "Charge"  + String(Test)
-        self.causeType = "Type"  + String(Test)
-//        self.client = ClientModel(Test:Test)
-    }
-        
 }
-
-    

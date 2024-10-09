@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DocketView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var CVModel:CommonViewModel
+    @EnvironmentObject var CVModel: CommonViewModel
     var docketDate:String
     
     struct workAppr {
@@ -95,6 +95,12 @@ struct DocketView: View {
 //        let todaysDate:String = DateService.dateDate2String(inDate: Date())
         var docketEntries:[workAppr] = []
         var docketEntryLines:[String] = []
+        var noteLine:String = ""
+        var i:Int = 0
+        while i < 80 {
+            noteLine = noteLine + "_"
+            i = i + 1
+        }
         for appearanceRecord in CVModel.appearances.filter({ $0.appearDate == docketDate } ) {
             var ar:workAppr = workAppr(appr: appearanceRecord, cause: CVModel.findCause(internalID: appearanceRecord.involvedCause), client: CVModel.findClient(internalID: appearanceRecord.involvedClient), representation: CVModel.findRepresentation(internalID: appearanceRecord.involvedRepresentation))
                 docketEntries.append(ar)
@@ -112,9 +118,20 @@ struct DocketView: View {
                     lastTime = de.appr.appearTime
                     let subHeader:String = "*Appearances on " + lastDate + " " + lastTime
                     docketEntryLines.append(subHeader)
+                    docketEntryLines.append(" ")
                 }
                 docketEntryLines.append(ln)
+                docketEntryLines.append(" ")
+                docketEntryLines.append(noteLine)
             }
+        }
+        
+        var iIndex:Int = 0
+        while iIndex < 5 {
+            docketEntryLines.append(" ")
+            docketEntryLines.append(" ")
+            docketEntryLines.append(noteLine)
+            iIndex += 1
         }
 
         let subHeader:String = "*Possible Appearances"

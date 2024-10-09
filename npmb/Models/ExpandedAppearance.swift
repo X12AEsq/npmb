@@ -42,7 +42,7 @@ class ExpandedAppearance {
         line += " "
         line += self.client.jail == "Y" ? "*" : " "
         line += self.client.formattedName
-       return line
+        return line
     }
     
     var sortSequence:String {

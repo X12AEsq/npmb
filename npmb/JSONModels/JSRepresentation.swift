@@ -1,32 +1,32 @@
 //
-//  RepresentationModel.swift
+//  JSBURepresentation.swift
 //  npmb
 //
-//  Created by Morris Albers on 3/8/23.
+//  Created by Morris Albers on 9/3/24.
 //
 
 import Foundation
-class RepresentationModel: Identifiable, Hashable, Codable, ObservableObject {
-    static func == (lhs: RepresentationModel, rhs: RepresentationModel) -> Bool {
+import SwiftUI
+//import SwiftData
+class JSBURepresentation: Identifiable, Codable, Hashable {
+    static func == (lhs: JSBURepresentation, rhs: JSBURepresentation) -> Bool {
             lhs.internalID == rhs.internalID
         }
     func hash(into hasher: inout Hasher) {
-        hasher.combine(sortField1)
+        hasher.combine(internalID)
     }
-//    @DocumentID var id: String?
-    var id: String?
+    var id: String
     var internalID: Int
     var involvedClient: Int
     var involvedCause: Int
     var involvedAppearances: [Int]
     var involvedNotes: [Int]
-    var active: Bool                // Open,Closed
+    var active: Bool
     var assignedDate: String
     var dispositionDate: String
-    var dispositionType: String     // PB, DISM, OTH ...
-    var dispositionAction:String    // PROB, DEF, PTD, C ...
-    var primaryCategory:String      // ORIG, MTA, MTR, ...
-//    var cause:CauseModel
+    var dispositionType: String
+    var dispositionAction:String
+    var primaryCategory:String
     
     init (fsid:String, intid:Int, client:Int, cause:Int, appearances:[Int], notes:[Int], active:Bool, assigneddate:String, dispositiondate:String, dispositionaction:String, dispositiontype:String, primarycategory:String) {
         self.id = fsid
@@ -41,7 +41,6 @@ class RepresentationModel: Identifiable, Hashable, Codable, ObservableObject {
         self.dispositionAction = dispositionaction
         self.dispositionType = dispositiontype
         self.primaryCategory = primarycategory
-//        self.cause = causemodel
     }
 
     init() {
@@ -57,6 +56,5 @@ class RepresentationModel: Identifiable, Hashable, Codable, ObservableObject {
         self.dispositionType = "PB"
         self.dispositionAction = "DEF"
         self.primaryCategory = "ORIG"
-//        self.cause = CauseModel()
     }
 }
